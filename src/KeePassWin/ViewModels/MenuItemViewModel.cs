@@ -1,10 +1,6 @@
 ﻿using Prism.Windows.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml.Controls;
 
 namespace KeePassWin.ViewModels
 {
@@ -12,7 +8,7 @@ namespace KeePassWin.ViewModels
     {
         public string DisplayName { get; set; }
 
-        public string FontIcon { get; set; }
+        public Symbol FontIcon { get; set; }
 
         public ICommand Command { get; set; }
 

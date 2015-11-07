@@ -1,24 +1,11 @@
 ﻿using Autofac;
 using Prism.Autofac.Windows;
 using Prism.Windows.AppModel;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 namespace KeePassWin
 {
@@ -58,6 +45,8 @@ namespace KeePassWin
 
             builder.RegisterInstance(new ResourceLoaderAdapter(new ResourceLoader()))
                 .As<IResourceLoader>();
+
+            builder.RegisterModule<FileServicesModule>();
         }
     }
 }

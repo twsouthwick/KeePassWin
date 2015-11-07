@@ -88,8 +88,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SplitViewMenuFontIconStyle" TargetType="FontIcon">
-        <Setter Property="FontSize" Value="20" />
+    <Style x:Key="SplitViewMenuSymbolIconStyle" TargetType="SymbolIcon">
         <Setter Property="Margin" Value="14,0,0,0" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="IsHitTestVisible" Value="True" />

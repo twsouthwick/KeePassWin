@@ -16,7 +16,7 @@
                         Style="{StaticResource SplitViewMenuButtonStyle}"
                         ToolTipService.ToolTip="{x:Bind Path=DisplayName}">
                     <StackPanel Orientation="Horizontal">
-                        <FontIcon Glyph="{x:Bind Path=FontIcon}" Style="{StaticResource SplitViewMenuFontIconStyle}" />
+                        <SymbolIcon Symbol="{x:Bind Path=FontIcon}" Style="{StaticResource SplitViewMenuSymbolIconStyle}" />
                         <TextBlock AutomationProperties.AccessibilityView="Raw"
                                    Style="{StaticResource SplitViewMenuItemTextStyle}"
                                    Text="{x:Bind Path=DisplayName}" />
@@ -46,10 +46,17 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <ItemsControl x:Name="menuItemsControl"
+        <StackPanel>
+            <ItemsControl x:Name="menuItemsControl"
                       Margin="0,48,0,0"
                       IsTabStop="False"
                       ItemTemplate="{StaticResource MenuItemTemplate}"
                       ItemsSource="{x:Bind Path=ConcreteDataContext.Commands}" />
+
+            <ItemsControl x:Name="databasesControl"
+                      IsTabStop="False"
+                      ItemTemplate="{StaticResource MenuItemTemplate}"
+                      ItemsSource="{x:Bind Path=ConcreteDataContext.Databases}" />
+        </StackPanel>
     </Grid>
 </UserControl>

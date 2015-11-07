@@ -114,6 +114,10 @@
     <Compile Include="Crypto\Rc4RandomGenerator.cs" />
     <Compile Include="Crypto\Salsa20Cipher.cs" />
     <Compile Include="Crypto\Salsa20RandomGenerator.cs" />
+    <Compile Include="Database\DatabaseCacheEvent.cs" />
+    <Compile Include="Database\DatabaseTracker.cs" />
+    <Compile Include="Database\StorageDatabaseWithKey.cs" />
+    <Compile Include="Database\DatabaseCache.cs" />
     <Compile Include="FileFormat.cs" />
     <Compile Include="Models\FileFormats.cs" />
     <Compile Include="Models\HeaderFields.cs" />

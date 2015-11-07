@@ -100,6 +100,7 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileServicesModule.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
@@ -156,6 +157,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KeePass.IO\KeePass.IO.csproj">
+      <Project>{f515083e-9b92-4857-9a49-7933dd9c2804}</Project>
+      <Name>KeePass.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KeePass.Models\KeePass.Models.csproj">
+      <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
+      <Name>KeePass.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
