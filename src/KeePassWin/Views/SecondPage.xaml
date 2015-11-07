@@ -1,4 +1,4 @@
-﻿<prismMvvm:SessionStateAwarePage x:Class="KeePassWin.Views.MainPage"
+﻿<prismMvvm:SessionStateAwarePage x:Class="KeePassWin.Views.SecondPage"
                                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,6 +12,6 @@
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Style="{ThemeResource HeaderTextBlockStyle}"
-                   Text="{x:Bind Path=ViewDataContext.DisplayText, FallbackValue=Title}" />
+                   Text="{x:Bind Path=ViewDataContext.DisplayText}" />
     </Grid>
 </prismMvvm:SessionStateAwarePage>

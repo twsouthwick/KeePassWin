@@ -22,19 +22,19 @@ namespace KeePassWin.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : SessionStateAwarePage, INotifyPropertyChanged
+    public sealed partial class SecondPage : SessionStateAwarePage, INotifyPropertyChanged
     {
-        public MainPage()
+        public SecondPage()
         {
             InitializeComponent();
-            DataContextChanged += MainPage_DataContextChanged;
+            DataContextChanged += SecondPage_DataContextChanged;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainPageViewModel ViewDataContext => DataContext as MainPageViewModel;
+        public SecondPageViewModel ViewDataContext => DataContext as SecondPageViewModel;
 
-        private void MainPage_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private void SecondPage_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewDataContext)));
         }

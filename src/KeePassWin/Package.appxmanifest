@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="0904b360-88d9-4677-93b3-3433ec212278"
+    Name="4ff162b9-bb0d-45f6-97e6-bcd6c1b7e8ad"
     Publisher="CN=twsou"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="0904b360-88d9-4677-93b3-3433ec212278" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="4ff162b9-bb0d-45f6-97e6-bcd6c1b7e8ad" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>KeePassWin</DisplayName>
