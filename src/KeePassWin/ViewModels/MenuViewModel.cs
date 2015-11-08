@@ -1,4 +1,5 @@
 ﻿using KeePass.IO.Database;
+using KeePassWin.Resources;
 using Prism.Commands;
 using Prism.Windows.AppModel;
 using Prism.Windows.Mvvm;
@@ -15,23 +16,21 @@ namespace KeePassWin.ViewModels
     public class MenuViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
-        private readonly IResourceLoader _resourceLoader;
         private readonly DatabaseCache _cache;
 
         private bool _canNavigateToMain = false;
         private bool _canNavigateToSecond = true;
 
-        public MenuViewModel(INavigationService navigationService, IResourceLoader resourceLoader, DatabaseCache cache)
+        public MenuViewModel(INavigationService navigationService, DatabaseCache cache)
         {
             // TODO: Add ability to indicate which page your on by listening for navigation events once the NuGet package has been updated. Change CanNavigate to use whether or not your on that page to return false.
             // As-is, if navigation occurs via the back button, we won't know and can't update the _canNavigate value
             _navigationService = navigationService;
             _cache = cache;
-            _resourceLoader = resourceLoader;
 
             var open = new MenuItemViewModel
             {
-                DisplayName = resourceLoader.GetString("MenuItemOpenCommandTitle"),
+                DisplayName = LocalizedStrings.MenuItemOpenCommandTitle,
                 FontIcon = Symbol.OpenFile,
                 Command = new DelegateCommand(async () => await _cache.AddDatabaseAsync())
             };
@@ -62,7 +61,7 @@ namespace KeePassWin.ViewModels
             }
             else if (arg == DatabaseCacheEvent.AlreadyExists)
             {
-                var dialog = new MessageDialog(_resourceLoader.GetString("MenuItemOpenSameFileContent"), _resourceLoader.GetString("MenuItemOpenSameFileTitle"));
+                var dialog = new MessageDialog(LocalizedStrings.MenuItemOpenSameFileContent, LocalizedStrings.MenuItemOpenSameFileTitle);
 
                 await dialog.ShowAsync();
             }

@@ -101,6 +101,11 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileServicesModule.cs" />
+    <Compile Include="Resources\en\LocalizedStrings.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedStrings.resw</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
@@ -120,7 +125,11 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <PRIResource Include="Resources\en\Resources.resw" />
+    <PRIResource Include="Resources\en\LocalizedStrings.resw">
+      <CustomToolNamespace>KeePassWin.Resources</CustomToolNamespace>
+      <Generator>InternalReswFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedStrings.cs</LastGenOutput>
+    </PRIResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />

@@ -43,9 +43,6 @@ namespace KeePassWin
             builder.RegisterType<AppShell>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterInstance(new ResourceLoaderAdapter(new ResourceLoader()))
-                .As<IResourceLoader>();
-
             builder.RegisterModule<FileServicesModule>();
         }
     }
