@@ -1,5 +1,7 @@
 ﻿using KeePass.IO.Database;
+using KeePass.Models;
 using KeePassWin.Resources;
+using KeePassWin.Views;
 using Prism.Commands;
 using Prism.Windows.AppModel;
 using Prism.Windows.Mvvm;
@@ -17,16 +19,18 @@ namespace KeePassWin.ViewModels
     {
         private readonly INavigationService _navigationService;
         private readonly DatabaseCache _cache;
+        private readonly IDatabaseUnlocker _unlocker;
 
         private bool _canNavigateToMain = false;
         private bool _canNavigateToSecond = true;
 
-        public MenuViewModel(INavigationService navigationService, DatabaseCache cache)
+        public MenuViewModel(INavigationService navigationService, IDatabaseUnlocker unlocker, DatabaseCache cache)
         {
             // TODO: Add ability to indicate which page your on by listening for navigation events once the NuGet package has been updated. Change CanNavigate to use whether or not your on that page to return false.
             // As-is, if navigation occurs via the back button, we won't know and can't update the _canNavigate value
             _navigationService = navigationService;
             _cache = cache;
+            _unlocker = unlocker;
 
             var open = new MenuItemViewModel
             {
@@ -80,7 +84,22 @@ namespace KeePassWin.ViewModels
             {
                 DisplayName = item.Database.Name,
                 FontIcon = Symbol.ProtectedDocument,
-                Command = new DelegateCommand(() => _navigationService.Navigate("Database", item))
+                Command = new DelegateCommand(async () =>
+                {
+                    try
+                    {
+                        var db = await _unlocker.UnlockAsync(item.Database);
+
+                        _navigationService.Navigate("Database", db);
+                    }
+                    catch (DatabaseUnlockException e)
+                    {
+                        var text = e.Known ? e.Message : $"Unknown error: {e}";
+                        var message = new MessageDialog(text, "Could not open database");
+
+                        await message.ShowAsync();
+                    }
+                })
             };
 
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Add(entry));

@@ -114,6 +114,7 @@
     <Compile Include="FileHeaders.cs" />
     <Compile Include="GroupItemModel.cs" />
     <Compile Include="ICacheService.cs" />
+    <Compile Include="IDatabaseUnlocker.cs" />
     <Compile Include="ItemModelBase.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassInterfaces.cs" />

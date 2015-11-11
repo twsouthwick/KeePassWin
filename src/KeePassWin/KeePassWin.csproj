@@ -100,7 +100,9 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FileServicesModule.cs" />
+    <Compile Include="IO\DialogDatabaseUnlocker.cs" />
+    <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
+    <Compile Include="WinKeePassModule.cs" />
     <Compile Include="Resources\en\LocalizedStrings.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -119,6 +121,9 @@
     </Compile>
     <Compile Include="Views\DatabasePage.xaml.cs">
       <DependentUpon>DatabasePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PasswordDialog.xaml.cs">
+      <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +170,10 @@
     <Page Include="Views\DatabasePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PasswordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

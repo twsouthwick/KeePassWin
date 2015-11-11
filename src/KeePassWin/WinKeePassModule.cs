@@ -1,9 +1,11 @@
 ﻿using Autofac;
+using KeePass.IO;
 using KeePass.IO.Database;
+using KeePass.Models;
 
 namespace KeePassWin
 {
-    internal class FileServicesModule : Module
+    internal class WinKeePassModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -11,6 +13,10 @@ namespace KeePassWin
                 .SingleInstance();
 
             builder.RegisterType<DatabaseTracker>()
+                .SingleInstance();
+
+            builder.RegisterType<DialogDatabaseUnlocker>()
+                .As<IDatabaseUnlocker>()
                 .SingleInstance();
         }
     }

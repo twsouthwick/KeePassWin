@@ -57,9 +57,34 @@ namespace KeePass.IO.Database
             return true;
         }
 
-        public Task AddKeyFileAsync(string dbPath, IStorageFile result)
+        public Task AddKeyFileAsync(IStorageFile dbFile, IStorageFile keyFile)
         {
-            throw new NotImplementedException();
+            var token = GetKeyToken(GetFileToken(dbFile));
+
+            _accessList.AddOrReplace(token, keyFile);
+
+            return Task.CompletedTask;
+        }
+
+        public async Task<IStorageFile> GetKeyFileAsync(IStorageFile dbFile)
+        {
+            var token = GetKeyToken(GetFileToken(dbFile));
+
+            if (_accessList.ContainsItem(token))
+            {
+                var key = await _accessList.GetFileAsync(token);
+
+                if (!key.IsAvailable)
+                {
+                    _accessList.Remove(token);
+                    return null;
+                }
+
+                return key;
+            }
+            {
+                return null;
+            }
         }
 
         public async Task<IEnumerable<StorageDatabaseWithKey>> GetDatabasesAsync()
