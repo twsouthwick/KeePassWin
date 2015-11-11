@@ -15,6 +15,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using KeePass.IO.Database;
+using KeePass.IO;
+using KeePass.Models;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 namespace KeePassWin.Views
@@ -22,17 +26,24 @@ namespace KeePassWin.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class SecondPage : SessionStateAwarePage, INotifyPropertyChanged
+    public sealed partial class DatabasePage : SessionStateAwarePage, INotifyPropertyChanged
     {
-        public SecondPage()
+        public DatabasePage()
         {
             InitializeComponent();
             DataContextChanged += SecondPage_DataContextChanged;
         }
 
+        protected override void LoadState(object navigationParameter, Dictionary<string, object> pageState)
+        {
+            base.LoadState(navigationParameter, pageState);
+
+            var database = (StorageDatabaseWithKey)navigationParameter;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public SecondPageViewModel ViewDataContext => DataContext as SecondPageViewModel;
+        public DatabaseViewModel ViewDataContext => DataContext as DatabaseViewModel;
 
         private void SecondPage_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {

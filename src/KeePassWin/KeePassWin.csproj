@@ -106,10 +106,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LocalizedStrings.resw</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\DatabaseViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
-    <Compile Include="ViewModels\SecondPageViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -117,8 +117,8 @@
     <Compile Include="Views\MenuView.xaml.cs">
       <DependentUpon>MenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SecondPage.xaml.cs">
-      <DependentUpon>SecondPage.xaml</DependentUpon>
+    <Compile Include="Views\DatabasePage.xaml.cs">
+      <DependentUpon>DatabasePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -162,7 +162,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SecondPage.xaml">
+    <Page Include="Views\DatabasePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

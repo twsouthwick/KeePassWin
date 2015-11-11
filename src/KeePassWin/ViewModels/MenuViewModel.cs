@@ -80,7 +80,7 @@ namespace KeePassWin.ViewModels
             {
                 DisplayName = item.Database.Name,
                 FontIcon = Symbol.ProtectedDocument,
-                Command = new DelegateCommand(() => { })
+                Command = new DelegateCommand(() => _navigationService.Navigate("Database", item))
             };
 
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Add(entry));
