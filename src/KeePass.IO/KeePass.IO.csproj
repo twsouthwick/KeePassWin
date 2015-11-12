@@ -118,6 +118,7 @@
     <Compile Include="Database\DatabaseTracker.cs" />
     <Compile Include="Database\StorageDatabaseWithKey.cs" />
     <Compile Include="Database\DatabaseCache.cs" />
+    <Compile Include="Database\EncryptedDatabaseUnlocker.cs" />
     <Compile Include="FileFormat.cs" />
     <Compile Include="Models\FileFormats.cs" />
     <Compile Include="Models\HeaderFields.cs" />

@@ -38,7 +38,7 @@ namespace KeePass.IO.Database
             return result;
         }
 
-        public async Task<IStorageFile> AddKeyFileAsync(string dbName)
+        public async Task<IStorageFile> AddKeyFileAsync(IStorageFile db)
         {
             var result = await OpenFileAsync("*");
 
@@ -47,7 +47,7 @@ namespace KeePass.IO.Database
                 return null;
             }
 
-            await _databaseTracker.AddKeyFileAsync(dbName, result);
+            await _databaseTracker.AddKeyFileAsync(db, result);
 
             return result;
         }

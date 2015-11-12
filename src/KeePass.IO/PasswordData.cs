@@ -10,6 +10,7 @@ using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 using KeePass.IO.Models;
+using Windows.Storage;
 
 namespace KeePass.IO
 {
@@ -48,13 +49,18 @@ namespace KeePass.IO
         /// <summary>
         /// Adds the specified key file.
         /// </summary>
-        /// <param name="input">The keyfile stream.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="input"/> parameter cannot be <c>null</c>.
-        /// </exception>
-        public async Task AddKeyFileAsync(IRandomAccessStream input)
+        /// <param name="input">The keyfile stream. If a null stream is passed in, no key file is added</param>
+        public async Task AddKeyFileAsync(IStorageFile keyFile)
         {
-            _keyFile = await LoadKeyFile(input);
+            if (keyFile == null)
+            {
+                return;
+            }
+
+            using (var input = await keyFile.OpenReadAsync())
+            {
+                _keyFile = await LoadKeyFile(input);
+            }
         }
 
         /// <summary>
@@ -131,7 +137,7 @@ namespace KeePass.IO
                         // Report progress
                         token.ThrowIfCancellationRequested();
                         progress.Report((uint)Math.Round(
-                            transforms*100F/rounds));
+                            transforms * 100F / rounds));
 
                         for (var i = 0; i < 1000; i++)
                         {

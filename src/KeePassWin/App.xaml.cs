@@ -43,7 +43,7 @@ namespace KeePassWin
             builder.RegisterType<AppShell>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterModule<FileServicesModule>();
+            builder.RegisterModule<WinKeePassModule>();
         }
     }
 }
