@@ -12,6 +12,6 @@
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Style="{ThemeResource HeaderTextBlockStyle}"
-                   Text="Database" />
+                   Text="{x:Bind Path=Model.Database.Name, Mode=OneWay}" />
     </Grid>
 </prismMvvm:SessionStateAwarePage>

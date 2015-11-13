@@ -108,7 +108,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LocalizedStrings.resw</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DatabaseViewModel.cs" />
+    <Compile Include="ViewModels\DatabasePageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
