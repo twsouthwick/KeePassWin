@@ -8,7 +8,7 @@ namespace KeePass.IO.Database
 {
     public class DatabaseCache
     {
-        public delegate void DatabaseCacheUpdatedHandler(object sender, DatabaseCacheEvent arg, StorageDatabaseWithKey database);
+        public delegate void DatabaseCacheUpdatedHandler(object sender, DatabaseCacheEvent arg, IStorageFile database);
 
         private readonly DatabaseTracker _databaseTracker;
 
@@ -28,11 +28,11 @@ namespace KeePass.IO.Database
 
             if (await _databaseTracker.AddDatabaseAsync(result))
             {
-                DatabaseUpdated?.Invoke(this, DatabaseCacheEvent.Added, new StorageDatabaseWithKey(result, null));
+                DatabaseUpdated?.Invoke(this, DatabaseCacheEvent.Added, result);
             }
             else
             {
-                DatabaseUpdated?.Invoke(this, DatabaseCacheEvent.AlreadyExists, new StorageDatabaseWithKey(result, null));
+                DatabaseUpdated?.Invoke(this, DatabaseCacheEvent.AlreadyExists, result);
             }
 
             return result;
@@ -63,7 +63,7 @@ namespace KeePass.IO.Database
 
         public event DatabaseCacheUpdatedHandler DatabaseUpdated;
 
-        public Task<IEnumerable<StorageDatabaseWithKey>> GetDatabaseFilesAsync()
+        public Task<IEnumerable<IStorageFile>> GetDatabaseFilesAsync()
         {
             return _databaseTracker.GetDatabasesAsync();
         }

@@ -10,6 +10,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
@@ -57,7 +58,7 @@ namespace KeePassWin.ViewModels
             });
         }
 
-        private async void DataBaseCacheUpdate(object sender, DatabaseCacheEvent arg, StorageDatabaseWithKey database)
+        private async void DataBaseCacheUpdate(object sender, DatabaseCacheEvent arg, IStorageFile database)
         {
             if (arg == DatabaseCacheEvent.Added)
             {
@@ -78,17 +79,17 @@ namespace KeePassWin.ViewModels
             }
         }
 
-        private async Task AddDatabaseEntry(StorageDatabaseWithKey item)
+        private async Task AddDatabaseEntry(IStorageFile dbFile)
         {
             var entry = new MenuItemViewModel
             {
-                DisplayName = item.Database.Name,
+                DisplayName = dbFile.Name,
                 FontIcon = Symbol.ProtectedDocument,
                 Command = new DelegateCommand(async () =>
                 {
                     try
                     {
-                        var db = await _unlocker.UnlockAsync(item.Database);
+                        var db = await _unlocker.UnlockAsync(dbFile);
 
                         _navigationService.Navigate("Database", db);
                     }
