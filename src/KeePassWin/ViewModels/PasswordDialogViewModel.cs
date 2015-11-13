@@ -1,7 +1,9 @@
 ﻿using KeePass.IO.Database;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
+using System;
 using System.Windows.Input;
+using Windows.ApplicationModel.Core;
 using Windows.Storage;
 
 namespace KeePassWin.ViewModels
@@ -19,7 +21,10 @@ namespace KeePassWin.ViewModels
                 KeyFile = await cache.AddKeyFileAsync(db);
             });
 
-            tracker.GetKeyFileAsync(db).ContinueWith(r => KeyFile = r.Result);
+            tracker.GetKeyFileAsync(db).ContinueWith(async r =>
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => KeyFile = r.Result);
+            });
         }
 
         /// <summary>
