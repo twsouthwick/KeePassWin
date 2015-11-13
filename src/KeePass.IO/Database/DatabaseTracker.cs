@@ -1,14 +1,8 @@
 ﻿using KeePass.Models;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
@@ -78,6 +72,18 @@ namespace KeePass.IO.Database
             }
         }
 
+        public async Task<IStorageFile> GetDatabaseAsync(KeePassId id)
+        {
+            try
+            {
+                return await _accessList.GetFileAsync(GetDatabaseToken(id));
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<IStorageFile>> GetDatabasesAsync()
         {
             var folder = await _folder;
@@ -86,13 +92,13 @@ namespace KeePass.IO.Database
 
             foreach (var file in files)
             {
-                try
-                {
-                    var dbStorageItem = await _accessList.GetFileAsync(GetDatabaseToken(file.Name));
+                var dbStorageItem = await GetDatabaseAsync(file.Name);
 
+                if (dbStorageItem != null)
+                {
                     result.Add(dbStorageItem);
                 }
-                catch (ArgumentException)
+                else
                 {
                     // There was a problem with the db cache
                     await file.DeleteAsync();
