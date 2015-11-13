@@ -51,7 +51,7 @@ namespace KeePass.IO.Database
 
                         // TODO: verify headers integrity
 
-                        return new XmlKeePassDatabase(doc, "Id", Path.GetFileNameWithoutExtension(file.Name));
+                        return new XmlKeePassDatabase(doc, KeePassId.FromPath(file), Path.GetFileNameWithoutExtension(file.Name));
                     }
                 }
             }

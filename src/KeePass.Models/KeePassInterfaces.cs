@@ -1,50 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace KeePass.Models
 {
-    [DebuggerDisplay("KeePass ID: {Id}")]
-    public class KeePassId
-    {
-        private readonly string _id;
-
-        public KeePassId(string id)
-        {
-            _id = id;
-        }
-
-        public string Id { get { return _id; } }
-
-        public override bool Equals(object obj)
-        {
-            return string.Equals(obj, _id);
-        }
-
-        public override int GetHashCode()
-        {
-            return _id.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return _id;
-        }
-
-        public static implicit operator KeePassId(string id)
-        {
-            return new KeePassId(id);
-        }
-
-        public static explicit operator string(KeePassId id)
-        {
-            return id.Id;
-        }
-    }
-
     public interface IKeePassDatabase
     {
         KeePassId Id { get; }

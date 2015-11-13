@@ -1,17 +1,17 @@
-﻿using System;
+﻿using KeePass.Models;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Foundation;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
-using System.Linq;
 
 namespace KeePass.IO.Database
 {
@@ -28,7 +28,7 @@ namespace KeePass.IO.Database
 
         public async Task<bool> AddDatabaseAsync(IStorageFile dbFile)
         {
-            var token = GetFileToken(dbFile);
+            var token = KeePassId.FromPath(dbFile);
 
             _accessList.AddOrReplace(GetDatabaseToken(token), dbFile);
 
@@ -37,13 +37,13 @@ namespace KeePass.IO.Database
             // Check if file already has been created
             var files = await folder.CreateFileQuery().GetFilesAsync();
 
-            if (files.Any(f => string.Equals(f.Name, token, StringComparison.OrdinalIgnoreCase)))
+            if (files.Any(f => string.Equals(f.Name, (string)token, StringComparison.OrdinalIgnoreCase)))
             {
                 return false;
             }
 
             // File doesn't exist, so we will now create it
-            var file = await folder.CreateFileAsync(token, CreationCollisionOption.FailIfExists);
+            var file = await folder.CreateFileAsync((string)token, CreationCollisionOption.FailIfExists);
 
             using (var randomAccessStream = await file.OpenAsync(FileAccessMode.ReadWrite))
             using (var stream = randomAccessStream.AsStream())
@@ -59,7 +59,7 @@ namespace KeePass.IO.Database
 
         public Task AddKeyFileAsync(IStorageFile dbFile, IStorageFile keyFile)
         {
-            var token = GetKeyToken(GetFileToken(dbFile));
+            var token = GetKeyToken(KeePassId.FromPath(dbFile));
 
             _accessList.AddOrReplace(token, keyFile);
 
@@ -68,7 +68,7 @@ namespace KeePass.IO.Database
 
         public async Task<IStorageFile> GetKeyFileAsync(IStorageFile dbFile)
         {
-            var token = GetKeyToken(GetFileToken(dbFile));
+            var token = GetKeyToken(KeePassId.FromPath(dbFile));
 
             if (_accessList.ContainsItem(token))
             {
@@ -116,27 +116,9 @@ namespace KeePass.IO.Database
             return result;
         }
 
-        private string GetDatabaseToken(string token) => $"{token}.kdbx";
+        private string GetDatabaseToken(KeePassId token) => $"{token}.kdbx";
 
-        private string GetKeyToken(string token) => $"{token}.key";
-
-        /// <summary>
-        /// Generate a MD5 hash of the file name to ensure the tokens are always the same
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        private string GetFileToken(IStorageFile file)
-        {
-            var algorithm = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Md5);
-            var buffer = CryptographicBuffer.ConvertStringToBinary(file.Path, BinaryStringEncoding.Utf16BE);
-            var hash = algorithm.CreateHash();
-
-            hash.Append(buffer);
-
-            var result = hash.GetValueAndReset();
-
-            return CryptographicBuffer.EncodeToHexString(result);
-        }
+        private string GetKeyToken(KeePassId token) => $"{token}.key";
 
         private class KeyDatabaseJson
         {
