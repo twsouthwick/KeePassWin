@@ -16,7 +16,7 @@ namespace KeePass.IO.Database
 
         public DatabaseTracker()
         {
-            _folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("db", CreationCollisionOption.OpenIfExists);
+            _folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("opened_databases", CreationCollisionOption.OpenIfExists);
             _accessList = StorageApplicationPermissions.FutureAccessList;
         }
 
