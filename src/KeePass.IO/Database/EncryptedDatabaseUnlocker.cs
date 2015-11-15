@@ -7,15 +7,22 @@ using Windows.Storage;
 
 namespace KeePass.IO.Database
 {
+    public class UnknownDatabaseUnlockException : DatabaseUnlockException
+    {
+        public UnknownDatabaseUnlockException(Exception inner)
+            : base($"Unknown error: {inner.Message}", inner)
+        { }
+    }
+
     public class DatabaseUnlockException : Exception
     {
-        public DatabaseUnlockException(string message, Exception inner, bool known)
-            : base(message, inner)
-        {
-            Known = known;
-        }
+        public DatabaseUnlockException(string message)
+            : base(message)
+        { }
 
-        public bool Known { get; }
+        public DatabaseUnlockException(string message, Exception inner)
+            : base(message, inner)
+        { }
     }
 
     public class EncryptedDatabaseUnlocker : IDatabaseUnlocker
@@ -57,13 +64,13 @@ namespace KeePass.IO.Database
             }
             catch (Exception e) when ((uint)e.HResult == 0x80070017)
             {
-                throw new DatabaseUnlockException("Invalid password or key file", e, true);
+                throw new DatabaseUnlockException("Invalid password or key file", e);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
 
-                throw new DatabaseUnlockException("Unknown exception", e, false);
+                throw new UnknownDatabaseUnlockException(e);
             }
         }
     }

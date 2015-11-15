@@ -51,8 +51,7 @@ namespace KeePassWin.ViewModels
             }
             catch (DatabaseUnlockException e)
             {
-                var text = e.Known ? e.Message : $"Unknown error: {e}";
-                var message = new MessageDialog(text, "Could not open database");
+                var message = new MessageDialog(e.Message, "Could not open database");
 
                 await message.ShowAsync();
                 return null;
