@@ -1,12 +1,14 @@
 ﻿using KeePass.IO.Database;
 using KeePass.Models;
+using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Windows.UI.Popups;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.UI.Popups;
 
 namespace KeePassWin.ViewModels
 {
@@ -17,12 +19,21 @@ namespace KeePassWin.ViewModels
         private readonly INavigationService _navigator;
 
         private IKeePassDatabase _database;
+        private IKeePassGroup _group;
 
         public DatabasePageViewModel(INavigationService navigator, IDatabaseUnlocker unlocker, DatabaseTracker tracker)
         {
             _unlocker = unlocker;
             _tracker = tracker;
             _navigator = navigator;
+
+            GroupClickCommand = new DelegateCommand<IKeePassGroup>(GroupClicked);
+            EntryClickCommand = new DelegateCommand(() => { });
+        }
+
+        private void GroupClicked(IKeePassGroup group)
+        {
+            _navigator.Navigate("Database", DatabaseGroupParameter.Encode(Database.Id, group.Id));
         }
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -37,6 +48,7 @@ namespace KeePassWin.ViewModels
             else
             {
                 Database = db;
+                Group = db.GetGroup(key.Group) ?? db.Root;
             }
         }
 
@@ -57,6 +69,16 @@ namespace KeePassWin.ViewModels
                 await message.ShowAsync();
                 return null;
             }
+        }
+
+        public ICommand GroupClickCommand { get; }
+
+        public ICommand EntryClickCommand { get; }
+
+        public IKeePassGroup Group
+        {
+            get { return _group; }
+            set { SetProperty(ref _group, value); }
         }
 
         public IKeePassDatabase Database
