@@ -106,6 +106,7 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\DatabaseGroupParameter.cs" />
+    <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="IO\DialogDatabaseUnlocker.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="WinKeePassModule.cs" />
