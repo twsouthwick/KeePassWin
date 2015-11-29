@@ -27,7 +27,8 @@ namespace KeePassWin.ViewModels
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            var db = await UnlockAsync((string)e.Parameter);
+            var key = DatabaseGroupParameter.Parse(((string)e.Parameter));
+            var db = await UnlockAsync(key.Database);
 
             if (db == null)
             {

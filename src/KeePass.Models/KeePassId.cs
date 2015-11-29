@@ -9,6 +9,8 @@ namespace KeePass.Models
     [DebuggerDisplay("KeePass ID: {Id}")]
     public class KeePassId
     {
+        private static readonly KeePassId s_empty = new KeePassId(string.Empty);
+
         private readonly string _id;
 
         public KeePassId(string id)
@@ -35,13 +37,15 @@ namespace KeePass.Models
 
         public static implicit operator KeePassId(string id)
         {
-            return new KeePassId(id);
+            return string.IsNullOrEmpty(id) ? s_empty : new KeePassId(id);
         }
 
         public static explicit operator string (KeePassId id)
         {
             return id.Id;
         }
+
+        public static KeePassId Empty => s_empty;
 
         /// <summary>
         /// Generate a MD5 hash of the file name to ensure the tokens are always the same
