@@ -16,7 +16,10 @@ namespace KeePassWin
                 .SingleInstance();
 
             builder.RegisterType<DialogDatabaseUnlocker>()
-                .As<IDatabaseUnlocker>()
+                .Named<IDatabaseUnlocker>(nameof(DialogDatabaseUnlocker))
+                .SingleInstance();
+
+            builder.RegisterDecorator<IDatabaseUnlocker>((c, inner) => new CachedDatabseUnlocker(inner), fromKey: nameof(DialogDatabaseUnlocker))
                 .SingleInstance();
         }
     }

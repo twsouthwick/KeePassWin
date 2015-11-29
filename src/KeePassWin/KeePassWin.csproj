@@ -105,6 +105,7 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IO\CachedDialogDatabseUnlocker.cs" />
     <Compile Include="Models\DatabaseGroupParameter.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="IO\DialogDatabaseUnlocker.cs" />
