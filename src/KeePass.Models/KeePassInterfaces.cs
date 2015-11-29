@@ -12,7 +12,7 @@ namespace KeePass.Models
 
         IKeePassIcon GetIcon(int idx);
 
-        IList<IKeePassGroup> Groups { get; }
+        IKeePassGroup Root { get; }
     }
 
     public interface IKeePassId

@@ -107,7 +107,6 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheService.cs" />
     <Compile Include="CrsAlgorithm.cs" />
     <Compile Include="DatabaseMetaData.cs" />
     <Compile Include="EntryItemModel.cs" />

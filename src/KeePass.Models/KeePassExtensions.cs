@@ -1,15 +1,41 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace KeePass.Models
 {
     public static class KeePassExtensions
     {
+        public static IKeePassGroup GetGroup(this IKeePassDatabase db, KeePassId id)
+        {
+            foreach (var entry in db.EnumerateAllGroups())
+            {
+                if (entry.Id.Equals(id))
+                {
+                    return entry;
+                }
+            }
+
+            return null;
+        }
+
         public static IEnumerable<IKeePassEntry> EnumerateAllEntries(this IKeePassDatabase db)
         {
-            foreach (var entry in db.Groups.SelectMany(EnumerateAllEntries))
+            return db.Root.EnumerateAllEntries();
+        }
+
+        public static IEnumerable<IKeePassGroup> EnumerateAllGroups(this IKeePassDatabase db)
+        {
+            return db.Root.EnumerateAllGroups();
+        }
+
+        public static IEnumerable<IKeePassGroup> EnumerateAllGroups(this IKeePassGroup group)
+        {
+            foreach (var subgroup in group.Groups)
             {
-                yield return entry;
+                yield return subgroup;
+                foreach (var entry in subgroup.EnumerateAllGroups())
+                {
+                    yield return entry;
+                }
             }
         }
 

@@ -16,7 +16,7 @@ namespace KeePass.Models
 
     public class XmlKeePassDatabase : IKeePassDatabase
     {
-        private readonly IList<IKeePassGroup> _groups;
+        private readonly IKeePassGroup _root;
         private readonly IList<IKeePassIcon> _icons;
         private readonly KeePassId _id;
         private readonly string _name;
@@ -25,19 +25,13 @@ namespace KeePass.Models
         {
             _id = id;
             _name = name;
-            _groups = doc.Descendants("Group")
+            _root = doc.Descendants("Group")
                 .Select(x => new XmlKeePassGroup(x))
                 .Cast<IKeePassGroup>()
-                .ToList();
+                .First();
             _icons = doc.Descendants("Icon")
                 .Select(x => new XmlKeePassIcon(x))
                 .Cast<IKeePassIcon>()
-                .ToList();
-
-            var i = this.EnumerateAllEntries()
-                .Select(e => e.IconId)
-                .Distinct()
-                .OrderBy(e => e)
                 .ToList();
         }
 
@@ -68,9 +62,9 @@ namespace KeePass.Models
             }
         }
 
-        public IList<IKeePassGroup> Groups
+        public IKeePassGroup Root
         {
-            get { return _groups; }
+            get { return _root; }
         }
 
         public class XmlKeePassId : IKeePassId

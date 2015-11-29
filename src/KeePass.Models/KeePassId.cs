@@ -20,9 +20,18 @@ namespace KeePass.Models
 
         public string Id => _id;
 
+        public bool IsEmpty => string.IsNullOrEmpty(_id);
+
         public override bool Equals(object obj)
         {
-            return string.Equals(obj as string, _id, StringComparison.Ordinal);
+            var other = obj as KeePassId;
+
+            if(other == null)
+            {
+                return false;
+            }
+
+            return string.Equals(other._id, _id, StringComparison.Ordinal);
         }
 
         public override int GetHashCode()
