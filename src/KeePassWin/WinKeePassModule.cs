@@ -2,6 +2,7 @@
 using KeePass.IO;
 using KeePass.IO.Database;
 using KeePass.Models;
+using KeePassWin.Mvvm;
 using System;
 
 namespace KeePassWin
@@ -26,6 +27,10 @@ namespace KeePassWin
             builder.RegisterType<TimedClipboard>()
                 .WithParameter(TypedParameter.From(TimeSpan.FromSeconds(10)))
                 .As<IClipboard>()
+                .SingleInstance();
+
+            builder.RegisterType<PrismNavigationService>()
+                .As<INavigator>()
                 .SingleInstance();
         }
     }

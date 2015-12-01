@@ -1,9 +1,9 @@
 ﻿using KeePass.IO.Database;
 using KeePass.Models;
+using KeePassWin.Mvvm;
 using KeePassWin.Resources;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
-using Prism.Windows.Navigation;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -16,17 +16,14 @@ namespace KeePassWin.ViewModels
 {
     public class MenuViewModel : ViewModelBase
     {
-        private readonly INavigationService _navigationService;
+        private readonly INavigator _navigator;
         private readonly DatabaseCache _cache;
 
-        private bool _canNavigateToMain = false;
-        private bool _canNavigateToSecond = true;
-
-        public MenuViewModel(INavigationService navigationService, DatabaseCache cache)
+        public MenuViewModel(INavigator navigator, DatabaseCache cache)
         {
             // TODO: Add ability to indicate which page your on by listening for navigation events once the NuGet package has been updated. Change CanNavigate to use whether or not your on that page to return false.
             // As-is, if navigation occurs via the back button, we won't know and can't update the _canNavigate value
-            _navigationService = navigationService;
+            _navigator = navigator;
             _cache = cache;
 
             var open = new MenuItemViewModel
@@ -81,7 +78,7 @@ namespace KeePassWin.ViewModels
             {
                 DisplayName = dbFile.Name,
                 FontIcon = Symbol.ProtectedDocument,
-                Command = new DelegateCommand(() => _navigationService.Navigate("Database", DatabaseGroupParameter.Encode(KeePassId.FromPath(dbFile), KeePassId.Empty)))
+                Command = new DelegateCommand(() => _navigator.GoToDatabaseView(KeePassId.FromPath(dbFile), KeePassId.Empty))
             };
 
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Add(entry));
@@ -90,42 +87,6 @@ namespace KeePassWin.ViewModels
         public ObservableCollection<MenuItemViewModel> Commands { get; set; }
 
         public ObservableCollection<MenuItemViewModel> Databases { get; set; }
-
-        private void NavigateToMainPage()
-        {
-            if (CanNavigateToMainPage())
-            {
-                if (_navigationService.Navigate("Main", null))
-                {
-                    _canNavigateToMain = false;
-                    _canNavigateToSecond = true;
-                    RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        private bool CanNavigateToMainPage()
-        {
-            return _canNavigateToMain;
-        }
-
-        private void NavigateToSecondPage()
-        {
-            if (CanNavigateToSecondPage())
-            {
-                if (_navigationService.Navigate("Second", null))
-                {
-                    _canNavigateToMain = true;
-                    _canNavigateToSecond = false;
-                    RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        private bool CanNavigateToSecondPage()
-        {
-            return _canNavigateToSecond;
-        }
 
         private void RaiseCanExecuteChanged()
         {

@@ -1,6 +1,7 @@
 ﻿using KeePass.IO;
 using KeePass.IO.Database;
 using KeePass.Models;
+using KeePassWin.Mvvm;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
@@ -17,13 +18,13 @@ namespace KeePassWin.ViewModels
     {
         private readonly IDatabaseUnlocker _unlocker;
         private readonly DatabaseTracker _tracker;
-        private readonly INavigationService _navigator;
+        private readonly INavigator _navigator;
         private readonly IClipboard _clipboard;
 
         private IKeePassDatabase _database;
         private IKeePassGroup _group;
 
-        public DatabasePageViewModel(INavigationService navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, DatabaseTracker tracker)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, DatabaseTracker tracker)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
@@ -42,7 +43,7 @@ namespace KeePassWin.ViewModels
 
         private void GroupClicked(IKeePassGroup group)
         {
-            _navigator.Navigate("Database", DatabaseGroupParameter.Encode(Database.Id, group.Id));
+            _navigator.GoToDatabaseView(Database.Id, group.Id);
         }
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
