@@ -212,3 +212,5 @@ _Pvt_Extensions/
 ModelManifest.xml
 /src/KeePassWin/BundleArtifacts
 /src/KeePassWin/_pkginfo.txt
+/test/KeePassWinTest/KeePassWinTest.nuget.props
+/test/KeePassWinTest/KeePassWinTest.nuget.targets
