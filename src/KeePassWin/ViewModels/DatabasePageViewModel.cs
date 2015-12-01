@@ -1,4 +1,5 @@
-﻿using KeePass.IO.Database;
+﻿using KeePass.IO;
+using KeePass.IO.Database;
 using KeePass.Models;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
@@ -17,18 +18,26 @@ namespace KeePassWin.ViewModels
         private readonly IDatabaseUnlocker _unlocker;
         private readonly DatabaseTracker _tracker;
         private readonly INavigationService _navigator;
+        private readonly IClipboard _clipboard;
 
         private IKeePassDatabase _database;
         private IKeePassGroup _group;
 
-        public DatabasePageViewModel(INavigationService navigator, IDatabaseUnlocker unlocker, DatabaseTracker tracker)
+        public DatabasePageViewModel(INavigationService navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, DatabaseTracker tracker)
         {
+            _clipboard = clipboard;
             _unlocker = unlocker;
             _tracker = tracker;
             _navigator = navigator;
 
             GroupClickCommand = new DelegateCommand<IKeePassGroup>(GroupClicked);
             EntryClickCommand = new DelegateCommand(() => { });
+            CopyCommand = new DelegateCommand<IKeePassEntry>(CopyClicked);
+        }
+
+        private void CopyClicked(IKeePassEntry entry)
+        {
+            _clipboard.SetText(entry.Password);
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -74,6 +83,8 @@ namespace KeePassWin.ViewModels
         public ICommand GroupClickCommand { get; }
 
         public ICommand EntryClickCommand { get; }
+
+        public ICommand CopyCommand { get; }
 
         public IKeePassGroup Group
         {

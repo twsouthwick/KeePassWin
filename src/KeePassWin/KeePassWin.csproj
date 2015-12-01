@@ -106,6 +106,8 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="IO\CachedDialogDatabseUnlocker.cs" />
+    <Compile Include="IO\IClipboard.cs" />
+    <Compile Include="IO\TimedClipboard.cs" />
     <Compile Include="Models\DatabaseGroupParameter.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="IO\DialogDatabaseUnlocker.cs" />

@@ -2,6 +2,7 @@
 using KeePass.IO;
 using KeePass.IO.Database;
 using KeePass.Models;
+using System;
 
 namespace KeePassWin
 {
@@ -20,6 +21,11 @@ namespace KeePassWin
                 .SingleInstance();
 
             builder.RegisterDecorator<IDatabaseUnlocker>((c, inner) => new CachedDatabseUnlocker(inner), fromKey: nameof(DialogDatabaseUnlocker))
+                .SingleInstance();
+
+            builder.RegisterType<TimedClipboard>()
+                .WithParameter(TypedParameter.From(TimeSpan.FromSeconds(10)))
+                .As<IClipboard>()
                 .SingleInstance();
         }
     }

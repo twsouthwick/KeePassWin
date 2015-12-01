@@ -10,7 +10,7 @@
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Tag="{Binding}" x:Name="root" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -21,33 +21,49 @@
                    Style="{ThemeResource HeaderTextBlockStyle}"
                    Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
         <RelativePanel Grid.Row="1">
-                <ListView x:Name="GroupList" ItemsSource="{x:Bind Path=Model.Group.Groups, Mode=OneWay}" 
+            <ListView x:Name="GroupList" ItemsSource="{x:Bind Path=Model.Group.Groups, Mode=OneWay}" 
                           HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
                           IsItemClickEnabled="True"
                           m:MvvmExtensions.Command="{x:Bind Model.GroupClickCommand, Mode=OneWay}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:IKeePassGroup">
-                            <StackPanel Orientation="Horizontal">
-                                <SymbolIcon Symbol="Folder" />
-                                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Name}" TextTrimming="WordEllipsis" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <ListView x:Name="EntryList" ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}" 
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:IKeePassGroup">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Folder" />
+                            <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Name}" TextTrimming="WordEllipsis" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView x:Name="EntryList" ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}" 
                           HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
                           IsItemClickEnabled="True" 
                           m:MvvmExtensions.Command="{x:Bind Model.EntryClickCommand, Mode=OneWay}"
                           RelativePanel.Below="GroupList">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:IKeePassEntry">
-                            <StackPanel Orientation="Horizontal">
-                                <SymbolIcon Symbol="Page" />
-                                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Title}" TextTrimming="WordEllipsis" />
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:IKeePassEntry">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
+                                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
                             </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                            <AppBarButton Grid.Column="1" Margin="0,0,0,0" Label="Copy" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding}">
+                                <AppBarButton.Icon>
+                                    <SymbolIcon Grid.Column="2" Symbol="Copy" />
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </RelativePanel>
 
         <VisualStateManager.VisualStateGroups>
