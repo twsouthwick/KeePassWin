@@ -1,0 +1,3 @@
+assembly-versioning-scheme: MajorMinorPatchTag
+mode: ContinuousDeployment
+branches: {}
