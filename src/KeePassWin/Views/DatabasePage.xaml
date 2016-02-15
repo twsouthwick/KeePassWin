@@ -28,11 +28,18 @@
                     <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
                     <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
                 </StackPanel>
-                <AppBarButton Grid.Column="1" Margin="0,0,0,0" Label="Copy" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding}">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Grid.Column="2" Symbol="Copy" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,0,0,0">
+                    <AppBarButton Label="Username" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding Path=UserName}">
+                        <AppBarButton.Icon>
+                            <SymbolIcon Symbol="Copy" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="Password" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding Path=Password}">
+                        <AppBarButton.Icon>
+                            <SymbolIcon Symbol="Copy" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </StackPanel>
             </Grid>
         </DataTemplate>
     </Page.Resources>

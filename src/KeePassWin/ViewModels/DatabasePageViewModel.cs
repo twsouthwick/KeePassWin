@@ -42,12 +42,12 @@ namespace KeePassWin.ViewModels
                 {
                 }
             });
-            CopyCommand = new DelegateCommand<IKeePassEntry>(CopyClicked);
+            CopyCommand = new DelegateCommand<string>(CopyClicked);
         }
 
-        private void CopyClicked(IKeePassEntry entry)
+        private void CopyClicked(string item)
         {
-            _clipboard.SetText(entry.Password);
+            _clipboard.SetText(item);
         }
 
         private void GroupClicked(IKeePassGroup group)
