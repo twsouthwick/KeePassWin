@@ -18,9 +18,6 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KeePassWin_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
-    <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>B95D5967998F78E87C2E33122B12D63DE53A6E20</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
@@ -112,6 +109,7 @@
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="IO\DialogDatabaseUnlocker.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
+    <Compile Include="Mvvm\TemplateMatch.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="WinKeePassModule.cs" />
     <Compile Include="Resources\en\LocalizedStrings.cs">

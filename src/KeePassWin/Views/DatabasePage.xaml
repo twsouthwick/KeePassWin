@@ -5,10 +5,37 @@
                                  xmlns:m="using:KeePassWin.Mvvm"
                                  xmlns:local="using:KeePassWin.Views"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:mvvm="using:KeePassWin.Mvvm"
                                  xmlns:prismMvvm="using:Prism.Windows.Mvvm"
                                  xmlns:models="using:KeePass.Models"
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Name="KeePassGroupTemplate" x:DataType="models:IKeePassGroup">
+            <StackPanel Orientation="Horizontal">
+                <SymbolIcon Symbol="Folder" />
+                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Name}" TextTrimming="WordEllipsis" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Name="KeePassEntryTemplate" x:DataType="models:IKeePassEntry">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
+                    <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
+                </StackPanel>
+                <AppBarButton Grid.Column="1" Margin="0,0,0,0" Label="Copy" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Grid.Column="2" Symbol="Copy" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Tag="{Binding}" x:Name="root" >
         <Grid.RowDefinitions>
@@ -21,75 +48,22 @@
                    Style="{ThemeResource HeaderTextBlockStyle}"
                    Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
         <RelativePanel Grid.Row="1">
-            <ListView x:Name="GroupList" ItemsSource="{x:Bind Path=Model.Group.Groups, Mode=OneWay}" 
+            <ListView x:Name="GroupList" ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
                           HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
                           IsItemClickEnabled="True"
-                          m:MvvmExtensions.Command="{x:Bind Model.GroupClickCommand, Mode=OneWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:IKeePassGroup">
-                        <StackPanel Orientation="Horizontal">
-                            <SymbolIcon Symbol="Folder" />
-                            <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Name}" TextTrimming="WordEllipsis" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <ListView x:Name="EntryList" ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}" 
-                          HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
-                          IsItemClickEnabled="True" 
-                          m:MvvmExtensions.Command="{x:Bind Model.EntryClickCommand, Mode=OneWay}"
-                          RelativePanel.Below="GroupList">
+                          m:MvvmExtensions.Command="{x:Bind Model.ItemClickCommand, Mode=OneWay}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     </Style>
                 </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:IKeePassEntry">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
-                                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
-                            </StackPanel>
-                            <AppBarButton Grid.Column="1" Margin="0,0,0,0" Label="Copy" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding}">
-                                <AppBarButton.Icon>
-                                    <SymbolIcon Grid.Column="2" Symbol="Copy" />
-                                </AppBarButton.Icon>
-                            </AppBarButton>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                <ListView.ItemTemplateSelector>
+                    <mvvm:TypeTemplateSelector>
+                        <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
+                        <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
+                    </mvvm:TypeTemplateSelector>
+                </ListView.ItemTemplateSelector>
             </ListView>
         </RelativePanel>
-
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState x:Name="WideState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="600" />
-                    </VisualState.StateTriggers>
-
-                    <VisualState.Setters>
-                        <Setter Target="EntryList.(RelativePanel.RightOf)" Value="GroupList" />
-                        <Setter Target="EntryList.(RelativePanel.Below)" Value="" />
-                    </VisualState.Setters>
-                </VisualState>
-
-                <VisualState x:Name="NarrowState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-
-                    <VisualState.Setters>
-                        <Setter Target="EntryList.(RelativePanel.RightOf)" Value="" />
-                        <Setter Target="EntryList.(RelativePanel.Below)" Value="GroupList" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
     </Grid>
 </prismMvvm:SessionStateAwarePage>

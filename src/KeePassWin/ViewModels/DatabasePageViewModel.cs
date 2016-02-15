@@ -7,6 +7,7 @@ using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -31,8 +32,16 @@ namespace KeePassWin.ViewModels
             _tracker = tracker;
             _navigator = navigator;
 
-            GroupClickCommand = new DelegateCommand<IKeePassGroup>(GroupClicked);
-            EntryClickCommand = new DelegateCommand(() => { });
+            ItemClickCommand = new DelegateCommand<IKeePassId>(item =>
+            {
+                if (item is IKeePassGroup)
+                {
+                    GroupClicked(item as IKeePassGroup);
+                }
+                else if (item is IKeePassEntry)
+                {
+                }
+            });
             CopyCommand = new DelegateCommand<IKeePassEntry>(CopyClicked);
         }
 
@@ -58,7 +67,19 @@ namespace KeePassWin.ViewModels
             else
             {
                 Database = db;
+                Items.Clear();
+
                 Group = db.GetGroup(key.Group) ?? db.Root;
+
+                foreach (var item in Group.Groups)
+                {
+                    Items.Add(item);
+                }
+
+                foreach (var item in Group.Entries)
+                {
+                    Items.Add(item);
+                }
             }
         }
 
@@ -81,11 +102,15 @@ namespace KeePassWin.ViewModels
             }
         }
 
-        public ICommand GroupClickCommand { get; }
-
-        public ICommand EntryClickCommand { get; }
-
         public ICommand CopyCommand { get; }
+
+        public ICommand ItemClickCommand { get; }
+
+        public IKeePassDatabase Database
+        {
+            get { return _database; }
+            set { SetProperty(ref _database, value); }
+        }
 
         public IKeePassGroup Group
         {
@@ -93,10 +118,6 @@ namespace KeePassWin.ViewModels
             set { SetProperty(ref _group, value); }
         }
 
-        public IKeePassDatabase Database
-        {
-            get { return _database; }
-            set { SetProperty(ref _database, value); }
-        }
+        public ObservableCollection<IKeePassId> Items { get; } = new ObservableCollection<IKeePassId>();
     }
 }
