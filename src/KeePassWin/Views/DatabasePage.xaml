@@ -10,39 +10,6 @@
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
 
-    <Page.Resources>
-        <DataTemplate x:Name="KeePassGroupTemplate" x:DataType="models:IKeePassGroup">
-            <StackPanel Orientation="Horizontal">
-                <SymbolIcon Symbol="Folder" />
-                <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Name}" TextTrimming="WordEllipsis" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Name="KeePassEntryTemplate" x:DataType="models:IKeePassEntry">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
-                    <TextBlock Margin="10,0,0,0" Text="{x:Bind Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,0,0,0">
-                    <AppBarButton Label="Username" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding Path=UserName}">
-                        <AppBarButton.Icon>
-                            <SymbolIcon Symbol="Copy" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                    <AppBarButton Label="Password" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding Path=Password}">
-                        <AppBarButton.Icon>
-                            <SymbolIcon Symbol="Copy" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
-
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Tag="{Binding}" x:Name="root" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

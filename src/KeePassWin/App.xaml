@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ms-appx:///Themes/KeePassWinStyles.xaml" />
+                <ResourceDictionary Source="Resources/KeePassItems.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </prism:PrismAutofacApplication.Resources>
