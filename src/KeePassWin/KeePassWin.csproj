@@ -102,6 +102,7 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchQueryParameter.cs" />
     <Compile Include="Mvvm\INavigator.cs" />
     <Compile Include="IO\CachedDialogDatabseUnlocker.cs" />
     <Compile Include="IO\IClipboard.cs" />

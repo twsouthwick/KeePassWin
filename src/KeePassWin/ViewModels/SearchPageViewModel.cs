@@ -36,8 +36,8 @@ namespace KeePassWin.ViewModels
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            var param = (SearchQuery)e.Parameter;
-            var db = await UnlockAsync(param.Id);
+            var param = SearchQueryParameter.Parse((string)e.Parameter);
+            var db = await UnlockAsync(param.Database);
 
             if (db == null)
             {
@@ -47,7 +47,7 @@ namespace KeePassWin.ViewModels
 
             _database = db;
 
-            Text = param.Text;
+            Text = param.Term;
         }
 
         private async Task<IKeePassDatabase> UnlockAsync(KeePassId id)
