@@ -69,6 +69,7 @@ namespace KeePassWin.ViewModels
             if (db == null)
             {
                 _navigator.GoBack();
+                return;
             }
 
             Database = db;
