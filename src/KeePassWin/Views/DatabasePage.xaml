@@ -14,16 +14,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <AutoSuggestBox Grid.Row="0" Grid.Column="1"
+        <AutoSuggestBox Grid.Row="0"
             QueryIcon="Find"
             QuerySubmitted="AutoSuggestBox_QuerySubmitted" />
-        <ListView Grid.Row="0" Grid.Column="0"
+        <ListView Grid.Row="1"
                   ItemsSource="{x:Bind Path=Model.Parents, Mode=OneWay}"
                   IsItemClickEnabled="True"
                   mvvm:MvvmExtensions.Command="{x:Bind Path=Model.GoToParentCommand, Mode=OneWay}">
@@ -41,11 +38,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+        <TextBlock Grid.Row="2"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Style="{ThemeResource HeaderTextBlockStyle}"
                    Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
-        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+        <ListView Grid.Row="3"
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
                   HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
                   IsItemClickEnabled="True"
