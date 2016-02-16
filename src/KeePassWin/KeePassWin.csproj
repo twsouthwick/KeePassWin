@@ -112,6 +112,10 @@
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
+    <Compile Include="ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Views\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WinKeePassModule.cs" />
     <Compile Include="Resources\en\LocalizedStrings.cs">
       <AutoGen>True</AutoGen>
@@ -182,6 +186,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\PasswordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

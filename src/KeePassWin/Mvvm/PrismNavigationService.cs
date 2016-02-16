@@ -26,5 +26,16 @@ namespace KeePassWin.Mvvm
         {
             return _navigationService.Navigate("Main", null);
         }
+
+        public bool GoToSearch(KeePassId database, string text)
+        {
+            return _navigationService.Navigate("Search", new SearchQuery { Id = database, Text = text });
+        }
+    }
+
+    internal class SearchQuery
+    {
+        public KeePassId Id { get; set; }
+        public string Text { get; set; }
     }
 }

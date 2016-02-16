@@ -7,5 +7,6 @@ namespace KeePassWin.Mvvm
         bool GoToDatabaseView(KeePassId database, KeePassId group);
         bool GoToMain();
         void GoBack();
+        bool GoToSearch(KeePassId id, string text);
     }
 }

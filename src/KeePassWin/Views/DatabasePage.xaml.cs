@@ -2,6 +2,7 @@
 using Prism.Windows.Mvvm;
 using System.ComponentModel;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace KeePassWin.Views
 {
@@ -20,6 +21,11 @@ namespace KeePassWin.Views
         private void SecondPage_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Model)));
+        }
+
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            Model.GoToSearch(sender.Text);
         }
     }
 }

@@ -53,12 +53,7 @@ namespace KeePassWin.ViewModels
                 }
             });
 
-            CopyCommand = new DelegateCommand<string>(CopyClicked);
-        }
-
-        private void CopyClicked(string item)
-        {
-            _clipboard.SetText(item);
+            CopyCommand = new DelegateCommand<string>(_clipboard.SetText);
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -94,6 +89,11 @@ namespace KeePassWin.ViewModels
 
             // Add parents to generate breadcrump navigation
             Parents = Group.EnumerateParents().Reverse().ToList();
+        }
+
+        public void GoToSearch(string text)
+        {
+            _navigator.GoToSearch(Database.Id, text);
         }
 
         private async Task<IKeePassDatabase> UnlockAsync(KeePassId id)
