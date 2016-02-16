@@ -26,7 +26,7 @@ namespace KeePass.Models
             _id = id;
             _name = name;
             _root = doc.Descendants("Group")
-                .Select(x => new XmlKeePassGroup(x))
+                .Select(x => new XmlKeePassGroup(x, null))
                 .Cast<IKeePassGroup>()
                 .First();
             _icons = doc.Descendants("Icon")
@@ -297,12 +297,13 @@ namespace KeePass.Models
         public class XmlKeePassGroup : IKeePassGroup
         {
             private readonly KeePassId _id;
+            private readonly IKeePassGroup _parent;
             private readonly List<IKeePassEntry> _entries;
             private readonly List<IKeePassGroup> _groups;
             private readonly string _name;
             private readonly string _notes;
 
-            public XmlKeePassGroup(XElement group)
+            public XmlKeePassGroup(XElement group, IKeePassGroup parent)
             {
                 _id = group.Element("UUID").Value;
 
@@ -312,17 +313,24 @@ namespace KeePass.Models
                     .ToList();
 
                 _groups = group.Elements("Group")
-                    .Select(x => new XmlKeePassGroup(x))
+                    .Select(x => new XmlKeePassGroup(x, this))
                     .Cast<IKeePassGroup>()
                     .ToList();
 
                 _name = (string)group.Element("Name");
                 _notes = (string)group.Element("Notes");
+
+                _parent = parent;
             }
 
             public KeePassId Id
             {
                 get { return _id; }
+            }
+
+            public IKeePassGroup Parent
+            {
+                get { return _parent; }
             }
 
             public IList<IKeePassEntry> Entries

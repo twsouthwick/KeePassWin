@@ -29,6 +29,7 @@ namespace KeePass.Models
     {
         string Name { get; }
         string Notes { get; }
+        IKeePassGroup Parent { get; }
         IList<IKeePassEntry> Entries { get; }
         IList<IKeePassGroup> Groups { get; }
     }

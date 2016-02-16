@@ -47,30 +47,46 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Tag="{Binding}" x:Name="root" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="Title" Grid.Row="0"
+        <ListView Grid.Row="0" ItemsSource="{x:Bind Path=Model.Parents, Mode=OneWay}"
+                  IsItemClickEnabled="True"
+                  m:MvvmExtensions.Command="{x:Bind Path=Model.GoToParentCommand, Mode=OneWay}">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:IKeePassGroup">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Bind Path=Name}" />
+                        <TextBlock Text="\" Margin="5,0,0,0" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock Grid.Row="1"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Style="{ThemeResource HeaderTextBlockStyle}"
                    Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
-        <RelativePanel Grid.Row="1">
-            <ListView x:Name="GroupList" ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
-                          HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
-                          IsItemClickEnabled="True"
-                          m:MvvmExtensions.Command="{x:Bind Model.ItemClickCommand, Mode=OneWay}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplateSelector>
-                    <mvvm:TypeTemplateSelector>
-                        <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
-                        <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
-                    </mvvm:TypeTemplateSelector>
-                </ListView.ItemTemplateSelector>
-            </ListView>
-        </RelativePanel>
+        <ListView Grid.Row="2" ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
+                  HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
+                  IsItemClickEnabled="True"
+                  m:MvvmExtensions.Command="{x:Bind Model.ItemClickCommand, Mode=OneWay}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplateSelector>
+                <mvvm:TypeTemplateSelector>
+                    <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
+                    <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
+                </mvvm:TypeTemplateSelector>
+            </ListView.ItemTemplateSelector>
+        </ListView>
     </Grid>
 </prismMvvm:SessionStateAwarePage>

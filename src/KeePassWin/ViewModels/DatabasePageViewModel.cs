@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Popups;
@@ -24,6 +25,7 @@ namespace KeePassWin.ViewModels
 
         private IKeePassDatabase _database;
         private IKeePassGroup _group;
+        private IList<IKeePassGroup> _parents;
 
         public DatabasePageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, DatabaseTracker tracker)
         {
@@ -42,6 +44,15 @@ namespace KeePassWin.ViewModels
                 {
                 }
             });
+
+            GoToParentCommand = new DelegateCommand<IKeePassGroup>(group =>
+            {
+                if (_database != null)
+                {
+                    _navigator.GoToDatabaseView(_database.Id, group.Id);
+                }
+            });
+
             CopyCommand = new DelegateCommand<string>(CopyClicked);
         }
 
@@ -64,23 +75,25 @@ namespace KeePassWin.ViewModels
             {
                 _navigator.GoBack();
             }
-            else
+
+            Database = db;
+            Items.Clear();
+
+            // Set group and entries into the Items container
+            Group = db.GetGroup(key.Group) ?? db.Root;
+
+            foreach (var item in Group.Groups)
             {
-                Database = db;
-                Items.Clear();
-
-                Group = db.GetGroup(key.Group) ?? db.Root;
-
-                foreach (var item in Group.Groups)
-                {
-                    Items.Add(item);
-                }
-
-                foreach (var item in Group.Entries)
-                {
-                    Items.Add(item);
-                }
+                Items.Add(item);
             }
+
+            foreach (var item in Group.Entries)
+            {
+                Items.Add(item);
+            }
+
+            // Add parents to generate breadcrump navigation
+            Parents = Group.EnumerateParents().Reverse().ToList();
         }
 
         private async Task<IKeePassDatabase> UnlockAsync(KeePassId id)
@@ -102,6 +115,8 @@ namespace KeePassWin.ViewModels
             }
         }
 
+        public ICommand GoToParentCommand { get; }
+
         public ICommand CopyCommand { get; }
 
         public ICommand ItemClickCommand { get; }
@@ -116,6 +131,12 @@ namespace KeePassWin.ViewModels
         {
             get { return _group; }
             set { SetProperty(ref _group, value); }
+        }
+
+        public IList<IKeePassGroup> Parents
+        {
+            get { return _parents; }
+            set { SetProperty(ref _parents, value); }
         }
 
         public ObservableCollection<IKeePassId> Items { get; } = new ObservableCollection<IKeePassId>();

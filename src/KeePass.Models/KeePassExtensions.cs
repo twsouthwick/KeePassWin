@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace KeePass.Models
 {
@@ -52,6 +53,21 @@ namespace KeePass.Models
                 {
                     yield return entry;
                 }
+            }
+        }
+
+        public static IEnumerable<IKeePassGroup> EnumerateParents(this IKeePassGroup group)
+        {
+            if (group == null)
+            {
+                yield break;
+            }
+
+            while (group != null && group.Parent != null)
+            {
+                yield return group.Parent;
+
+                group = group.Parent;
             }
         }
     }
