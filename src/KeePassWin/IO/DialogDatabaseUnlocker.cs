@@ -2,7 +2,6 @@
 using KeePass.Models;
 using KeePassWin.Views;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -23,9 +22,7 @@ namespace KeePass.IO
 
             await dialog.ShowAsync();
 
-            Debug.Assert(dialog.Result != PasswordDialog.ResultState.None);
-
-            if (dialog.Result == PasswordDialog.ResultState.Cancel)
+            if (dialog.Result == PasswordDialog.ResultState.Cancel || dialog.Result == PasswordDialog.ResultState.None)
             {
                 return null;
             }
