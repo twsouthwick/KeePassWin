@@ -18,14 +18,14 @@ namespace KeePassWin.ViewModels
     public class SearchPageViewModel : ViewModelBase
     {
         private readonly INavigator _navigator;
-        private readonly DatabaseTracker _tracker;
+        private readonly IDatabaseTracker _tracker;
         private readonly IDatabaseUnlocker _unlocker;
 
         private string _text;
         private IList<IKeePassEntry> _items;
         private IKeePassDatabase _database;
 
-        public SearchPageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, DatabaseTracker tracker)
+        public SearchPageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, IDatabaseTracker tracker)
         {
             _unlocker = unlocker;
             _tracker = tracker;

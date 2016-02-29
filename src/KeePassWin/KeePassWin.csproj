@@ -200,6 +200,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KeePass.IO.Sqlite\KeePass.IO.Sqlite.csproj">
+      <Project>{43a3f056-5f46-45a6-8975-036148e2f16b}</Project>
+      <Name>KeePass.IO.Sqlite</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KeePass.IO\KeePass.IO.csproj">
       <Project>{f515083e-9b92-4857-9a49-7933dd9c2804}</Project>
       <Name>KeePass.IO</Name>

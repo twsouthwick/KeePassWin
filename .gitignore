@@ -214,3 +214,5 @@ ModelManifest.xml
 /src/KeePassWin/_pkginfo.txt
 /test/KeePassWinTest/KeePassWinTest.nuget.props
 /test/KeePassWinTest/KeePassWinTest.nuget.targets
+*.nuget.props
+*.nuget.targets

@@ -26,7 +26,7 @@ namespace KeePass.Models
         {
             var other = obj as KeePassId;
 
-            if(other == null)
+            if (other == null)
             {
                 return false;
             }
@@ -49,9 +49,14 @@ namespace KeePass.Models
             return string.IsNullOrEmpty(id) ? s_empty : new KeePassId(id);
         }
 
-        public static explicit operator string (KeePassId id)
+        public static explicit operator string(KeePassId id)
         {
             return id.Id;
+        }
+
+        public static implicit operator KeePassId(int id)
+        {
+            return new KeePassId(id.ToString());
         }
 
         public static KeePassId Empty => s_empty;
