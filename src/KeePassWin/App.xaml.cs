@@ -1,9 +1,7 @@
 ﻿using Autofac;
 using Prism.Autofac.Windows;
-using Prism.Windows.AppModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -30,10 +28,11 @@ namespace KeePassWin
             return shell;
         }
 
-        protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
+        protected override async Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
         {
+            await KeePass.IO.Sqlite.KeePassSqliteContext.InitializeAsync();
+
             NavigationService.Navigate("Main", null);
-            return Task.FromResult<object>(null);
         }
 
         protected override void ConfigureContainer(ContainerBuilder builder)

@@ -1,9 +1,10 @@
 ﻿using KeePass.Models;
+using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 
@@ -12,71 +13,137 @@ namespace KeePass.IO.Database
     public class DatabaseTracker
     {
         private readonly StorageItemAccessList _accessList;
-        private readonly IAsyncOperation<StorageFolder> _folder;
 
         public DatabaseTracker()
         {
-            _folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("opened_databases", CreationCollisionOption.OpenIfExists);
             _accessList = StorageApplicationPermissions.FutureAccessList;
         }
 
         public async Task<bool> AddDatabaseAsync(IStorageFile dbFile)
         {
-            var token = KeePassId.FromPath(dbFile);
-
-            _accessList.AddOrReplace(GetDatabaseToken(token), dbFile);
-
-            var folder = await _folder;
-
-            // Check if file already has been created
-            var files = await folder.CreateFileQuery().GetFilesAsync();
-
-            if (files.Any(f => string.Equals(f.Name, (string)token, StringComparison.OrdinalIgnoreCase)))
+            using (var db = new Sqlite.KeePassSqliteContext())
             {
-                return false;
+                if (db.KeePassDatabases.Include(e => e.KeePass).FirstOrDefault(e => e.KeePass.Path == dbFile.Path) != null)
+                {
+                    return false;
+                }
+
+                var entry = new Sqlite.DatabaseEntry
+                {
+                    KeePass = new Sqlite.File
+                    {
+                        Path = dbFile.Path,
+                        AccessToken = (string)KeePassId.FromPath(dbFile)
+                    }
+                };
+
+                _accessList.AddOrReplace(entry.KeePass.AccessToken, dbFile);
+
+                db.Add(entry, behavior: GraphBehavior.SingleObject);
+                db.Add(entry.KeePass, behavior: GraphBehavior.SingleObject);
+
+                await db.SaveChangesAsync();
             }
 
-            // File doesn't exist, so we will now create it. We don't need any contents in, just to be present
-            await folder.CreateFileAsync((string)token, CreationCollisionOption.FailIfExists);
+#if DEBUG
+            using (var db = new Sqlite.KeePassSqliteContext())
+            {
+                var result = db.KeePassDatabases
+                     .Include(e => e.KeePass)
+                     .FirstOrDefault(e => e.KeePass.Path == dbFile.Path);
+
+                Debug.Assert(result != null);
+            }
+#endif
 
             return true;
         }
 
-        public Task AddKeyFileAsync(IStorageFile dbFile, IStorageFile keyFile)
+        public async Task AddKeyFileAsync(IStorageFile dbFile, IStorageFile keyFile)
         {
-            var token = GetKeyToken(KeePassId.FromPath(dbFile));
+            using (var db = new Sqlite.KeePassSqliteContext())
+            {
+                var entry = db.KeePassDatabases
+                    .Include(e => e.KeePass)
+                    .FirstOrDefault(e => e.KeePass.Path == dbFile.Path);
 
-            _accessList.AddOrReplace(token, keyFile);
+                if (entry == null)
+                {
+                    return;
+                }
 
-            return Task.CompletedTask;
+                entry.Key = new Sqlite.File
+                {
+                    Path = keyFile.Path,
+                    AccessToken = (string)KeePassId.FromPath(keyFile)
+                };
+
+                _accessList.AddOrReplace(entry.Key.AccessToken, keyFile);
+
+                db.Add(entry.Key, behavior: GraphBehavior.SingleObject);
+
+                await db.SaveChangesAsync();
+            }
+
+#if DEBUG
+            using (var db = new Sqlite.KeePassSqliteContext())
+            {
+                var result = db.KeePassDatabases
+                     .Include(e => e.KeePass)
+                     .Include(e => e.Key)
+                     .FirstOrDefault(e => e.KeePass.Path == dbFile.Path);
+
+                Debug.Assert(result != null);
+                Debug.Assert(result.Key.Path == keyFile.Path);
+            }
+#endif
         }
 
         public async Task<IStorageFile> GetKeyFileAsync(IStorageFile dbFile)
         {
-            var token = GetKeyToken(KeePassId.FromPath(dbFile));
-
-            if (_accessList.ContainsItem(token))
+            using (var db = new Sqlite.KeePassSqliteContext())
             {
+                var entry = db.KeePassDatabases
+                    .Include(d => d.KeePass)
+                    .Include(d => d.Key)
+                    .FirstOrDefault(d => d.KeePass.Path == dbFile.Path);
+
+                var token = entry?.Key?.AccessToken;
+
+                if (token == null || !_accessList.ContainsItem(token))
+                {
+                    return null;
+                }
+
+                if (!_accessList.ContainsItem(token))
+                {
+                    return null;
+                }
+
                 var key = await _accessList.GetFileAsync(token);
 
-                if (!key.IsAvailable)
+                if (key.IsAvailable)
+                {
+                    return key;
+                }
+                else
                 {
                     _accessList.Remove(token);
                     return null;
                 }
-
-                return key;
-            }
-            {
-                return null;
             }
         }
 
-        public async Task<IStorageFile> GetDatabaseAsync(KeePassId id)
+        public Task<IStorageFile> GetDatabaseAsync(KeePassId id)
+        {
+            return GetDatabaseAsync(GetDatabaseToken(id));
+        }
+
+        public async Task<IStorageFile> GetDatabaseAsync(string accessToken)
         {
             try
             {
-                return await _accessList.GetFileAsync(GetDatabaseToken(id));
+                return await _accessList.GetFileAsync(accessToken);
             }
             catch (ArgumentException)
             {
@@ -86,26 +153,31 @@ namespace KeePass.IO.Database
 
         public async Task<IEnumerable<IStorageFile>> GetDatabasesAsync()
         {
-            var folder = await _folder;
-            var files = await folder.GetFilesAsync();
-            var result = new List<IStorageFile>();
-
-            foreach (var file in files)
+            using (var db = new Sqlite.KeePassSqliteContext())
             {
-                var dbStorageItem = await GetDatabaseAsync(file.Name);
+                var result = new List<IStorageFile>();
 
-                if (dbStorageItem != null)
+                foreach (var file in db.KeePassDatabases.Include(k => k.KeePass))
                 {
-                    result.Add(dbStorageItem);
+                    Debug.Assert(file.KeePass != null, "Ensure EF loads the KeePass file info");
+
+                    var dbStorageItem = await GetDatabaseAsync(file.KeePass.AccessToken);
+
+                    if (dbStorageItem != null)
+                    {
+                        result.Add(dbStorageItem);
+                    }
+                    else
+                    {
+                        // There was a problem with the db cache
+                        db.KeePassDatabases.Remove(file);
+                    }
                 }
-                else
-                {
-                    // There was a problem with the db cache
-                    await file.DeleteAsync();
-                }
+
+                await db.SaveChangesAsync();
+
+                return result;
             }
-
-            return result;
         }
 
         private string GetDatabaseToken(KeePassId token) => $"{token}.kdbx";
