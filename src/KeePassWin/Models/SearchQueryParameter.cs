@@ -1,4 +1,6 @@
-﻿namespace KeePass.Models
+﻿using Newtonsoft.Json;
+
+namespace KeePass.Models
 {
     internal class SearchQueryParameter
     {
@@ -13,10 +15,7 @@
 
         public static SearchQueryParameter Parse(string entry)
         {
-            var database = entry.Substring(0, 32);
-            var term = entry.Substring(32);
-
-            return new SearchQueryParameter(database, term);
+            return JsonConvert.DeserializeObject<SearchQueryParameter>(entry);
         }
 
         public static string Encode(KeePassId database, string term)
@@ -26,7 +25,7 @@
 
         public override string ToString()
         {
-            return (string)Database + Term;
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

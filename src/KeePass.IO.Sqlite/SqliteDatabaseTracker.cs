@@ -33,7 +33,7 @@ namespace KeePass.IO.Database
                     KeePass = new Sqlite.File
                     {
                         Path = dbFile.Path,
-                        AccessToken = (string)KeePassId.FromPath(dbFile)
+                        AccessToken = Guid.NewGuid().ToString()
                     }
                 };
 
@@ -75,7 +75,7 @@ namespace KeePass.IO.Database
                 entry.Key = new Sqlite.File
                 {
                     Path = keyFile.Path,
-                    AccessToken = (string)KeePassId.FromPath(keyFile)
+                    AccessToken = Guid.NewGuid().ToString()
                 };
 
                 _accessList.AddOrReplace(entry.Key.AccessToken, keyFile);
@@ -134,13 +134,25 @@ namespace KeePass.IO.Database
             }
         }
 
-        public Task<IStorageFile> GetDatabaseAsync(KeePassId id)
+        public async Task<IStorageFile> GetDatabaseAsync(KeePassId id)
         {
-            return GetDatabaseAsync(GetDatabaseToken(id));
+            using (var db = new Sqlite.KeePassSqliteContext())
+            {
+                var entry = await db.KeePassDatabases
+                    .Include(e => e.KeePass)
+                    .FirstOrDefaultAsync(e => e.KeePass.Path == id.Id);
+
+                return await GetDatabaseAsync(entry?.KeePass?.AccessToken);
+            }
         }
 
         public async Task<IStorageFile> GetDatabaseAsync(string accessToken)
         {
+            if(accessToken == null)
+            {
+                return null;
+            }
+
             try
             {
                 return await _accessList.GetFileAsync(accessToken);

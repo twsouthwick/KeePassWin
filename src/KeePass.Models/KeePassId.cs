@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
-using Windows.Storage;
 
 namespace KeePass.Models
 {
@@ -60,23 +57,5 @@ namespace KeePass.Models
         }
 
         public static KeePassId Empty => s_empty;
-
-        /// <summary>
-        /// Generate a MD5 hash of the file name to ensure the tokens are always the same
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public static KeePassId FromPath(IStorageFile file)
-        {
-            var algorithm = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Md5);
-            var buffer = CryptographicBuffer.ConvertStringToBinary(file.Path.ToLowerInvariant(), BinaryStringEncoding.Utf16BE);
-            var hash = algorithm.CreateHash();
-
-            hash.Append(buffer);
-
-            var result = hash.GetValueAndReset();
-
-            return CryptographicBuffer.EncodeToHexString(result);
-        }
     }
 }

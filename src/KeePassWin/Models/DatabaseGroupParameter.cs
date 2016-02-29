@@ -1,4 +1,6 @@
-﻿namespace KeePass.Models
+﻿using Newtonsoft.Json;
+
+namespace KeePass.Models
 {
     internal class DatabaseGroupParameter
     {
@@ -13,10 +15,7 @@
 
         public static DatabaseGroupParameter Parse(string entry)
         {
-            var database = entry.Substring(0, 32);
-            var group = entry.Substring(32);
-
-            return new DatabaseGroupParameter(database, group);
+            return JsonConvert.DeserializeObject<DatabaseGroupParameter>(entry);
         }
 
         public static string Encode(KeePassId database, KeePassId group)
@@ -26,7 +25,7 @@
 
         public override string ToString()
         {
-            return (string)Database + (string)Group;
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

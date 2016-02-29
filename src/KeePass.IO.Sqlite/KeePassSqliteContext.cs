@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Entity;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace KeePass.IO.Sqlite
@@ -7,6 +8,11 @@ namespace KeePass.IO.Sqlite
     {
         public DbSet<DatabaseEntry> KeePassDatabases { get; set; }
         public DbSet<File> Files { get; set; }
+
+        static KeePassSqliteContext()
+        {
+            Debug.WriteLine($@"Sqlite database will be at {Windows.Storage.ApplicationData.Current.LocalFolder.Path}\settings.dat");
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
