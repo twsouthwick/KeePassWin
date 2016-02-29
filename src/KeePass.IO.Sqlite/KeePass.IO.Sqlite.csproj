@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SqliteDatabaseTracker.cs" />
     <Compile Include="KeePassSqliteContext.cs" />
     <Compile Include="Migrations\20160229035622_InitialMigration.cs" />
     <Compile Include="Migrations\20160229035622_InitialMigration.designer.cs">
@@ -115,6 +116,12 @@
     <Compile Include="Migrations\KeePassSqliteContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\KeePass.IO.Sqlite.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KeePass.Models\KeePass.Models.csproj">
+      <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
+      <Name>KeePass.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

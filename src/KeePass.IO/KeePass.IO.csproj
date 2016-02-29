@@ -115,7 +115,6 @@
     <Compile Include="Crypto\Salsa20Cipher.cs" />
     <Compile Include="Crypto\Salsa20RandomGenerator.cs" />
     <Compile Include="Database\DatabaseCacheEvent.cs" />
-    <Compile Include="Database\DatabaseTracker.cs" />
     <Compile Include="Database\DatabaseCache.cs" />
     <Compile Include="Database\EncryptedDatabaseUnlocker.cs" />
     <Compile Include="FileFormat.cs" />

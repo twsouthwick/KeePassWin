@@ -10,11 +10,11 @@ using Windows.Storage.AccessCache;
 
 namespace KeePass.IO.Database
 {
-    public class DatabaseTracker
+    public class SqliteDatabaseTracker : IDatabaseTracker
     {
         private readonly StorageItemAccessList _accessList;
 
-        public DatabaseTracker()
+        public SqliteDatabaseTracker()
         {
             _accessList = StorageApplicationPermissions.FutureAccessList;
         }

@@ -14,7 +14,8 @@ namespace KeePassWin
             builder.RegisterType<DatabaseCache>()
                 .SingleInstance();
 
-            builder.RegisterType<DatabaseTracker>()
+            builder.RegisterType<SqliteDatabaseTracker>()
+                .As<IDatabaseTracker>()
                 .SingleInstance();
 
             builder.RegisterType<DialogDatabaseUnlocker>()
