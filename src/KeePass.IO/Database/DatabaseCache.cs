@@ -10,11 +10,11 @@ namespace KeePass.IO.Database
     {
         public delegate void DatabaseCacheUpdatedHandler(object sender, DatabaseCacheEvent arg, IStorageFile database);
 
-        private readonly DatabaseTracker _databaseTracker;
+        private readonly IDatabaseTracker _databaseTracker;
 
-        public DatabaseCache(DatabaseTracker settings)
+        public DatabaseCache(IDatabaseTracker databaseTracker)
         {
-            _databaseTracker = settings;
+            _databaseTracker = databaseTracker;
         }
 
         public async Task<IStorageFile> AddDatabaseAsync()

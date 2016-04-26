@@ -78,7 +78,7 @@ namespace KeePassWin.ViewModels
             {
                 DisplayName = dbFile.Name,
                 FontIcon = Symbol.ProtectedDocument,
-                Command = new DelegateCommand(() => _navigator.GoToDatabaseView(KeePassId.FromPath(dbFile), KeePassId.Empty))
+                Command = new DelegateCommand(() => _navigator.GoToDatabaseView(dbFile.Path, KeePassId.Empty))
             };
 
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Add(entry));

@@ -19,7 +19,7 @@ namespace KeePassWin.ViewModels
     public class DatabasePageViewModel : ViewModelBase
     {
         private readonly IDatabaseUnlocker _unlocker;
-        private readonly DatabaseTracker _tracker;
+        private readonly IDatabaseTracker _tracker;
         private readonly INavigator _navigator;
         private readonly IClipboard _clipboard;
 
@@ -27,7 +27,7 @@ namespace KeePassWin.ViewModels
         private IKeePassGroup _group;
         private IList<IKeePassGroup> _parents;
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, DatabaseTracker tracker)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, IDatabaseTracker tracker)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;

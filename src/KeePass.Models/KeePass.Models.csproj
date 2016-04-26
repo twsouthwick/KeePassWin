@@ -108,13 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrsAlgorithm.cs" />
-    <Compile Include="DatabaseMetaData.cs" />
-    <Compile Include="EntryItemModel.cs" />
     <Compile Include="FileHeaders.cs" />
-    <Compile Include="GroupItemModel.cs" />
-    <Compile Include="ICacheService.cs" />
+    <Compile Include="IDatabaseTracker.cs" />
     <Compile Include="IDatabaseUnlocker.cs" />
-    <Compile Include="ItemModelBase.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />
