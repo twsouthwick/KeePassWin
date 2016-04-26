@@ -211,8 +211,10 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 /src/KeePassWin/BundleArtifacts
+/src/KeePassWin/AppxPackages
 /src/KeePassWin/_pkginfo.txt
 /test/KeePassWinTest/KeePassWinTest.nuget.props
 /test/KeePassWinTest/KeePassWinTest.nuget.targets
+/test/KeePassWinTest/AppxPackages
 *.nuget.props
 *.nuget.targets
