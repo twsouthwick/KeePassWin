@@ -8,7 +8,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
-using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
@@ -51,7 +50,7 @@ namespace KeePassWin.ViewModels
             });
         }
 
-        private async void DataBaseCacheUpdate(object sender, DatabaseCacheEvent arg, IStorageFile database)
+        private async void DataBaseCacheUpdate(object sender, DatabaseCacheEvent arg, IFile database)
         {
             if (arg == DatabaseCacheEvent.Added)
             {
@@ -72,7 +71,7 @@ namespace KeePassWin.ViewModels
             }
         }
 
-        private async Task AddDatabaseEntry(IStorageFile dbFile)
+        private async Task AddDatabaseEntry(IFile dbFile)
         {
             var entry = new MenuItemViewModel
             {

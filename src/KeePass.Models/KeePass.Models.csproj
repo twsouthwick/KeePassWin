@@ -111,6 +111,7 @@
     <Compile Include="FileHeaders.cs" />
     <Compile Include="IDatabaseTracker.cs" />
     <Compile Include="IDatabaseUnlocker.cs" />
+    <Compile Include="IFile.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />

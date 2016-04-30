@@ -1,24 +1,24 @@
 ﻿using KeePass.IO.Database;
+using KeePass.Models;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using System;
 using System.Windows.Input;
 using Windows.ApplicationModel.Core;
-using Windows.Storage;
 
 namespace KeePassWin.ViewModels
 {
     public class PasswordDialogViewModel : ViewModelBase
     {
-        private IStorageItem _keyFile;
+        private IFile _keyFile;
 
-        public PasswordDialogViewModel(IStorageFile db, DatabaseCache cache, IDatabaseTracker tracker)
+        public PasswordDialogViewModel(IFile db, DatabaseCache cache, IDatabaseTracker tracker)
         {
             Name = db.Name;
 
             AddKeyFileCommand = new DelegateCommand(async () =>
             {
-                KeyFile = await cache.AddKeyFileAsync(db);
+                KeyFile = await cache.AddKeyFileAsync(db); 
             });
 
             tracker.GetKeyFileAsync(db).ContinueWith(async r =>
@@ -30,7 +30,7 @@ namespace KeePassWin.ViewModels
         /// <summary>
         /// The key associated with the database. This is of type IStorageItem due to x:Bind restrictions
         /// </summary>
-        public IStorageItem KeyFile
+        public IFile KeyFile
         {
             get { return _keyFile; }
             set { SetProperty(ref _keyFile, value); }

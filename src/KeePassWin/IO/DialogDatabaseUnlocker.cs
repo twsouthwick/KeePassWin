@@ -3,20 +3,19 @@ using KeePass.Models;
 using KeePassWin.Views;
 using System;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace KeePass.IO
 {
     public class DialogDatabaseUnlocker : EncryptedDatabaseUnlocker, IDatabaseUnlocker
     {
-        private readonly Func<IStorageFile, PasswordDialog> _dialogFactory;
+        private readonly Func<IFile, PasswordDialog> _dialogFactory;
 
-        public DialogDatabaseUnlocker(Func<IStorageFile, PasswordDialog> dialogFactory)
+        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory)
         {
             _dialogFactory = dialogFactory;
         }
 
-        public override async Task<IKeePassDatabase> UnlockAsync(IStorageFile file)
+        public override async Task<IKeePassDatabase> UnlockAsync(IFile file)
         {
             var dialog = _dialogFactory(file);
 
@@ -29,7 +28,7 @@ namespace KeePass.IO
 
             var model = dialog.Model;
 
-            return await UnlockAsync(file, model.KeyFile as IStorageFile, dialog.Model.Password);
+            return await UnlockAsync(file, model.KeyFile, dialog.Model.Password);
         }
     }
 }

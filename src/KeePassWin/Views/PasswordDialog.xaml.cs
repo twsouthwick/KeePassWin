@@ -1,6 +1,6 @@
-﻿using KeePassWin.ViewModels;
+﻿using KeePass.Models;
+using KeePassWin.ViewModels;
 using System;
-using Windows.Storage;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -11,7 +11,7 @@ namespace KeePassWin.Views
     {
         public enum ResultState { None, Open, Cancel };
 
-        public PasswordDialog(IStorageFile db, Func<IStorageFile, PasswordDialogViewModel> modelCreator)
+        public PasswordDialog(IFile db, Func<IFile, PasswordDialogViewModel> modelCreator)
         {
             this.InitializeComponent();
 

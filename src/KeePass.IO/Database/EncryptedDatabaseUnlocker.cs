@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace KeePass.IO.Database
 {
@@ -28,12 +27,12 @@ namespace KeePass.IO.Database
 
     public class EncryptedDatabaseUnlocker : IDatabaseUnlocker
     {
-        public virtual Task<IKeePassDatabase> UnlockAsync(IStorageFile file)
+        public virtual Task<IKeePassDatabase> UnlockAsync(IFile file)
         {
             return UnlockAsync(file, null, null);
         }
 
-        protected async Task<IKeePassDatabase> UnlockAsync(IStorageFile file, IStorageFile keyfile, string password)
+        protected async Task<IKeePassDatabase> UnlockAsync(IFile file, IFile keyfile, string password)
         {
             try
             {
@@ -44,12 +43,12 @@ namespace KeePass.IO.Database
                     await _password.AddKeyFileAsync(keyfile);
 
                     // TODO: handle errors & display transformation progress
-                    var result = await FileFormat.Headers(fs);
+                    var result = await FileFormat.Headers(fs.AsInputStream());
                     var headers = result.Headers;
 
                     var masterKey = await _password.GetMasterKey(headers);
 
-                    using (var decrypted = await FileFormat.Decrypt(fs, masterKey.ToArray() , headers))
+                    using (var decrypted = await FileFormat.Decrypt(fs.AsRandomAccessStream(), masterKey.ToArray() , headers))
                     {
                         // TODO: verify start bytes
                         await FileFormat.VerifyStartBytes(decrypted, headers);

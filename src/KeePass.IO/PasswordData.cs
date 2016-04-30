@@ -1,4 +1,5 @@
 ﻿using KeePass.IO.Models;
+using KeePass.Models;
 using System;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,6 @@ using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
-using Windows.Storage;
 using Windows.Storage.Streams;
 
 namespace KeePass.IO
@@ -50,7 +50,7 @@ namespace KeePass.IO
         /// Adds the specified key file.
         /// </summary>
         /// <param name="input">The keyfile stream. If a null stream is passed in, no key file is added</param>
-        public async Task AddKeyFileAsync(IStorageFile keyFile)
+        public async Task AddKeyFileAsync(IFile keyFile)
         {
             if (keyFile == null)
             {
@@ -59,7 +59,7 @@ namespace KeePass.IO
 
             using (var input = await keyFile.OpenReadAsync())
             {
-                _keyFile = await LoadKeyFile(input);
+                _keyFile = await LoadKeyFile(input.AsRandomAccessStream());
             }
         }
 

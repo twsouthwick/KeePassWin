@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace KeePass.IO
 {
@@ -16,7 +15,7 @@ namespace KeePass.IO
             _unlocker = unlocker;
         }
 
-        public async Task<IKeePassDatabase> UnlockAsync(IStorageFile file)
+        public async Task<IKeePassDatabase> UnlockAsync(IFile file)
         {
             IKeePassDatabase db;
             if (_cache.TryGetValue(file.Path, out db))

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
 using Windows.Storage.AccessCache;
 
 namespace KeePass.IO.Database
@@ -19,7 +18,7 @@ namespace KeePass.IO.Database
             _accessList = StorageApplicationPermissions.FutureAccessList;
         }
 
-        public async Task<bool> AddDatabaseAsync(IStorageFile dbFile)
+        public async Task<bool> AddDatabaseAsync(IFile dbFile)
         {
             using (var db = new Sqlite.KeePassSqliteContext())
             {
@@ -37,7 +36,8 @@ namespace KeePass.IO.Database
                     }
                 };
 
-                _accessList.AddOrReplace(entry.KeePass.AccessToken, dbFile);
+                Debug.Assert(dbFile.AsStorageItem() != null);
+                _accessList.AddOrReplace(entry.KeePass.AccessToken, dbFile.AsStorageItem());
 
                 db.Add(entry, behavior: GraphBehavior.SingleObject);
                 db.Add(entry.KeePass, behavior: GraphBehavior.SingleObject);
@@ -59,7 +59,7 @@ namespace KeePass.IO.Database
             return true;
         }
 
-        public async Task AddKeyFileAsync(IStorageFile dbFile, IStorageFile keyFile)
+        public async Task AddKeyFileAsync(IFile dbFile, IFile keyFile)
         {
             using (var db = new Sqlite.KeePassSqliteContext())
             {
@@ -78,7 +78,8 @@ namespace KeePass.IO.Database
                     AccessToken = Guid.NewGuid().ToString()
                 };
 
-                _accessList.AddOrReplace(entry.Key.AccessToken, keyFile);
+                Debug.Assert(keyFile.AsStorageItem() != null);
+                _accessList.AddOrReplace(entry.Key.AccessToken, keyFile.AsStorageItem());
 
                 db.Add(entry.Key, behavior: GraphBehavior.SingleObject);
 
@@ -99,7 +100,7 @@ namespace KeePass.IO.Database
 #endif
         }
 
-        public async Task<IStorageFile> GetKeyFileAsync(IStorageFile dbFile)
+        public async Task<IFile> GetKeyFileAsync(IFile dbFile)
         {
             using (var db = new Sqlite.KeePassSqliteContext())
             {
@@ -124,7 +125,7 @@ namespace KeePass.IO.Database
 
                 if (key.IsAvailable)
                 {
-                    return key;
+                    return new StorageItemFile(key);
                 }
                 else
                 {
@@ -134,7 +135,7 @@ namespace KeePass.IO.Database
             }
         }
 
-        public async Task<IStorageFile> GetDatabaseAsync(KeePassId id)
+        public async Task<IFile> GetDatabaseAsync(KeePassId id)
         {
             using (var db = new Sqlite.KeePassSqliteContext())
             {
@@ -146,16 +147,16 @@ namespace KeePass.IO.Database
             }
         }
 
-        public async Task<IStorageFile> GetDatabaseAsync(string accessToken)
+        public async Task<IFile> GetDatabaseAsync(string accessToken)
         {
-            if(accessToken == null)
+            if (accessToken == null)
             {
                 return null;
             }
 
             try
             {
-                return await _accessList.GetFileAsync(accessToken);
+                return new StorageItemFile(await _accessList.GetFileAsync(accessToken));
             }
             catch (ArgumentException)
             {
@@ -163,11 +164,11 @@ namespace KeePass.IO.Database
             }
         }
 
-        public async Task<IEnumerable<IStorageFile>> GetDatabasesAsync()
+        public async Task<IEnumerable<IFile>> GetDatabasesAsync()
         {
             using (var db = new Sqlite.KeePassSqliteContext())
             {
-                var result = new List<IStorageFile>();
+                var result = new List<IFile>();
 
                 foreach (var file in db.KeePassDatabases.Include(k => k.KeePass))
                 {

@@ -115,6 +115,7 @@
     </Compile>
     <Compile Include="Migrations\KeePassSqliteContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageItemFile.cs" />
     <EmbeddedResource Include="Properties\KeePass.IO.Sqlite.rd.xml" />
   </ItemGroup>
   <ItemGroup>

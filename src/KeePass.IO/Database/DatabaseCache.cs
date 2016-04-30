@@ -1,14 +1,14 @@
-﻿using System;
+﻿using KeePass.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.Storage;
 using Windows.Storage.Pickers;
 
 namespace KeePass.IO.Database
 {
     public class DatabaseCache
     {
-        public delegate void DatabaseCacheUpdatedHandler(object sender, DatabaseCacheEvent arg, IStorageFile database);
+        public delegate void DatabaseCacheUpdatedHandler(object sender, DatabaseCacheEvent arg, IFile database);
 
         private readonly IDatabaseTracker _databaseTracker;
 
@@ -17,7 +17,7 @@ namespace KeePass.IO.Database
             _databaseTracker = databaseTracker;
         }
 
-        public async Task<IStorageFile> AddDatabaseAsync()
+        public async Task<IFile> AddDatabaseAsync()
         {
             var result = await OpenFileAsync(".kdbx");
 
@@ -38,7 +38,7 @@ namespace KeePass.IO.Database
             return result;
         }
 
-        public async Task<IStorageFile> AddKeyFileAsync(IStorageFile db)
+        public async Task<IFile> AddKeyFileAsync(IFile db)
         {
             var result = await OpenFileAsync("*");
 
@@ -52,18 +52,18 @@ namespace KeePass.IO.Database
             return result;
         }
 
-        private async Task<IStorageFile> OpenFileAsync(string extension)
+        private async Task<IFile> OpenFileAsync(string extension)
         {
             var picker = new FileOpenPicker();
 
             picker.FileTypeFilter.Add(extension);
 
-            return await picker.PickSingleFileAsync();
+            return (await picker.PickSingleFileAsync()).AsFile();
         }
 
         public event DatabaseCacheUpdatedHandler DatabaseUpdated;
 
-        public Task<IEnumerable<IStorageFile>> GetDatabaseFilesAsync()
+        public Task<IEnumerable<IFile>> GetDatabaseFilesAsync()
         {
             return _databaseTracker.GetDatabasesAsync();
         }
