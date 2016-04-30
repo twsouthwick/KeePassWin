@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrsAlgorithm.cs" />
+    <Compile Include="Crypto\IRandomGenerator.cs" />
     <Compile Include="DatabaseUnlockException.cs" />
     <Compile Include="FileFormats.cs" />
     <Compile Include="FileHeaders.cs" />

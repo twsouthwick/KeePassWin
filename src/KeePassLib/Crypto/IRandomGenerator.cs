@@ -1,7 +1,4 @@
-﻿using System;
-using Windows.Storage.Streams;
-
-namespace KeePass.Crypto
+﻿namespace KeePass.Crypto
 {
     public interface IRandomGenerator
     {
@@ -10,6 +7,6 @@ namespace KeePass.Crypto
         /// </summary>
         /// <param name="size">Size of the bytes buffer.</param>
         /// <returns>Random bytes buffer.</returns>
-        IBuffer GetRandomBytes(int size);
+        byte[] GetRandomBytes(int size);
     }
 }

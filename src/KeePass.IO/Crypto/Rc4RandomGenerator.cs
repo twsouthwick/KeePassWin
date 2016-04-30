@@ -51,7 +51,7 @@ namespace KeePass.Crypto
         /// <returns>
         /// Random bytes buffer.
         /// </returns>
-        public IBuffer GetRandomBytes(int size)
+        public byte[] GetRandomBytes(int size)
         {
             var result = new byte[size];
 
@@ -74,7 +74,7 @@ namespace KeePass.Crypto
                 }
             }
 
-            return result.AsBuffer();
+            return result;
         }
     }
 }

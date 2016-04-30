@@ -340,7 +340,7 @@ namespace KeePass
                 var padding = generator.GetRandomBytes(length);
 
                 for (var i = 0U; i < length; i++)
-                    encrypted[i] ^= padding.GetByte(i);
+                    encrypted[i] ^= padding[i];
 
                 protectedString.Value = Encoding.UTF8
                     .GetString(encrypted, 0, length);

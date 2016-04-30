@@ -27,14 +27,14 @@ namespace KeePass.Crypto
             _cipher = new Salsa20Cipher(key.ToArray(), iv);
         }
 
-        public IBuffer GetRandomBytes(int size)
+        public byte[] GetRandomBytes(int size)
         {
             var result = new byte[size];
 
             if (size > 0)
                 _cipher.Encrypt(result, result.Length, false);
 
-            return result.AsBuffer();
+            return result;
         }
     }
 }
