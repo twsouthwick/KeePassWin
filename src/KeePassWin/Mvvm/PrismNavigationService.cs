@@ -1,4 +1,5 @@
-﻿using KeePass.Models;
+﻿using KeePass;
+using KeePass.Models;
 using Prism.Windows.Navigation;
 
 namespace KeePassWin.Mvvm

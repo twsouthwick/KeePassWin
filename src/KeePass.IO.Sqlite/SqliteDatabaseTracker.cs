@@ -1,5 +1,4 @@
-﻿using KeePass.Models;
-using Microsoft.Data.Entity;
+﻿using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.AccessCache;
 
-namespace KeePass.IO.Database
+namespace KeePass
 {
     public class SqliteDatabaseTracker : IDatabaseTracker
     {
@@ -20,16 +19,16 @@ namespace KeePass.IO.Database
 
         public async Task<bool> AddDatabaseAsync(IFile dbFile)
         {
-            using (var db = new Sqlite.KeePassSqliteContext())
+            using (var db = new KeePassSqliteContext())
             {
                 if (db.KeePassDatabases.Include(e => e.KeePass).FirstOrDefault(e => e.KeePass.Path == dbFile.Path) != null)
                 {
                     return false;
                 }
 
-                var entry = new Sqlite.DatabaseEntry
+                var entry = new DatabaseEntry
                 {
-                    KeePass = new Sqlite.File
+                    KeePass = new File
                     {
                         Path = dbFile.Path,
                         AccessToken = Guid.NewGuid().ToString()
@@ -46,7 +45,7 @@ namespace KeePass.IO.Database
             }
 
 #if DEBUG
-            using (var db = new Sqlite.KeePassSqliteContext())
+            using (var db = new KeePassSqliteContext())
             {
                 var result = db.KeePassDatabases
                      .Include(e => e.KeePass)
@@ -61,7 +60,7 @@ namespace KeePass.IO.Database
 
         public async Task AddKeyFileAsync(IFile dbFile, IFile keyFile)
         {
-            using (var db = new Sqlite.KeePassSqliteContext())
+            using (var db = new KeePassSqliteContext())
             {
                 var entry = db.KeePassDatabases
                     .Include(e => e.KeePass)
@@ -72,7 +71,7 @@ namespace KeePass.IO.Database
                     return;
                 }
 
-                entry.Key = new Sqlite.File
+                entry.Key = new File
                 {
                     Path = keyFile.Path,
                     AccessToken = Guid.NewGuid().ToString()
@@ -87,7 +86,7 @@ namespace KeePass.IO.Database
             }
 
 #if DEBUG
-            using (var db = new Sqlite.KeePassSqliteContext())
+            using (var db = new KeePassSqliteContext())
             {
                 var result = db.KeePassDatabases
                      .Include(e => e.KeePass)
@@ -102,7 +101,7 @@ namespace KeePass.IO.Database
 
         public async Task<IFile> GetKeyFileAsync(IFile dbFile)
         {
-            using (var db = new Sqlite.KeePassSqliteContext())
+            using (var db = new KeePassSqliteContext())
             {
                 var entry = db.KeePassDatabases
                     .Include(d => d.KeePass)
@@ -137,7 +136,7 @@ namespace KeePass.IO.Database
 
         public async Task<IFile> GetDatabaseAsync(KeePassId id)
         {
-            using (var db = new Sqlite.KeePassSqliteContext())
+            using (var db = new KeePassSqliteContext())
             {
                 var entry = await db.KeePassDatabases
                     .Include(e => e.KeePass)
@@ -166,7 +165,7 @@ namespace KeePass.IO.Database
 
         public async Task<IEnumerable<IFile>> GetDatabasesAsync()
         {
-            using (var db = new Sqlite.KeePassSqliteContext())
+            using (var db = new KeePassSqliteContext())
             {
                 var result = new List<IFile>();
 

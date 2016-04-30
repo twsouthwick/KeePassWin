@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KeePass.Models
+namespace KeePass
 {
     public interface IKeePassDatabase
     {

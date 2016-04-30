@@ -7,6 +7,7 @@
                                  xmlns:mvvm="using:KeePassWin.Mvvm"
                                  xmlns:prismMvvm="using:Prism.Windows.Mvvm"
                                  xmlns:models="using:KeePass.Models"
+                                 xmlns:keepass="using:KeePass"
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
 
@@ -30,7 +31,7 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:IKeePassGroup">
+                <DataTemplate x:DataType="keepass:IKeePassGroup">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{x:Bind Path=Name}" />
                         <TextBlock Text="\" Margin="5,0,0,0" />

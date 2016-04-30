@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace KeePass.Models
+namespace KeePass
 {
     [DebuggerDisplay("KeePass ID: {Id}")]
     public class KeePassId

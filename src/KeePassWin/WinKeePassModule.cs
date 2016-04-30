@@ -1,7 +1,6 @@
 ﻿using Autofac;
+using KeePass;
 using KeePass.IO;
-using KeePass.IO.Database;
-using KeePass.Models;
 using KeePassWin.Mvvm;
 using System;
 

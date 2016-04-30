@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 
-namespace KeePass.IO
+namespace KeePass
 {
     public class TimedClipboard : IClipboard
     {

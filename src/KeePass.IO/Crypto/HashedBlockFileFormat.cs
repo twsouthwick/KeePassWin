@@ -7,7 +7,7 @@ using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 
-namespace KeePass.IO.Crypto
+namespace KeePass.Crypto
 {
     public class HashedBlockFileFormat
     {

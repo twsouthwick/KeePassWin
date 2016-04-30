@@ -22,7 +22,7 @@
 using System;
 using System.Diagnostics;
 
-namespace KeePassLib.Cryptography.Cipher
+namespace KeePass.Crypto
 {
     public sealed class Salsa20Cipher
     {

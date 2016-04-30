@@ -1,7 +1,6 @@
-﻿using KeePass.IO.Crypto;
-using System;
+﻿using System;
 
-namespace KeePass.IO.Models
+namespace KeePass
 {
     /// <summary>
     /// Headers of a KeePass 2.x database file.

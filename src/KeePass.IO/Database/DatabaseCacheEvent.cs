@@ -1,4 +1,4 @@
-﻿namespace KeePass.IO.Database
+﻿namespace KeePass
 {
     public enum DatabaseCacheEvent
     {

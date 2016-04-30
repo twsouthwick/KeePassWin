@@ -1,10 +1,8 @@
-﻿using KeePass.IO.Database;
-using KeePass.Models;
-using KeePassWin.Views;
+﻿using KeePassWin.Views;
 using System;
 using System.Threading.Tasks;
 
-namespace KeePass.IO
+namespace KeePass
 {
     public class DialogDatabaseUnlocker : EncryptedDatabaseUnlocker, IDatabaseUnlocker
     {

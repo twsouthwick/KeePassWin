@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Storage.Streams;
 
-namespace KeePass.IO.Crypto
+namespace KeePass.Crypto
 {
     public class Rc4RandomGenerator : IRandomGenerator
     {

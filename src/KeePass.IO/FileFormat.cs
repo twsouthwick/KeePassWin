@@ -1,5 +1,4 @@
-﻿using KeePass.IO.Crypto;
-using KeePass.IO.Models;
+﻿using KeePass.Crypto;
 using System;
 using System.IO.Compression;
 using System.Linq;
@@ -11,7 +10,7 @@ using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 
-namespace KeePass.IO
+namespace KeePass
 {
     public static class FileFormat
     {

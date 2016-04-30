@@ -5,7 +5,7 @@ using Windows.Foundation;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 
-namespace KeePass.IO.Crypto
+namespace KeePass.Crypto
 {
     /// <summary>
     /// <see cref="IInputStream"/> wrapper that provides the SHA 256 hash

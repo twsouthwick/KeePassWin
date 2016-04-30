@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace KeePass.Models
+namespace KeePass
 {
     public class KeePassField
     {

@@ -1,4 +1,4 @@
-﻿namespace KeePass.IO
+﻿namespace KeePass
 {
     public interface IClipboard
     {

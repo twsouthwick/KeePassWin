@@ -1,5 +1,4 @@
-﻿using KeePass.IO;
-using KeePass.IO.Database;
+﻿using KeePass;
 using KeePass.Models;
 using KeePassWin.Mvvm;
 using Prism.Commands;

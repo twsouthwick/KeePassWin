@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace KeePass.Models
+namespace KeePass
 {
     public interface IFile
     {

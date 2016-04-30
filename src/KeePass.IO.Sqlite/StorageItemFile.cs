@@ -1,11 +1,10 @@
-﻿using KeePass.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace KeePass.IO
+namespace KeePass
 {
     public class StorageItemFile : IFile
     {

@@ -2,7 +2,7 @@
 using Windows.Foundation;
 using Windows.Storage.Streams;
 
-namespace KeePass.IO
+namespace KeePass
 {
     public static class Utils
     {

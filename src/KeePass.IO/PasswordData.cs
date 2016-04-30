@@ -1,6 +1,4 @@
-﻿using KeePass.IO.Models;
-using KeePass.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -12,7 +10,7 @@ using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 
-namespace KeePass.IO
+namespace KeePass
 {
     public class PasswordData
     {

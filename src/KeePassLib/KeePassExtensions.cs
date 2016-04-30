@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
-namespace KeePass.Models
+namespace KeePass
 {
     public static class KeePassExtensions
     {

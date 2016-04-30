@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.Storage.Streams;
 
-namespace KeePass.IO.Crypto
+namespace KeePass.Crypto
 {
     public interface IRandomGenerator
     {

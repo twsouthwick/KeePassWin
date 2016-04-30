@@ -1,4 +1,4 @@
-﻿using KeePass.Models;
+﻿using KeePass;
 
 namespace KeePassWin.Mvvm
 {

@@ -2,9 +2,8 @@
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
-using KeePassLib.Cryptography.Cipher;
 
-namespace KeePass.IO.Crypto
+namespace KeePass.Crypto
 {
     public class Salsa20RandomGenerator : IRandomGenerator
     {

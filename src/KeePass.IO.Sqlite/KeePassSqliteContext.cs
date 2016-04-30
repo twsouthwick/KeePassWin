@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace KeePass.IO.Sqlite
+namespace KeePass
 {
     public class KeePassSqliteContext : DbContext
     {

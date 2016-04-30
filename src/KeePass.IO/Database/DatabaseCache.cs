@@ -1,10 +1,9 @@
-﻿using KeePass.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
 
-namespace KeePass.IO.Database
+namespace KeePass
 {
     public class DatabaseCache
     {

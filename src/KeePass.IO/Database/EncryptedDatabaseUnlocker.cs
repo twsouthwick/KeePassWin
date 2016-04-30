@@ -1,11 +1,10 @@
-﻿using KeePass.Models;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
-namespace KeePass.IO.Database
+namespace KeePass
 {
     public class UnknownDatabaseUnlockException : DatabaseUnlockException
     {

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using KeePass.Models;
 
-namespace KeePass.IO.Database
+namespace KeePass
 {
     public interface IDatabaseTracker
     {

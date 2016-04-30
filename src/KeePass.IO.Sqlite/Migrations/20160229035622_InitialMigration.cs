@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 
-namespace KeePass.IO.Sqlite.Migrations
+namespace KeePass
 {
     public partial class InitialMigration : Migration
     {

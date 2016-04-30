@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KeePass.IO.Models
+﻿namespace KeePass
 {
     public enum FileFormats
     {

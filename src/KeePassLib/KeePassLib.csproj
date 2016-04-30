@@ -107,7 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrsAlgorithm.cs" />
+    <Compile Include="FileFormats.cs" />
     <Compile Include="FileHeaders.cs" />
+    <Compile Include="HeaderFields.cs" />
     <Compile Include="IDatabaseTracker.cs" />
     <Compile Include="IDatabaseUnlocker.cs" />
     <Compile Include="IFile.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadHeaderResult.cs" />
     <Compile Include="XmlKeePassDatabase.cs" />
     <Content Include="Properties\KeePass.Models.rd.xml" />
   </ItemGroup>

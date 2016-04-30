@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using KeePass;
 using Prism.Autofac.Windows;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
@@ -30,7 +31,7 @@ namespace KeePassWin
 
         protected override async Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
         {
-            await KeePass.IO.Sqlite.KeePassSqliteContext.InitializeAsync();
+            await KeePassSqliteContext.InitializeAsync();
 
             NavigationService.Navigate("Main", null);
         }

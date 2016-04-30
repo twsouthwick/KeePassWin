@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace KeePass.IO.Models
+﻿namespace KeePass
 {
-    internal enum HeaderFields : byte
+    public enum HeaderFields : byte
     {
         EndOfHeader = 0,
         Comment = 1,

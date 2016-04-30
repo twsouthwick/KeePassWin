@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KeePass.IO.Crypto
+﻿namespace KeePass
 {
     public enum CrsAlgorithm
     {
