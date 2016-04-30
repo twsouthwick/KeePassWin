@@ -7,8 +7,8 @@
     <ProjectGuid>{B4D06DD3-1980-4F4E-9867-4E1625F8F14F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KeePass.Models</RootNamespace>
-    <AssemblyName>KeePass.Models</AssemblyName>
+    <RootNamespace>KeePassLib</RootNamespace>
+    <AssemblyName>KeePassLib</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

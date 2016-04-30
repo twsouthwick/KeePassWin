@@ -119,9 +119,9 @@
     <EmbeddedResource Include="Properties\KeePass.IO.Sqlite.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KeePass.Models\KeePass.Models.csproj">
+    <ProjectReference Include="..\KeePassLib\KeePassLib.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
-      <Name>KeePass.Models</Name>
+      <Name>KeePassLib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

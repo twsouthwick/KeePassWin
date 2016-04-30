@@ -131,9 +131,9 @@
       <Project>{43a3f056-5f46-45a6-8975-036148e2f16b}</Project>
       <Name>KeePass.IO.Sqlite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KeePass.Models\KeePass.Models.csproj">
+    <ProjectReference Include="..\KeePassLib\KeePassLib.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
-      <Name>KeePass.Models</Name>
+      <Name>KeePassLib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
