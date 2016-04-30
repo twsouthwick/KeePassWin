@@ -16,15 +16,17 @@ namespace KeePass.Crypto
         /// </summary>
         /// <param name="input">The hashed block stream.</param>
         /// <returns>The de-hashed stream.</returns>
-        public static async Task<Stream> Read(IInputStream input)
+        public static async Task<Stream> Read(Stream inputStream)
         {
-            if (input == null)
+            if (inputStream == null)
                 throw new ArgumentNullException("input");
+
+            var input = inputStream.AsInputStream();
 
             var blockIndex = 0;
             var result = new MemoryStream();
             var hash = WindowsRuntimeBuffer.Create(32);
-            
+
             var reader = new DataReader(input)
             {
                 ByteOrder = ByteOrder.LittleEndian,

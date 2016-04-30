@@ -47,18 +47,21 @@ namespace KeePass
 
                     var masterKey = await _password.GetMasterKey(headers);
 
-                    using (var decrypted = await FileFormat.Decrypt(fs.AsRandomAccessStream(), masterKey.ToArray() , headers))
-                    {
-                        // TODO: verify start bytes
-                        await FileFormat.VerifyStartBytes(decrypted, headers);
+                    var decrypted = await FileFormat.Decrypt(fs, masterKey.ToArray(), headers);
 
-                        // Parse content
-                        var doc = await FileFormat.ParseContent(decrypted, headers.UseGZip, headers);
+                    // Wrap in a stream so position is tracked
+                    var stream = new MemoryStream(decrypted);
 
-                        // TODO: verify headers integrity
+                    // TODO: Verify start bytes. This must be called even without validation so that
+                    // the stream is correctly advanced
+                    var startBytesCorrect = await FileFormat.VerifyStartBytes(stream, headers);
 
-                        return new XmlKeePassDatabase(doc, file.Path, Path.GetFileNameWithoutExtension(file.Name));
-                    }
+                    // Parse content
+                    var doc = await FileFormat.ParseContent(stream, headers.UseGZip, headers);
+
+                    // TODO: verify headers integrity
+
+                    return new XmlKeePassDatabase(doc, file.Path, Path.GetFileNameWithoutExtension(file.Name));
                 }
             }
             catch (Exception e) when ((uint)e.HResult == 0x80070017)

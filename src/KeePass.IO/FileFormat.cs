@@ -1,5 +1,6 @@
 ﻿using KeePass.Crypto;
 using System;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -25,7 +26,7 @@ namespace KeePass
         /// The <paramref name="input"/>, <paramref name="masterKey"/>,
         /// <paramref name="headers"/> cannot be <c>null</c>.
         /// </exception>
-        public static Task<IInputStream> Decrypt(IRandomAccessStream input,
+        public static Task<byte[]> Decrypt(Stream input,
             byte[] masterKey, FileHeaders headers)
         {
             if (headers == null)
@@ -47,7 +48,7 @@ namespace KeePass
         /// The <paramref name="input"/>, <paramref name="masterSeed"/>, <paramref name="masterKey"/>
         /// and <paramref name="encryptionIV"/> cannot be <c>null</c>.
         /// </exception>
-        public static async Task<IInputStream> Decrypt(IRandomAccessStream input,
+        public static async Task<byte[]> Decrypt(Stream input,
             byte[] masterKey, byte[] masterSeed, byte[] encryptionIV)
         {
             if (input == null) throw new ArgumentNullException("input");
@@ -67,16 +68,11 @@ namespace KeePass
                 .OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7)
                 .CreateSymmetricKey(seed);
 
-            var buffer = WindowsRuntimeBuffer.Create(
-                (int)(input.Size - input.Position));
-            buffer = await input.ReadAsync(buffer, buffer.Capacity);
-            buffer = CryptographicEngine.Decrypt(aes, buffer, encryptionIV.AsBuffer());
+            var buffer = new byte[(int)(input.Length - input.Position)];
+            var count = await input.ReadAsync(buffer, 0, buffer.Length);
+            var result = CryptographicEngine.Decrypt(aes, buffer.AsBuffer(), encryptionIV.AsBuffer());
 
-            var stream = new InMemoryRandomAccessStream();
-            await stream.WriteAsync(buffer);
-            stream.Seek(0);
-
-            return stream;
+            return result.ToArray();
         }
 
         /// <summary>
@@ -147,7 +143,7 @@ namespace KeePass
         /// The <paramref name="decrypted"/> or <paramref name="headers"/> parameter cannot be <c>null</c>.
         /// </exception>
         public static async Task<XDocument> ParseContent(
-            IInputStream decrypted, bool useGZip, FileHeaders headers)
+            Stream decrypted, bool useGZip, FileHeaders headers)
         {
             if (decrypted == null) throw new ArgumentNullException("decrypted");
             if (headers == null) throw new ArgumentNullException("headers");
@@ -230,12 +226,12 @@ namespace KeePass
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="input"/> and <paramref name="startBytes"/> cannot be <c>null</c>.
         /// </exception>
-        public static async Task<bool> VerifyStartBytes(IInputStream input, byte[] startBytes)
+        public static async Task<bool> VerifyStartBytes(Stream input, byte[] startBytes)
         {
             if (input == null) throw new ArgumentNullException("input");
             if (startBytes == null) throw new ArgumentNullException("startBytes");
 
-            var reader = new DataReader(input);
+            var reader = new DataReader(input.AsInputStream());
             var read = await reader.LoadAsync((uint)startBytes.Length);
             if (read != startBytes.Length)
                 return false;
@@ -253,7 +249,7 @@ namespace KeePass
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="input"/> and <paramref name="headers"/> cannot be <c>null</c>.
         /// </exception>
-        public static Task<bool> VerifyStartBytes(IInputStream input, FileHeaders headers)
+        public static Task<bool> VerifyStartBytes(Stream input, FileHeaders headers)
         {
             if (headers == null)
                 throw new ArgumentNullException("headers");
