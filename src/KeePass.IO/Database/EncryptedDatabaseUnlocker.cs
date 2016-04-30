@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -48,7 +49,7 @@ namespace KeePass.IO.Database
 
                     var masterKey = await _password.GetMasterKey(headers);
 
-                    using (var decrypted = await FileFormat.Decrypt(fs, masterKey, headers))
+                    using (var decrypted = await FileFormat.Decrypt(fs, masterKey.ToArray() , headers))
                     {
                         // TODO: verify start bytes
                         await FileFormat.VerifyStartBytes(decrypted, headers);

@@ -1,6 +1,5 @@
-﻿using System;
-using Windows.Storage.Streams;
-using KeePass.IO.Crypto;
+﻿using KeePass.IO.Crypto;
+using System;
 
 namespace KeePass.IO.Models
 {
@@ -12,22 +11,22 @@ namespace KeePass.IO.Models
         /// <summary>
         /// Gets or sets the encryption IV.
         /// </summary>
-        public IBuffer EncryptionIV { get; set; }
+        public byte[] EncryptionIV { get; set; }
 
         /// <summary>
         /// Gets or sets the header hash.
         /// </summary>
-        public IBuffer Hash { get; set; }
+        public byte[] Hash { get; set; }
 
         /// <summary>
         /// Gets or sets the master seed.
         /// </summary>
-        public IBuffer MasterSeed { get; set; }
+        public byte[] MasterSeed { get; set; }
 
         /// <summary>
         /// Gets or sets the protected stream key.
         /// </summary>
-        public IBuffer ProtectedStreamKey { get; set; }
+        public byte[] ProtectedStreamKey { get; set; }
 
         /// <summary>
         /// Gets or sets the algorithm for the random bytes generator.
@@ -43,7 +42,7 @@ namespace KeePass.IO.Models
         /// <summary>
         /// Gets or sets the first bytes of the decrypted database content.
         /// </summary>
-        public IBuffer StartBytes { get; set; }
+        public byte[] StartBytes { get; set; }
 
         /// <summary>
         /// Gets or sets the number of password transformation rounds.
@@ -53,7 +52,7 @@ namespace KeePass.IO.Models
         /// <summary>
         /// Gets or sets the password transformation seed.
         /// </summary>
-        public IBuffer TransformSeed { get; set; }
+        public byte[] TransformSeed { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the database content is compressed using GZip.

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KeePass.IO.Crypto;
+using KeePass.IO.Models;
+using System;
 using System.IO.Compression;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -8,8 +10,6 @@ using System.Xml.Linq;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
-using KeePass.IO.Crypto;
-using KeePass.IO.Models;
 
 namespace KeePass.IO
 {
@@ -27,7 +27,7 @@ namespace KeePass.IO
         /// <paramref name="headers"/> cannot be <c>null</c>.
         /// </exception>
         public static Task<IInputStream> Decrypt(IRandomAccessStream input,
-            IBuffer masterKey, FileHeaders headers)
+            byte[] masterKey, FileHeaders headers)
         {
             if (headers == null)
                 throw new ArgumentNullException("headers");
@@ -49,7 +49,7 @@ namespace KeePass.IO
         /// and <paramref name="encryptionIV"/> cannot be <c>null</c>.
         /// </exception>
         public static async Task<IInputStream> Decrypt(IRandomAccessStream input,
-            IBuffer masterKey, IBuffer masterSeed, IBuffer encryptionIV)
+            byte[] masterKey, byte[] masterSeed, byte[] encryptionIV)
         {
             if (input == null) throw new ArgumentNullException("input");
             if (masterSeed == null) throw new ArgumentNullException("masterSeed");
@@ -60,8 +60,8 @@ namespace KeePass.IO
                 .OpenAlgorithm(HashAlgorithmNames.Sha256)
                 .CreateHash();
 
-            sha.Append(masterSeed);
-            sha.Append(masterKey);
+            sha.Append(masterSeed.AsBuffer());
+            sha.Append(masterKey.AsBuffer());
 
             var seed = sha.GetValueAndReset();
             var aes = SymmetricKeyAlgorithmProvider
@@ -71,7 +71,7 @@ namespace KeePass.IO
             var buffer = WindowsRuntimeBuffer.Create(
                 (int)(input.Size - input.Position));
             buffer = await input.ReadAsync(buffer, buffer.Capacity);
-            buffer = CryptographicEngine.Decrypt(aes, buffer, encryptionIV);
+            buffer = CryptographicEngine.Decrypt(aes, buffer, encryptionIV.AsBuffer());
 
             var stream = new InMemoryRandomAccessStream();
             await stream.WriteAsync(buffer);
@@ -128,7 +128,7 @@ namespace KeePass.IO
 
             // Fields
             var headers = await GetHeaders(hash, buffer);
-            headers.Hash = hash.GetHashAndReset();
+            headers.Hash = hash.GetHashAndReset().ToArray();
 
             return new ReadHeaderResult
             {
@@ -199,7 +199,7 @@ namespace KeePass.IO
         /// <exception cref="ArgumentNullException">
         /// The <paramref name="headerHash"/> and <paramref name="doc"/> cannot be <c>null</c>.
         /// </exception>
-        public static bool VerifyHeaders(IBuffer headerHash, XDocument doc)
+        public static bool VerifyHeaders(byte[] headerHash, XDocument doc)
         {
             string meta;
             try
@@ -219,7 +219,7 @@ namespace KeePass.IO
             var expected = CryptographicBuffer
                 .DecodeFromBase64String(meta);
 
-            return CryptographicBuffer.Compare(expected, headerHash);
+            return CryptographicBuffer.Compare(expected, headerHash.AsBuffer());
         }
 
         /// <summary>
@@ -231,18 +231,18 @@ namespace KeePass.IO
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="input"/> and <paramref name="startBytes"/> cannot be <c>null</c>.
         /// </exception>
-        public static async Task<bool> VerifyStartBytes(IInputStream input, IBuffer startBytes)
+        public static async Task<bool> VerifyStartBytes(IInputStream input, byte[] startBytes)
         {
             if (input == null) throw new ArgumentNullException("input");
             if (startBytes == null) throw new ArgumentNullException("startBytes");
 
             var reader = new DataReader(input);
-            var read = await reader.LoadAsync(startBytes.Length);
+            var read = await reader.LoadAsync((uint)startBytes.Length);
             if (read != startBytes.Length)
                 return false;
 
-            var actual = reader.ReadBuffer(startBytes.Length);
-            return CryptographicBuffer.Compare(actual, startBytes);
+            var actual = reader.ReadBuffer((uint)startBytes.Length);
+            return CryptographicBuffer.Compare(actual, startBytes.AsBuffer());
         }
 
         /// <summary>
@@ -327,12 +327,12 @@ namespace KeePass.IO
             {
                 case CrsAlgorithm.ArcFourVariant:
                     generator = new Rc4RandomGenerator(
-                        headers.ProtectedStreamKey);
+                        headers.ProtectedStreamKey.AsBuffer());
                     break;
 
                 default:
                     generator = new Salsa20RandomGenerator(
-                        headers.ProtectedStreamKey);
+                        headers.ProtectedStreamKey.AsBuffer());
                     break;
             }
 
@@ -382,23 +382,19 @@ namespace KeePass.IO
                         break;
 
                     case HeaderFields.EncryptionIV:
-                        result.EncryptionIV = buffer
-                            .ToArray().AsBuffer();
+                        result.EncryptionIV = buffer.ToArray();
                         break;
 
                     case HeaderFields.MasterSeed:
-                        result.MasterSeed = buffer
-                            .ToArray().AsBuffer();
+                        result.MasterSeed = buffer.ToArray();
                         break;
 
                     case HeaderFields.StreamStartBytes:
-                        result.StartBytes = buffer
-                            .ToArray().AsBuffer();
+                        result.StartBytes = buffer.ToArray();
                         break;
 
                     case HeaderFields.TransformSeed:
-                        result.TransformSeed = buffer
-                            .ToArray().AsBuffer();
+                        result.TransformSeed = buffer.ToArray();
                         break;
 
                     case HeaderFields.TransformRounds:
@@ -407,8 +403,7 @@ namespace KeePass.IO
                         break;
 
                     case HeaderFields.ProtectedStreamKey:
-                        result.ProtectedStreamKey = buffer
-                            .ToArray().AsBuffer();
+                        result.ProtectedStreamKey = buffer.ToArray();
                         break;
 
                     case HeaderFields.InnerRandomStreamID:

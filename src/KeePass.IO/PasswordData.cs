@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KeePass.IO.Models;
+using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -8,9 +9,8 @@ using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
-using Windows.Storage.Streams;
-using KeePass.IO.Models;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace KeePass.IO
 {
@@ -107,7 +107,7 @@ namespace KeePass.IO
             if (headers == null)
                 throw new ArgumentNullException("headers");
 
-            return GetMasterKey(headers.TransformSeed,
+            return GetMasterKey(headers.TransformSeed.AsBuffer(),
                 headers.TransformRounds);
         }
 
