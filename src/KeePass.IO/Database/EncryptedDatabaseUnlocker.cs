@@ -6,24 +6,6 @@ using System.Threading.Tasks;
 
 namespace KeePass
 {
-    public class UnknownDatabaseUnlockException : DatabaseUnlockException
-    {
-        public UnknownDatabaseUnlockException(Exception inner)
-            : base($"Unknown error: {inner.Message}", inner)
-        { }
-    }
-
-    public class DatabaseUnlockException : Exception
-    {
-        public DatabaseUnlockException(string message)
-            : base(message)
-        { }
-
-        public DatabaseUnlockException(string message, Exception inner)
-            : base(message, inner)
-        { }
-    }
-
     public class EncryptedDatabaseUnlocker : IDatabaseUnlocker
     {
         public virtual Task<IKeePassDatabase> UnlockAsync(IFile file)
@@ -72,7 +54,7 @@ namespace KeePass
             {
                 Debug.WriteLine(e);
 
-                throw new UnknownDatabaseUnlockException(e);
+                throw new DatabaseUnlockException($"Unknown error: {e.Message}",e);
             }
         }
     }
