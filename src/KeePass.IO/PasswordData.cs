@@ -5,7 +5,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using Windows.Foundation;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
@@ -99,14 +98,12 @@ namespace KeePass
         /// </summary>
         /// <param name="headers">The database file headers.</param>
         /// <returns>The transformation operation.</returns>
-        public IAsyncOperationWithProgress<IBuffer, uint>
-            GetMasterKey(FileHeaders headers)
+        public Task<byte[]> GetMasterKey(FileHeaders headers)
         {
             if (headers == null)
                 throw new ArgumentNullException("headers");
 
-            return GetMasterKey(headers.TransformSeed.AsBuffer(),
-                headers.TransformRounds);
+            return GetMasterKey(headers.TransformSeed, headers.TransformRounds);
         }
 
         /// <summary>
@@ -115,48 +112,39 @@ namespace KeePass
         /// <param name="seed">The transformation seed.</param>
         /// <param name="rounds">The number of transformation rounds.</param>
         /// <returns>The transformation operation.</returns>
-        public IAsyncOperationWithProgress<IBuffer, uint>
-            GetMasterKey(IBuffer seed, ulong rounds)
+        public Task<byte[]> GetMasterKey(byte[] seed, ulong rounds)
         {
-            return AsyncInfo.Run<IBuffer, uint>(
-                (token, progress) => Task.Run(() =>
+            return Task.Run(() =>
+            {
+                var transforms = 0UL;
+                var master = GetMasterKey();
+
+                // AES - ECB
+                var aes = SymmetricKeyAlgorithmProvider
+                    .OpenAlgorithm(SymmetricAlgorithmNames.AesEcb);
+                var key = aes.CreateSymmetricKey(seed.AsBuffer());
+
+
+                while (true)
                 {
-                    var transforms = 0UL;
-                    var master = GetMasterKey();
-
-                    // AES - ECB
-                    var aes = SymmetricKeyAlgorithmProvider
-                        .OpenAlgorithm(SymmetricAlgorithmNames.AesEcb);
-                    var key = aes.CreateSymmetricKey(seed);
-
-
-                    while (true)
+                    for (var i = 0; i < 1000; i++)
                     {
-                        // Report progress
-                        token.ThrowIfCancellationRequested();
-                        progress.Report((uint)Math.Round(
-                            transforms * 100F / rounds));
+                        // Transform master key
+                        master = CryptographicEngine
+                            .Encrypt(key, master, null);
 
-                        for (var i = 0; i < 1000; i++)
-                        {
-                            // Transform master key
-                            master = CryptographicEngine
-                                .Encrypt(key, master, null);
+                        transforms++;
+                        if (transforms < rounds)
+                            continue;
 
-                            transforms++;
-                            if (transforms < rounds)
-                                continue;
-
-                            // Completed
-                            progress.Report(100);
-                            master = HashAlgorithmProvider
+                        // Completed
+                        return HashAlgorithmProvider
                                 .OpenAlgorithm(HashAlgorithmNames.Sha256)
-                                .HashData(master);
-
-                            return master;
-                        }
+                                .HashData(master)
+                                .ToArray();
                     }
-                }, token));
+                }
+            });
         }
 
         /// <summary>

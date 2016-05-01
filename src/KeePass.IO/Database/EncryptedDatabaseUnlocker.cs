@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace KeePass
@@ -36,7 +35,7 @@ namespace KeePass
 
                     var masterKey = await _password.GetMasterKey(headers);
 
-                    var decrypted = await _fileFormat.Decrypt(fs, masterKey.ToArray(), headers);
+                    var decrypted = await _fileFormat.Decrypt(fs, masterKey, headers);
 
                     // Wrap in a stream so position is tracked
                     var stream = new MemoryStream(decrypted);
