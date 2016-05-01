@@ -8,6 +8,13 @@ namespace KeePass
 {
     public class EncryptedDatabaseUnlocker : IDatabaseUnlocker
     {
+        private readonly FileFormat _fileFormat;
+
+        public EncryptedDatabaseUnlocker(FileFormat fileFormat)
+        {
+            _fileFormat = fileFormat;
+        }
+
         public virtual Task<IKeePassDatabase> UnlockAsync(IFile file)
         {
             return UnlockAsync(file, null, null);
@@ -24,22 +31,22 @@ namespace KeePass
                     await _password.AddKeyFileAsync(keyfile);
 
                     // TODO: handle errors & display transformation progress
-                    var result = await FileFormat.Headers(fs.AsInputStream());
+                    var result = await _fileFormat.Headers(fs.AsInputStream());
                     var headers = result.Headers;
 
                     var masterKey = await _password.GetMasterKey(headers);
 
-                    var decrypted = await FileFormat.Decrypt(fs, masterKey.ToArray(), headers);
+                    var decrypted = await _fileFormat.Decrypt(fs, masterKey.ToArray(), headers);
 
                     // Wrap in a stream so position is tracked
                     var stream = new MemoryStream(decrypted);
 
                     // TODO: Verify start bytes. This must be called even without validation so that
                     // the stream is correctly advanced
-                    var startBytesCorrect = await FileFormat.VerifyStartBytes(stream, headers);
+                    var startBytesCorrect = await _fileFormat.VerifyStartBytes(stream, headers);
 
                     // Parse content
-                    var doc = await FileFormat.ParseContent(stream, headers.UseGZip, headers);
+                    var doc = await _fileFormat.ParseContent(stream, headers.UseGZip, headers);
 
                     // TODO: verify headers integrity
 

@@ -13,8 +13,15 @@ using Windows.Storage.Streams;
 
 namespace KeePass
 {
-    public static class FileFormat
+    public class FileFormat
     {
+        private readonly IRandomGeneratorProvider _randomGeneratorProvider;
+
+        public FileFormat(IRandomGeneratorProvider randomGeneratorProvider)
+        {
+            _randomGeneratorProvider = randomGeneratorProvider;
+        }
+
         /// <summary>
         /// Decrypts the specified input stream.
         /// </summary>
@@ -26,7 +33,7 @@ namespace KeePass
         /// The <paramref name="input"/>, <paramref name="masterKey"/>,
         /// <paramref name="headers"/> cannot be <c>null</c>.
         /// </exception>
-        public static Task<byte[]> Decrypt(Stream input,
+        public Task<byte[]> Decrypt(Stream input,
             byte[] masterKey, FileHeaders headers)
         {
             if (headers == null)
@@ -48,7 +55,7 @@ namespace KeePass
         /// The <paramref name="input"/>, <paramref name="masterSeed"/>, <paramref name="masterKey"/>
         /// and <paramref name="encryptionIV"/> cannot be <c>null</c>.
         /// </exception>
-        public static async Task<byte[]> Decrypt(Stream input,
+        public async Task<byte[]> Decrypt(Stream input,
             byte[] masterKey, byte[] masterSeed, byte[] encryptionIV)
         {
             if (input == null) throw new ArgumentNullException("input");
@@ -83,7 +90,7 @@ namespace KeePass
         /// <exception cref="ArgumentNullException">
         /// The <paramref name="input"/> cannot be <c>null</c>.
         /// </exception>
-        public static async Task<ReadHeaderResult> Headers(IInputStream input)
+        public async Task<ReadHeaderResult> Headers(IInputStream input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
@@ -142,7 +149,7 @@ namespace KeePass
         /// <exception cref="System.ArgumentNullException">
         /// The <paramref name="decrypted"/> or <paramref name="headers"/> parameter cannot be <c>null</c>.
         /// </exception>
-        public static async Task<XDocument> ParseContent(
+        public async Task<XDocument> ParseContent(
             Stream decrypted, bool useGZip, FileHeaders headers)
         {
             if (decrypted == null) throw new ArgumentNullException("decrypted");
@@ -180,7 +187,7 @@ namespace KeePass
         /// <exception cref="ArgumentNullException">
         /// The <paramref name="headers"/> and <paramref name="doc"/> cannot be <c>null</c>.
         /// </exception>
-        public static bool VerifyHeaders(FileHeaders headers, XDocument doc)
+        public bool VerifyHeaders(FileHeaders headers, XDocument doc)
         {
             return VerifyHeaders(headers.Hash, doc);
         }
@@ -194,7 +201,7 @@ namespace KeePass
         /// <exception cref="ArgumentNullException">
         /// The <paramref name="headerHash"/> and <paramref name="doc"/> cannot be <c>null</c>.
         /// </exception>
-        public static bool VerifyHeaders(byte[] headerHash, XDocument doc)
+        public bool VerifyHeaders(byte[] headerHash, XDocument doc)
         {
             string meta;
             try
@@ -226,7 +233,7 @@ namespace KeePass
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="input"/> and <paramref name="startBytes"/> cannot be <c>null</c>.
         /// </exception>
-        public static async Task<bool> VerifyStartBytes(Stream input, byte[] startBytes)
+        public async Task<bool> VerifyStartBytes(Stream input, byte[] startBytes)
         {
             if (input == null) throw new ArgumentNullException("input");
             if (startBytes == null) throw new ArgumentNullException("startBytes");
@@ -249,7 +256,7 @@ namespace KeePass
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="input"/> and <paramref name="headers"/> cannot be <c>null</c>.
         /// </exception>
-        public static Task<bool> VerifyStartBytes(Stream input, FileHeaders headers)
+        public Task<bool> VerifyStartBytes(Stream input, FileHeaders headers)
         {
             if (headers == null)
                 throw new ArgumentNullException("headers");
@@ -262,7 +269,7 @@ namespace KeePass
         /// </summary>
         /// <param name="schema">The database schema version.</param>
         /// <returns>The compatibility.</returns>
-        private static FileFormats CheckCompatibility(Version schema)
+        private FileFormats CheckCompatibility(Version schema)
         {
             if (schema.Major < 3)
                 return FileFormats.OldVersion;
@@ -280,7 +287,7 @@ namespace KeePass
         /// </summary>
         /// <param name="buffer">The signature bytes buffer.</param>
         /// <returns>The detected database file format.</returns>
-        private static FileFormats CheckSignature(IBuffer buffer)
+        private FileFormats CheckSignature(IBuffer buffer)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer");
@@ -306,7 +313,7 @@ namespace KeePass
             return FileFormats.Supported;
         }
 
-        private static void Decrypt(FileHeaders headers, XDocument doc)
+        private void Decrypt(FileHeaders headers, XDocument doc)
         {
             var protectedStrings = doc.Descendants("Entry")
                 .SelectMany(x => x.Elements("String"))
@@ -317,17 +324,7 @@ namespace KeePass
                     return protect != null && (bool)protect;
                 });
 
-            IRandomGenerator generator;
-            switch (headers.RandomAlgorithm)
-            {
-                case CrsAlgorithm.ArcFourVariant:
-                    generator = new Rc4RandomGenerator(headers.ProtectedStreamKey);
-                    break;
-
-                default:
-                    generator = new Salsa20RandomGenerator(headers.ProtectedStreamKey);
-                    break;
-            }
+            var generator = _randomGeneratorProvider.Get(headers.RandomAlgorithm, headers.ProtectedStreamKey);
 
             foreach (var protectedString in protectedStrings)
             {
@@ -351,7 +348,7 @@ namespace KeePass
         /// <param name="input">The input stream.</param>
         /// <param name="buffer">The header bytes reader.</param>
         /// <returns>The file headers.</returns>
-        private static async Task<FileHeaders> GetHeaders(
+        private async Task<FileHeaders> GetHeaders(
             IInputStream input, IBuffer buffer)
         {
             var result = new FileHeaders();
@@ -412,7 +409,7 @@ namespace KeePass
         /// </summary>
         /// <param name="buffer">The version bytes buffer</param>
         /// <returns>The database schema version.</returns>
-        private static Version GetVersion(IBuffer buffer)
+        private Version GetVersion(IBuffer buffer)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer");

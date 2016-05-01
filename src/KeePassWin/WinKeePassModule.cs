@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using KeePass;
+using KeePass.Crypto;
 using KeePass.IO;
 using KeePassWin.Mvvm;
 using System;
@@ -12,6 +13,8 @@ namespace KeePassWin
         {
             builder.RegisterType<DatabaseCache>()
                 .SingleInstance();
+
+            BuildCryptoProviders(builder);
 
             builder.RegisterType<SqliteDatabaseTracker>()
                 .As<IDatabaseTracker>()
@@ -32,6 +35,22 @@ namespace KeePassWin
             builder.RegisterType<PrismNavigationService>()
                 .As<INavigator>()
                 .SingleInstance();
+        }
+
+        private void BuildCryptoProviders(ContainerBuilder builder)
+        {
+            builder.RegisterType<FileFormat>()
+                .AsSelf()
+                .SingleInstance();
+
+            builder.RegisterType<RandomGeneratorProvider>()
+                .As<IRandomGeneratorProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<WindowsHashProvider>()
+                .As<IHashProvider>()
+                .SingleInstance();
+
         }
     }
 }
