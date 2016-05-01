@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Storage.Streams;
 
 namespace KeePass.Crypto
 {
@@ -11,7 +9,7 @@ namespace KeePass.Crypto
         private byte _i;
         private byte _j;
 
-        public Rc4RandomGenerator(IBuffer key)
+        public Rc4RandomGenerator(byte[] key)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
@@ -29,7 +27,7 @@ namespace KeePass.Crypto
 
                 for (uint w = 0; w < 256; ++w) // Key setup
                 {
-                    j += (byte)(_state[w] + key.GetByte(keyIndex));
+                    j += (byte)(_state[w] + key[keyIndex]);
 
                     var temp = _state[0];
                     _state[0] = _state[j];

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Security.Cryptography.Core;
-using Windows.Storage.Streams;
 
 namespace KeePass.Crypto
 {
@@ -9,14 +8,11 @@ namespace KeePass.Crypto
     {
         private readonly Salsa20Cipher _cipher;
 
-        public Salsa20RandomGenerator(IBuffer key)
+        public Salsa20RandomGenerator(byte[] key)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            key = HashAlgorithmProvider
-                .OpenAlgorithm(HashAlgorithmNames.Sha256)
-                .HashData(key);
 
             var iv = new byte[]
             {
@@ -24,7 +20,15 @@ namespace KeePass.Crypto
                 0x97, 0x20, 0x5D, 0x2A
             };
 
-            _cipher = new Salsa20Cipher(key.ToArray(), iv);
+            _cipher = new Salsa20Cipher(GetSha256(key), iv);
+        }
+
+        private byte[] GetSha256(byte[] input)
+        {
+            return HashAlgorithmProvider
+               .OpenAlgorithm(HashAlgorithmNames.Sha256)
+               .HashData(input.AsBuffer())
+               .ToArray();
         }
 
         public byte[] GetRandomBytes(int size)

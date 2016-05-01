@@ -321,13 +321,11 @@ namespace KeePass
             switch (headers.RandomAlgorithm)
             {
                 case CrsAlgorithm.ArcFourVariant:
-                    generator = new Rc4RandomGenerator(
-                        headers.ProtectedStreamKey.AsBuffer());
+                    generator = new Rc4RandomGenerator(headers.ProtectedStreamKey);
                     break;
 
                 default:
-                    generator = new Salsa20RandomGenerator(
-                        headers.ProtectedStreamKey.AsBuffer());
+                    generator = new Salsa20RandomGenerator(headers.ProtectedStreamKey);
                     break;
             }
 

@@ -110,8 +110,6 @@
     <Compile Include="Crypto\HashedBlockFileFormat.cs" />
     <Compile Include="Crypto\HashedInputStream.cs" />
     <Compile Include="Crypto\HashedOutputStream.cs" />
-    <Compile Include="Crypto\Rc4RandomGenerator.cs" />
-    <Compile Include="Crypto\Salsa20Cipher.cs" />
     <Compile Include="Crypto\Salsa20RandomGenerator.cs" />
     <Compile Include="Database\DatabaseCacheEvent.cs" />
     <Compile Include="Database\DatabaseCache.cs" />
