@@ -117,14 +117,11 @@
     <Compile Include="FileFormat.cs" />
     <Compile Include="PasswordData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageItemFile.cs" />
     <Compile Include="Utils.cs" />
     <Content Include="Properties\KeePass.IO.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KeePass.IO.Sqlite\KeePass.IO.Sqlite.csproj">
-      <Project>{43a3f056-5f46-45a6-8975-036148e2f16b}</Project>
-      <Name>KeePass.IO.Sqlite</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KeePassLib\KeePassLib.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
       <Name>KeePassLib</Name>

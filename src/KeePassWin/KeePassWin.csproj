@@ -19,6 +19,9 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KeePassWin_StoreKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>ED9EBFF21A98A6C2829529A666D7574DB44D5BD5</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -102,6 +105,13 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IO\Sqlite\KeePassSqliteContext.cs" />
+    <Compile Include="IO\Sqlite\Migrations\20160229035622_InitialMigration.cs" />
+    <Compile Include="IO\Sqlite\Migrations\20160229035622_InitialMigration.Designer.cs">
+      <DependentUpon>20160229035622_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IO\Sqlite\Migrations\KeePassSqliteContextModelSnapshot.cs" />
+    <Compile Include="IO\Sqlite\SqliteDatabaseTracker.cs" />
     <Compile Include="Models\SearchQueryParameter.cs" />
     <Compile Include="Mvvm\INavigator.cs" />
     <Compile Include="IO\CachedDialogDatabseUnlocker.cs" />
@@ -200,10 +210,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KeePass.IO.Sqlite\KeePass.IO.Sqlite.csproj">
-      <Project>{43a3f056-5f46-45a6-8975-036148e2f16b}</Project>
-      <Name>KeePass.IO.Sqlite</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KeePass.IO\KeePass.IO.csproj">
       <Project>{f515083e-9b92-4857-9a49-7933dd9c2804}</Project>
       <Name>KeePass.IO</Name>
