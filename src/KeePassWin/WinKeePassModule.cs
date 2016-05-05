@@ -35,6 +35,10 @@ namespace KeePassWin
             builder.RegisterType<PrismNavigationService>()
                 .As<INavigator>()
                 .SingleInstance();
+
+            builder.RegisterType<WindowsFilePicker>()
+                .As<IFilePicker>()
+                .SingleInstance();
         }
 
         private void BuildCryptoProviders(ContainerBuilder builder)

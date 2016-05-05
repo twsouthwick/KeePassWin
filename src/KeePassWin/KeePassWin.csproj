@@ -122,6 +122,9 @@
     <Compile Include="IO\DialogDatabaseUnlocker.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
+    <Compile Include="Services\StorageItemFile.cs" />
+    <Compile Include="Services\WindowsFilePicker.cs" />
+    <Compile Include="Services\WindowsHashProvider.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchPageViewModel.cs" />
     <Compile Include="Views\SearchPage.xaml.cs">
@@ -210,10 +213,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KeePass.IO\KeePass.IO.csproj">
-      <Project>{f515083e-9b92-4857-9a49-7933dd9c2804}</Project>
-      <Name>KeePass.IO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KeePassLib\KeePassLib.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
       <Name>KeePassLib</Name>

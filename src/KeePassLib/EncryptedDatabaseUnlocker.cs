@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KeePass.Crypto;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,9 +9,11 @@ namespace KeePass
     public class EncryptedDatabaseUnlocker : IDatabaseUnlocker
     {
         private readonly FileFormat _fileFormat;
+        private readonly IHashProvider _hashProvider;
 
-        public EncryptedDatabaseUnlocker(FileFormat fileFormat)
+        public EncryptedDatabaseUnlocker(FileFormat fileFormat, IHashProvider hashProvider)
         {
+            _hashProvider = hashProvider;
             _fileFormat = fileFormat;
         }
 
@@ -25,12 +28,12 @@ namespace KeePass
             {
                 using (var fs = await file.OpenReadAsync())
                 {
-                    var _password = new PasswordData { Password = password ?? string.Empty };
+                    var _password = new PasswordData(_hashProvider) { Password = password ?? string.Empty };
 
                     await _password.AddKeyFileAsync(keyfile);
 
                     // TODO: handle errors & display transformation progress
-                    var result = await _fileFormat.Headers(fs.AsInputStream());
+                    var result = await _fileFormat.Headers(fs);
                     var headers = result.Headers;
 
                     var masterKey = await _password.GetMasterKey(headers);

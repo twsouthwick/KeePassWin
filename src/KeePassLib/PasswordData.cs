@@ -1,19 +1,24 @@
-﻿using System;
+﻿using KeePass.Crypto;
+using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
-using Windows.Storage.Streams;
 
 namespace KeePass
 {
     public class PasswordData
     {
-        private IBuffer _keyFile;
+        private readonly IHashProvider _hashProvider;
+
+        private byte[] _keyFile;
+
+        public PasswordData(IHashProvider hashProvider)
+        {
+            _hashProvider = hashProvider;
+        }
 
         /// <summary>
         /// Determines if a keyfile has been registered.
@@ -26,14 +31,7 @@ namespace KeePass
         /// <summary>
         /// Determines if this instance has valid data.
         /// </summary>
-        public bool IsValid
-        {
-            get
-            {
-                return _keyFile != null ||
-                    !string.IsNullOrEmpty(Password);
-            }
-        }
+        public bool IsValid => _keyFile != null || !string.IsNullOrEmpty(Password);
 
         /// <summary>
         /// Gets or sets the password.
@@ -56,7 +54,7 @@ namespace KeePass
 
             using (var input = await keyFile.OpenReadAsync())
             {
-                _keyFile = await LoadKeyFile(input.AsRandomAccessStream());
+                _keyFile = await LoadKeyFile(input);
             }
         }
 
@@ -72,23 +70,22 @@ namespace KeePass
         /// Gets the raw master key.
         /// </summary>
         /// <returns>The raw master key data.</returns>
-        public IBuffer GetMasterKey()
+        public byte[] GetMasterKey()
         {
-            var hash = HashAlgorithmProvider
-                .OpenAlgorithm(HashAlgorithmNames.Sha256)
-                .CreateHash();
+            var hash = _hashProvider.GetSha256();
 
             if (!string.IsNullOrEmpty(Password))
             {
-                hash.Append(CryptographicBuffer.ConvertStringToBinary
-                    (Password, BinaryStringEncoding.Utf8));
+                hash.Append(Encoding.UTF8.GetBytes(Password));
 
                 var buffer = hash.GetValueAndReset();
                 hash.Append(buffer);
             }
 
             if (_keyFile != null)
+            {
                 hash.Append(_keyFile);
+            }
 
             return hash.GetValueAndReset();
         }
@@ -120,28 +117,21 @@ namespace KeePass
                 var master = GetMasterKey();
 
                 // AES - ECB
-                var aes = SymmetricKeyAlgorithmProvider
-                    .OpenAlgorithm(SymmetricAlgorithmNames.AesEcb);
-                var key = aes.CreateSymmetricKey(seed.AsBuffer());
-
+                var encryptor = _hashProvider.EncryptAesEcb(seed);
 
                 while (true)
                 {
                     for (var i = 0; i < 1000; i++)
                     {
                         // Transform master key
-                        master = CryptographicEngine
-                            .Encrypt(key, master, null);
+                        master = encryptor.Encrypt(master, null);
 
                         transforms++;
+
                         if (transforms < rounds)
                             continue;
 
-                        // Completed
-                        return HashAlgorithmProvider
-                                .OpenAlgorithm(HashAlgorithmNames.Sha256)
-                                .HashData(master)
-                                .ToArray();
+                        return _hashProvider.GetSha256(master);
                     }
                 }
             });
@@ -153,17 +143,13 @@ namespace KeePass
         /// <param name="input">The keyfile stream.</param>
         /// <param name="buffer">The buffer.</param>
         /// <returns>The hash of the keyfile.</returns>
-        private static async Task<IBuffer> GetFileHash(
-            IInputStream input, IBuffer buffer)
+        private async Task<byte[]> GetFileHash(Stream input)
         {
-            var sha = HashAlgorithmProvider
-                .OpenAlgorithm(HashAlgorithmNames.Sha256)
-                .CreateHash();
+            var sha = _hashProvider.GetSha256();
 
             while (true)
             {
-                buffer = await input.ReadAsync(
-                    buffer, buffer.Capacity);
+                var buffer = await input.ReadAsync(1024);
 
                 if (buffer.Length == 0)
                     break;
@@ -195,37 +181,37 @@ namespace KeePass
         /// <exception cref="System.ArgumentNullException">
         /// The <paramref name="input"/> parameter cannot be <c>null</c>.
         /// </exception>
-        private static async Task<IBuffer> LoadKeyFile(IRandomAccessStream input)
+        private async Task<byte[]> LoadKeyFile(Stream input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
 
-            var buffer = WindowsRuntimeBuffer.Create(1024);
-
-            switch (input.Size)
+            switch (input.Length)
             {
                 case 32: // Binary key file
-                    return await input.ReadAsync(buffer, 32);
+                    return await input.ReadAsync(32);
 
                 case 64: // Hex text key file
-                    buffer = await input.ReadAsync(buffer, 64);
-                    var hex = CryptographicBuffer.ConvertBinaryToString(
-                        BinaryStringEncoding.Utf8, buffer);
+                    var buffer = await input.ReadAsync(64);
+                    var hex = Encoding.UTF8.GetString(buffer);
 
                     if (IsHexString(hex))
-                        return CryptographicBuffer.DecodeFromHexString(hex);
+                    {
+                        return _hashProvider.HexStringToBytes(hex);
+                    }
+
                     break;
             }
 
             // XML
-            input.Seek(0);
+            input.Seek(0, SeekOrigin.Begin);
             var xml = LoadXmlKeyFile(input);
             if (xml != null)
                 return xml;
 
             // Random keyfile
-            input.Seek(0);
-            return await GetFileHash(input, buffer);
+            input.Seek(0, SeekOrigin.Begin);
+            return await GetFileHash(input);
         }
 
         /// <summary>
@@ -233,11 +219,11 @@ namespace KeePass
         /// </summary>
         /// <param name="input">The keyfile stream.</param>
         /// <returns>The binary data buffer, or <c>null</c> if not a valid XML keyfile.</returns>
-        private static IBuffer LoadXmlKeyFile(IInputStream input)
+        private static byte[] LoadXmlKeyFile(Stream input)
         {
             try
             {
-                var doc = XDocument.Load(input.AsStreamForRead());
+                var doc = XDocument.Load(input);
 
                 // Root
                 var root = doc.Root;
@@ -256,8 +242,7 @@ namespace KeePass
 
                 try
                 {
-                    return CryptographicBuffer
-                        .DecodeFromBase64String(data.Value);
+                    return Convert.FromBase64String(data.Value);
                 }
                 catch (Exception)
                 {

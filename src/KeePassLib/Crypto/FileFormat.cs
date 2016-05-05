@@ -3,23 +3,23 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
-using Windows.Storage.Streams;
 
 namespace KeePass
 {
     public class FileFormat
     {
+        private readonly IHashProvider _hashProvider;
+        private readonly Func<Stream, HashedStream> _inputStreamFactory;
         private readonly IRandomGeneratorProvider _randomGeneratorProvider;
 
-        public FileFormat(IRandomGeneratorProvider randomGeneratorProvider)
+        public FileFormat(IRandomGeneratorProvider randomGeneratorProvider, Func<Stream, HashedStream> inputStreamFactory, IHashProvider hashProvider)
         {
             _randomGeneratorProvider = randomGeneratorProvider;
+            _inputStreamFactory = inputStreamFactory;
+            _hashProvider = hashProvider;
         }
 
         /// <summary>
@@ -33,14 +33,12 @@ namespace KeePass
         /// The <paramref name="input"/>, <paramref name="masterKey"/>,
         /// <paramref name="headers"/> cannot be <c>null</c>.
         /// </exception>
-        public Task<byte[]> Decrypt(Stream input,
-            byte[] masterKey, FileHeaders headers)
+        public Task<byte[]> Decrypt(Stream input, byte[] masterKey, FileHeaders headers)
         {
             if (headers == null)
                 throw new ArgumentNullException("headers");
 
-            return Decrypt(input, masterKey,
-                headers.MasterSeed, headers.EncryptionIV);
+            return Decrypt(input, masterKey, headers.MasterSeed, headers.EncryptionIV);
         }
 
         /// <summary>
@@ -55,31 +53,21 @@ namespace KeePass
         /// The <paramref name="input"/>, <paramref name="masterSeed"/>, <paramref name="masterKey"/>
         /// and <paramref name="encryptionIV"/> cannot be <c>null</c>.
         /// </exception>
-        public async Task<byte[]> Decrypt(Stream input,
-            byte[] masterKey, byte[] masterSeed, byte[] encryptionIV)
+        public Task<byte[]> Decrypt(Stream input, byte[] masterKey, byte[] masterSeed, byte[] encryptionIV)
         {
             if (input == null) throw new ArgumentNullException("input");
             if (masterSeed == null) throw new ArgumentNullException("masterSeed");
             if (masterKey == null) throw new ArgumentNullException("masterKey");
             if (encryptionIV == null) throw new ArgumentNullException("encryptionIV");
 
-            var sha = HashAlgorithmProvider
-                .OpenAlgorithm(HashAlgorithmNames.Sha256)
-                .CreateHash();
+            var sha = _hashProvider.GetSha256();
 
-            sha.Append(masterSeed.AsBuffer());
-            sha.Append(masterKey.AsBuffer());
+            sha.Append(masterSeed);
+            sha.Append(masterKey);
 
             var seed = sha.GetValueAndReset();
-            var aes = SymmetricKeyAlgorithmProvider
-                .OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7)
-                .CreateSymmetricKey(seed);
 
-            var buffer = new byte[(int)(input.Length - input.Position)];
-            var count = await input.ReadAsync(buffer, 0, buffer.Length);
-            var result = CryptographicEngine.Decrypt(aes, buffer.AsBuffer(), encryptionIV.AsBuffer());
-
-            return result.ToArray();
+            return Task.FromResult(_hashProvider.DecryptAesCbcPkcs7(seed, input, encryptionIV));
         }
 
         /// <summary>
@@ -90,18 +78,19 @@ namespace KeePass
         /// <exception cref="ArgumentNullException">
         /// The <paramref name="input"/> cannot be <c>null</c>.
         /// </exception>
-        public async Task<ReadHeaderResult> Headers(IInputStream input)
+        public async Task<ReadHeaderResult> Headers(Stream input)
         {
             if (input == null)
-                throw new ArgumentNullException("input");
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
 
-            var hash = new HashedInputStream(input);
-            var buffer = WindowsRuntimeBuffer.Create(128);
+            var hash = _inputStreamFactory(input);
 
             // Signature
-            buffer = await hash.ReadAsync(buffer, 8);
+            var signature = await hash.ReadAsync(8);
 
-            var format = CheckSignature(buffer);
+            var format = CheckSignature(signature);
             if (format != FileFormats.Supported)
             {
                 return new ReadHeaderResult
@@ -111,9 +100,8 @@ namespace KeePass
             }
 
             // Schema version
-            buffer = await hash.ReadAsync(buffer, 4);
-
-            var version = GetVersion(buffer);
+            var versionBytes = await hash.ReadAsync(4);
+            var version = GetVersion(versionBytes);
             format = CheckCompatibility(version);
             switch (format)
             {
@@ -129,8 +117,8 @@ namespace KeePass
             }
 
             // Fields
-            var headers = await GetHeaders(hash, buffer);
-            headers.Hash = hash.GetHashAndReset().ToArray();
+            var headers = await GetHeaders(hash);
+            headers.Hash = hash.GetHashAndReset();
 
             return new ReadHeaderResult
             {
@@ -155,7 +143,7 @@ namespace KeePass
             if (decrypted == null) throw new ArgumentNullException("decrypted");
             if (headers == null) throw new ArgumentNullException("headers");
 
-            var deHashed = await HashedBlockFileFormat.Read(decrypted);
+            var deHashed = await ReadHashedBlockFileFormat(decrypted);
             var input = deHashed;
 
             try
@@ -218,10 +206,9 @@ namespace KeePass
                 return false;
             }
 
-            var expected = CryptographicBuffer
-                .DecodeFromBase64String(meta);
+            var expected = Convert.FromBase64String(meta);
 
-            return CryptographicBuffer.Compare(expected, headerHash.AsBuffer());
+            return ByteArrayEquals(expected, headerHash);
         }
 
         /// <summary>
@@ -238,13 +225,14 @@ namespace KeePass
             if (input == null) throw new ArgumentNullException("input");
             if (startBytes == null) throw new ArgumentNullException("startBytes");
 
-            var reader = new DataReader(input.AsInputStream());
-            var read = await reader.LoadAsync((uint)startBytes.Length);
-            if (read != startBytes.Length)
-                return false;
+            var actual = await input.ReadAsync(startBytes.Length);
 
-            var actual = reader.ReadBuffer((uint)startBytes.Length);
-            return CryptographicBuffer.Compare(actual, startBytes.AsBuffer());
+            if (actual.Length != startBytes.Length)
+            {
+                return false;
+            }
+
+            return ByteArrayEquals(startBytes, actual);
         }
 
         /// <summary>
@@ -282,32 +270,42 @@ namespace KeePass
                 : FileFormats.Supported;
         }
 
+        static bool ByteArrayEquals(byte[] a1, byte[] a2)
+        {
+            return System.Collections.StructuralComparisons.StructuralEqualityComparer.Equals(a1, a2);
+        }
+
+        private static class KeepassHeaders
+        {
+            // KeePass 1.x
+            public static readonly byte[] Version1 = new byte[] { 0x03, 0xD9, 0xA2, 0x9A, 0x65, 0xFB, 0x4B, 0xB5 };
+
+            // KeePass 2.x pre-release
+            public static readonly byte[] Version2pre = new byte[] { 0x03, 0xD9, 0xA2, 0x9A, 0x66, 0xFB, 0x4B, 0xB5 };
+
+            // KeePass 2.x
+            public static readonly byte[] Version2 = new byte[] { 0x03, 0xD9, 0xA2, 0x9A, 0x67, 0xFB, 0x4B, 0xB5 };
+        }
+
         /// <summary>
         /// Gets the file format of the specified stream based on file signature.
         /// </summary>
         /// <param name="buffer">The signature bytes buffer.</param>
         /// <returns>The detected database file format.</returns>
-        private FileFormats CheckSignature(IBuffer buffer)
+        private FileFormats CheckSignature(byte[] data)
         {
-            if (buffer == null)
-                throw new ArgumentNullException("buffer");
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
 
-            // KeePass 1.x
-            var oldSignature = CryptographicBuffer
-                .DecodeFromHexString("03D9A29A65FB4BB5");
-            if (CryptographicBuffer.Compare(buffer, oldSignature))
+            if (ByteArrayEquals(KeepassHeaders.Version1, data))
                 return FileFormats.KeePass1x;
 
-            // KeePass 2.x pre-release
-            var preRelease = CryptographicBuffer
-                .DecodeFromHexString("03D9A29A66FB4BB5");
-            if (CryptographicBuffer.Compare(buffer, preRelease))
+            if (ByteArrayEquals(KeepassHeaders.Version2pre, data))
                 return FileFormats.OldVersion;
 
-            // KeePass 2.x
-            var current = CryptographicBuffer
-                .DecodeFromHexString("03D9A29A67FB4BB5");
-            if (!CryptographicBuffer.Compare(buffer, current))
+            if (!ByteArrayEquals(KeepassHeaders.Version2, data))
                 return FileFormats.NotSupported;
 
             return FileFormats.Supported;
@@ -348,19 +346,20 @@ namespace KeePass
         /// <param name="input">The input stream.</param>
         /// <param name="buffer">The header bytes reader.</param>
         /// <returns>The file headers.</returns>
-        private async Task<FileHeaders> GetHeaders(
-            IInputStream input, IBuffer buffer)
+        private async Task<FileHeaders> GetHeaders(Stream input)
         {
             var result = new FileHeaders();
 
             while (true)
             {
-                buffer = await input.ReadAsync(buffer, 3);
-                var field = (HeaderFields)buffer.GetByte(0);
-                var size = BitConverter.ToUInt16(buffer.ToArray(1, 2), 0);
+                var buffer = await input.ReadAsync(3);
+                var field = (HeaderFields)buffer[0];
+                var size = BitConverter.ToUInt16(new[] { buffer[1], buffer[2] }, 0);
 
                 if (size > 0)
-                    buffer = await input.ReadAsync(buffer, size);
+                {
+                    buffer = await input.ReadAsync(size);
+                }
 
                 switch (field)
                 {
@@ -368,37 +367,35 @@ namespace KeePass
                         return result;
 
                     case HeaderFields.CompressionFlags:
-                        result.UseGZip = buffer.GetByte(0) == 1;
+                        result.UseGZip = buffer[0] == 1;
                         break;
 
                     case HeaderFields.EncryptionIV:
-                        result.EncryptionIV = buffer.ToArray();
+                        result.EncryptionIV = buffer;
                         break;
 
                     case HeaderFields.MasterSeed:
-                        result.MasterSeed = buffer.ToArray();
+                        result.MasterSeed = buffer;
                         break;
 
                     case HeaderFields.StreamStartBytes:
-                        result.StartBytes = buffer.ToArray();
+                        result.StartBytes = buffer;
                         break;
 
                     case HeaderFields.TransformSeed:
-                        result.TransformSeed = buffer.ToArray();
+                        result.TransformSeed = buffer;
                         break;
 
                     case HeaderFields.TransformRounds:
-                        result.TransformRounds = BitConverter.ToUInt64(
-                            buffer.ToArray(), 0);
+                        result.TransformRounds = BitConverter.ToUInt64(buffer, 0);
                         break;
 
                     case HeaderFields.ProtectedStreamKey:
-                        result.ProtectedStreamKey = buffer.ToArray();
+                        result.ProtectedStreamKey = buffer;
                         break;
 
                     case HeaderFields.InnerRandomStreamID:
-                        result.RandomAlgorithm = (CrsAlgorithm)
-                            BitConverter.ToUInt32(buffer.ToArray(), 0);
+                        result.RandomAlgorithm = (CrsAlgorithm)BitConverter.ToUInt32(buffer, 0);
                         break;
                 }
             }
@@ -407,18 +404,103 @@ namespace KeePass
         /// <summary>
         /// Gets the database schema version.
         /// </summary>
-        /// <param name="buffer">The version bytes buffer</param>
+        /// <param name="bytes">The version bytes</param>
         /// <returns>The database schema version.</returns>
-        private Version GetVersion(IBuffer buffer)
+        private Version GetVersion(byte[] bytes)
         {
-            if (buffer == null)
-                throw new ArgumentNullException("buffer");
+            if (bytes == null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
 
-            var bytes = buffer.ToArray(0, 4);
             var minor = BitConverter.ToUInt16(bytes, 0);
             var major = BitConverter.ToUInt16(bytes, 2);
 
             return new Version(major, minor);
+        }
+
+        /// <summary>
+        /// Reads the specified hashed block stream into a memory stream.
+        /// </summary>
+        /// <param name="input">The hashed block stream.</param>
+        /// <returns>The de-hashed stream.</returns>
+        public async Task<Stream> ReadHashedBlockFileFormat(Stream input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            var blockIndex = 0;
+            var result = new MemoryStream();
+            //var hash = WindowsRuntimeBuffer.Create(32);
+
+            using (var reader = new BinaryReader(input))
+            {
+                var sha = _hashProvider.GetSha256();
+
+                while (true)
+                {
+                    // Verify block index
+                    var index = reader.ReadInt32();
+
+                    if (index != blockIndex)
+                    {
+                        throw new InvalidDataException($"Wrong block ID detected, expected: {blockIndex}, actual: {index}");
+                    }
+
+                    blockIndex++;
+
+                    // Block hash
+                    var hash = reader.ReadBytes(32);
+                    if (hash.Length != 32)
+                    {
+                        throw new InvalidDataException("Data corruption detected (truncated data)");
+                    }
+
+                    // Validate block size (< 10MB)
+                    var blockSize = reader.ReadInt32();
+                    if (blockSize == 0)
+                    {
+                        // Terminator block
+                        var isTerminator = hash
+                            .ToArray()
+                            .All(x => x == 0);
+
+                        if (!isTerminator)
+                        {
+                            throw new InvalidDataException("Data corruption detected (invalid hash for terminator block)");
+                        }
+
+                        break;
+                    }
+
+                    if (0 > blockSize || blockSize > 10485760)
+                    {
+                        throw new InvalidDataException(
+                            "Data corruption detected (truncated data)");
+                    }
+
+                    // Check data truncate
+                    var buffer = reader.ReadBytes(blockSize);
+                    if (buffer.Length < blockSize)
+                    {
+                        throw new InvalidDataException("Data corruption detected (truncated data)");
+                    }
+
+                    // Verify block integrity
+                    var actual = _hashProvider.GetSha256(buffer);
+                    if (!ByteArrayEquals(hash, actual))
+                    {
+                        throw new InvalidDataException("Data corruption detected (content corrupted)");
+                    }
+
+                    await result.WriteAsync(buffer.ToArray(), 0, (int)buffer.Length);
+                }
+
+                result.Position = 0;
+                return result;
+            }
         }
     }
 }

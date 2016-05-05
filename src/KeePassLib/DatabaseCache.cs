@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.Storage.Pickers;
 
 namespace KeePass
 {
@@ -10,15 +8,17 @@ namespace KeePass
         public delegate void DatabaseCacheUpdatedHandler(object sender, DatabaseCacheEvent arg, IFile database);
 
         private readonly IDatabaseTracker _databaseTracker;
+        private readonly IFilePicker _filePicker;
 
-        public DatabaseCache(IDatabaseTracker databaseTracker)
+        public DatabaseCache(IDatabaseTracker databaseTracker, IFilePicker filePicker)
         {
             _databaseTracker = databaseTracker;
+            _filePicker = filePicker;
         }
 
         public async Task<IFile> AddDatabaseAsync()
         {
-            var result = await OpenFileAsync(".kdbx");
+            var result = await _filePicker.GetDatabaseAsync();
 
             if (result == null)
             {
@@ -39,7 +39,7 @@ namespace KeePass
 
         public async Task<IFile> AddKeyFileAsync(IFile db)
         {
-            var result = await OpenFileAsync("*");
+            var result = await _filePicker.GetKeyFileAsync();
 
             if (result == null)
             {
@@ -51,14 +51,6 @@ namespace KeePass
             return result;
         }
 
-        private async Task<IFile> OpenFileAsync(string extension)
-        {
-            var picker = new FileOpenPicker();
-
-            picker.FileTypeFilter.Add(extension);
-
-            return (await picker.PickSingleFileAsync()).AsFile();
-        }
 
         public event DatabaseCacheUpdatedHandler DatabaseUpdated;
 
