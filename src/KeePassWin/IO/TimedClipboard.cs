@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 
 namespace KeePass
@@ -27,12 +25,14 @@ namespace KeePass
 
         public void ClearTextAsync()
         {
+#if FALSE
             Task.Run(async () =>
             {
                 await Task.Delay(_delay);
 
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, Clipboard.Clear);
             });
+#endif
         }
     }
 }
