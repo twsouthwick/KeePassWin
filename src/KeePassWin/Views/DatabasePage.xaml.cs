@@ -1,4 +1,5 @@
-﻿using KeePassWin.ViewModels;
+﻿using KeePass;
+using KeePassWin.ViewModels;
 using Prism.Windows.Mvvm;
 using System.ComponentModel;
 using Windows.UI.Xaml;
@@ -26,6 +27,11 @@ namespace KeePassWin.Views
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             Model.GoToSearch(sender.Text);
+        }
+
+        private void TreeViewSelectedItemChanged(object sender, WinRTXamlToolkit.Controls.RoutedPropertyChangedEventArgs<object> e)
+        {
+            Model.UpdateItems(e.NewValue as IKeePassGroup);
         }
     }
 }

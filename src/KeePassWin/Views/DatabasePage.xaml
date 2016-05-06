@@ -7,6 +7,8 @@
                                  xmlns:mvvm="using:KeePassWin.Mvvm"
                                  xmlns:prismMvvm="using:Prism.Windows.Mvvm"
                                  xmlns:models="using:KeePass.Models"
+                                 xmlns:controls="using:WinRTXamlToolkit.Controls"
+                                 xmlns:data="using:WinRTXamlToolkit.Controls.Data"
                                  xmlns:keepass="using:KeePass"
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
@@ -16,12 +18,13 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <AutoSuggestBox Grid.Row="0"
+        <AutoSuggestBox x:Name="SearchBox" Grid.Row="0"
             QueryIcon="Find"
             QuerySubmitted="AutoSuggestBox_QuerySubmitted" />
-        <ListView Grid.Row="1"
+        <ListView Grid.Row="1" x:Name="ParentNavbar"
                   ItemsSource="{x:Bind Path=Model.Parents, Mode=OneWay}"
                   IsItemClickEnabled="True"
                   mvvm:MvvmExtensions.Command="{x:Bind Path=Model.GoToParentCommand, Mode=OneWay}">
@@ -43,22 +46,68 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Style="{ThemeResource HeaderTextBlockStyle}"
                    Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
-        <ListView Grid.Row="3"
+        <Grid x:Name="WideView" Grid.Row="3">
+            <RelativePanel>
+                <controls:TreeView x:Name="treeView" Grid.Column="0" Margin="0,0,10,0" ItemsSource="{x:Bind Path=Model.Database.Root.Groups, Mode=OneWay}" SelectedItemChanged="TreeViewSelectedItemChanged">
+                    <controls:TreeView.ItemTemplate>
+                        <DataTemplate x:DataType="keepass:IKeePassGroup">
+                            <TextBlock Text="{x:Bind Path=Name}"/>
+                            <data:DataTemplateExtensions.Hierarchy>
+                                <data:HierarchicalDataTemplate ItemsSource="{Binding Groups}" />
+                            </data:DataTemplateExtensions.Hierarchy>
+                        </DataTemplate>
+                    </controls:TreeView.ItemTemplate>
+                </controls:TreeView>
+                <ListView RelativePanel.RightOf="treeView" ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}" ItemTemplate="{StaticResource KeePassEntryTemplate}">
+                    
+                </ListView>
+            </RelativePanel>
+        </Grid>
+        <Grid x:Name="NarrowView" Grid.Row="3">
+            <ListView 
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
                   HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
-                  IsItemClickEnabled="True"
+                  IsItemClickEnabled="True" 
                   mvvm:MvvmExtensions.Command="{x:Bind Model.ItemClickCommand, Mode=OneWay}">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplateSelector>
-                <mvvm:TypeTemplateSelector>
-                    <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
-                    <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
-                </mvvm:TypeTemplateSelector>
-            </ListView.ItemTemplateSelector>
-        </ListView>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplateSelector>
+                    <mvvm:TypeTemplateSelector>
+                        <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
+                        <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
+                    </mvvm:TypeTemplateSelector>
+                </ListView.ItemTemplateSelector>
+            </ListView>
+        </Grid>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="WideView.Visibility" Value="Collapsed" />
+                        <Setter Target="NarrowView.Visibility" Value="Visible" />
+                        <Setter Target="ParentNavbar.Visibility" Value="Visible" />
+                        <Setter Target="SearchBox.Margin" Value="50,10,10,0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="WideView.Visibility" Value="Visible" />
+                        <Setter Target="NarrowView.Visibility" Value="Collapsed" />
+                        <Setter Target="ParentNavbar.Visibility" Value="Collapsed" />
+                        <Setter Target="SearchBox.Margin" Value="0,10,10,0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </prismMvvm:SessionStateAwarePage>

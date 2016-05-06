@@ -72,10 +72,20 @@ namespace KeePassWin.ViewModels
             }
 
             Database = db;
+            UpdateItems(db.GetGroup(key.Group));
+        }
+
+        public void UpdateItems(IKeePassGroup group)
+        {
+            if (group != null && Group == group)
+            {
+                return;
+            }
+
             Items.Clear();
 
             // Set group and entries into the Items container
-            Group = db.GetGroup(key.Group) ?? db.Root;
+            Group = group ?? Database.Root;
 
             foreach (var item in Group.Groups)
             {
