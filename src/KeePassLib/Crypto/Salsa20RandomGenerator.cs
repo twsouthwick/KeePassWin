@@ -6,7 +6,7 @@ namespace KeePass.Crypto
     {
         private readonly Salsa20Cipher _cipher;
 
-        public Salsa20RandomGenerator(IHashProvider hashProvider, byte[] key)
+        public Salsa20RandomGenerator(ICryptoProvider hashProvider, byte[] key)
         {
             if (hashProvider == null)
             {

@@ -18,7 +18,7 @@ namespace KeePassLib
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<DotNetHashProvider>().As<IHashProvider>().SingleInstance();
+            builder.RegisterType<DotNetHashProvider>().As<ICryptoProvider>().SingleInstance();
             builder.RegisterType<EncryptedDatabaseUnlocker>();
             builder.RegisterType<FileFormat>();
             builder.RegisterType<HashedStream>();

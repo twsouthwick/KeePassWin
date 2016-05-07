@@ -11,10 +11,10 @@ namespace KeePass
 {
     public class FileFormat
     {
-        private readonly IHashProvider _hashProvider;
+        private readonly ICryptoProvider _hashProvider;
         private readonly Func<Stream, HashedStream> _inputStreamFactory;
 
-        public FileFormat(Func<Stream, HashedStream> inputStreamFactory, IHashProvider hashProvider)
+        public FileFormat(Func<Stream, HashedStream> inputStreamFactory, ICryptoProvider hashProvider)
         {
             _inputStreamFactory = inputStreamFactory;
             _hashProvider = hashProvider;
@@ -65,7 +65,7 @@ namespace KeePass
 
             var seed = sha.GetValueAndReset();
 
-            return Task.FromResult(_hashProvider.Decrypt(seed, input, encryptionIV));
+            return Task.FromResult(_hashProvider.Decrypt(input, seed, encryptionIV));
         }
 
         /// <summary>

@@ -48,7 +48,7 @@ namespace KeePassWin
                 .SingleInstance();
 
             builder.RegisterType<WindowsHashProvider>()
-                .As<IHashProvider>()
+                .As<ICryptoProvider>()
                 .SingleInstance();
 
         }

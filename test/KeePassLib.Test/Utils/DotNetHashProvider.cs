@@ -6,21 +6,21 @@ using System.Security.Cryptography;
 
 namespace KeePassLib
 {
-    internal class DotNetHashProvider : IHashProvider
+    internal class DotNetHashProvider : ICryptoProvider
     {
-        public byte[] Decrypt(byte[] seed, Stream input, byte[] encryptionIV)
+        public byte[] Decrypt(Stream input, byte[] key, byte[] iv)
         {
             using (var rijndael = new RijndaelManaged
             {
                 KeySize = 256,
-                Key = seed,
+                Key = key,
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7
             })
             {
                 if (iv != null)
                 {
-                    rijndael.IV = encryptionIV;
+                    rijndael.IV = iv;
                 }
 
                 var transform = rijndael.CreateDecryptor();
@@ -36,7 +36,7 @@ namespace KeePassLib
             }
         }
 
-        public byte[] Encrypt(byte[] key, byte[] input, byte[] iv)
+        public byte[] Encrypt(byte[] input, byte[] key, byte[] iv)
         {
             using (var aesAlg = new AesManaged
             {

@@ -109,7 +109,7 @@
     <Compile Include="CrsAlgorithm.cs" />
     <Compile Include="Crypto\FileFormat.cs" />
     <Compile Include="Crypto\HashedStream.cs" />
-    <Compile Include="Crypto\IHashProvider.cs" />
+    <Compile Include="Crypto\ICryptoProvider.cs" />
     <Compile Include="Crypto\IRandomGenerator.cs" />
     <Compile Include="Crypto\Rc4RandomGenerator.cs" />
     <Compile Include="Crypto\Salsa20Cipher.cs" />

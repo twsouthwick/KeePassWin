@@ -15,7 +15,7 @@ namespace KeePass.Crypto
         private readonly IHash _sha;
         private readonly Stream _stream;
 
-        public HashedStream(IHashProvider hashProvider, Stream stream)
+        public HashedStream(ICryptoProvider hashProvider, Stream stream)
         {
             if (stream == null)
             {

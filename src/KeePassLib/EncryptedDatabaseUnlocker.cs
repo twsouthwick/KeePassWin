@@ -9,9 +9,9 @@ namespace KeePass
     public class EncryptedDatabaseUnlocker : IDatabaseUnlocker
     {
         private readonly FileFormat _fileFormat;
-        private readonly IHashProvider _hashProvider;
+        private readonly ICryptoProvider _hashProvider;
 
-        public EncryptedDatabaseUnlocker(FileFormat fileFormat, IHashProvider hashProvider)
+        public EncryptedDatabaseUnlocker(FileFormat fileFormat, ICryptoProvider hashProvider)
         {
             _hashProvider = hashProvider;
             _fileFormat = fileFormat;

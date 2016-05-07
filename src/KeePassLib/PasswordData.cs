@@ -11,11 +11,11 @@ namespace KeePass
 {
     public class PasswordData
     {
-        private readonly IHashProvider _hashProvider;
+        private readonly ICryptoProvider _hashProvider;
 
         private byte[] _keyFile;
 
-        public PasswordData(IHashProvider hashProvider)
+        public PasswordData(ICryptoProvider hashProvider)
         {
             _hashProvider = hashProvider;
         }
@@ -121,7 +121,7 @@ namespace KeePass
                     for (var i = 0; i < 1000; i++)
                     {
                         // Transform master key
-                        master = _hashProvider.Encrypt(seed, master, null);
+                        master = _hashProvider.Encrypt(master, seed, null);
 
                         transforms++;
 

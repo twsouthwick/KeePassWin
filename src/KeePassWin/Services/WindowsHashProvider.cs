@@ -7,7 +7,7 @@ using Windows.Security.Cryptography.Core;
 
 namespace KeePass.Crypto
 {
-    public class WindowsHashProvider : IHashProvider
+    public class WindowsHashProvider : ICryptoProvider
     {
         public IHash GetSha256() => new WindowsCryptographicHash(HashAlgorithmNames.Sha256);
 
@@ -20,7 +20,7 @@ namespace KeePass.Crypto
                 .ToArray();
         }
 
-        public byte[] Decrypt(byte[] seed, Stream input, byte[] encryptionIV)
+        public byte[] Decrypt(Stream input, byte[] seed, byte[] encryptionIV)
         {
             var alg = SymmetricKeyAlgorithmProvider
                 .OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7);
@@ -35,7 +35,7 @@ namespace KeePass.Crypto
             return result.ToArray();
         }
 
-        public byte[] Encrypt(byte[] seed, byte[] data, byte[] iv)
+        public byte[] Encrypt(byte[] data, byte[] seed, byte[] iv)
         {
             var aes = SymmetricKeyAlgorithmProvider
                 .OpenAlgorithm(SymmetricAlgorithmNames.AesEcb);

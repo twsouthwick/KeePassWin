@@ -8,12 +8,12 @@ namespace KeePass.Crypto
         void Append(byte[] data);
     }
 
-    public interface IHashProvider
+    public interface ICryptoProvider
     {
         byte[] GetSha256(byte[] input);
         IHash GetSha256();
-        byte[] Decrypt(byte[] seed, Stream input, byte[] encryptionIV);
-        byte[] Encrypt(byte[] seed, byte[] data, byte[] iv);
+        byte[] Decrypt(Stream input, byte[] key, byte[] iv);
+        byte[] Encrypt(byte[] data, byte[] key, byte[] iv);
         byte[] HexStringToBytes(string hex);
     }
 }
