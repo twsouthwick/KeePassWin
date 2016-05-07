@@ -23,9 +23,10 @@
     -->
     <Assembly Name="*Application*" Dynamic="Required All" />
 
-
-    <!-- Add your application specific runtime directives here. -->
-    <Type Name="System.Collections.ArrayList" Dynamic="Required All" />
+    <Assembly Name="System.Collections.NonGeneric">
+      <!-- Add your application specific runtime directives here. -->
+      <Type Name="System.Collections.ArrayList" Dynamic="Required All" />
+    </Assembly>
 
   </Application>
 </Directives>
