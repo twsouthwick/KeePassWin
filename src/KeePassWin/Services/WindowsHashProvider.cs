@@ -20,11 +20,13 @@ namespace KeePass.Crypto
                 .ToArray();
         }
 
-        public byte[] DecryptAesCbcPkcs7(byte[] seed, Stream input, byte[] encryptionIV)
+        public byte[] Decrypt(byte[] seed, Stream input, byte[] encryptionIV)
         {
-            var aes = SymmetricKeyAlgorithmProvider
-                .OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7)
+            var alg = SymmetricKeyAlgorithmProvider
+                .OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7);
+            var aes = alg
                 .CreateSymmetricKey(seed.AsBuffer());
+
 
             var buffer = new byte[(int)(input.Length - input.Position)];
             var count = input.Read(buffer, 0, buffer.Length);
@@ -33,33 +35,23 @@ namespace KeePass.Crypto
             return result.ToArray();
         }
 
-        public ICryptoEncryptor EncryptAesEcb(byte[] seed)
+        public byte[] Encrypt(byte[] seed, byte[] data, byte[] iv)
         {
-            return new WindowCryptoEncryptor(SymmetricAlgorithmNames.AesEcb, seed);
+            var aes = SymmetricKeyAlgorithmProvider
+                .OpenAlgorithm(SymmetricAlgorithmNames.AesEcb);
+            var key = aes.CreateSymmetricKey(seed.AsBuffer());
+
+            
+            var blockLength = aes.BlockLength;
+            var keySize = key.KeySize;
+            return CryptographicEngine
+                .Encrypt(key, data.AsBuffer(), iv?.AsBuffer())
+                .ToArray();
         }
 
         public byte[] HexStringToBytes(string hex)
         {
             return CryptographicBuffer.DecodeFromHexString(hex).ToArray();
-        }
-
-        private class WindowCryptoEncryptor : ICryptoEncryptor
-        {
-            private readonly CryptographicKey _key;
-
-            public WindowCryptoEncryptor(string name, byte[] seed)
-            {
-                var aes = SymmetricKeyAlgorithmProvider
-                    .OpenAlgorithm(name);
-                _key = aes.CreateSymmetricKey(seed.AsBuffer());
-            }
-
-            public byte[] Encrypt(byte[] data, byte[] iv)
-            {
-                return CryptographicEngine
-                    .Encrypt(_key, data.AsBuffer(), iv?.AsBuffer())
-                    .ToArray();
-            }
         }
 
         private class WindowsCryptographicHash : IHash

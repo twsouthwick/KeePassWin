@@ -47,10 +47,6 @@ namespace KeePassWin
                 .AsSelf()
                 .SingleInstance();
 
-            builder.RegisterType<RandomGeneratorProvider>()
-                .As<IRandomGeneratorProvider>()
-                .SingleInstance();
-
             builder.RegisterType<WindowsHashProvider>()
                 .As<IHashProvider>()
                 .SingleInstance();

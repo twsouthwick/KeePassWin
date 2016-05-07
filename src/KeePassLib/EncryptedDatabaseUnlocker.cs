@@ -22,7 +22,7 @@ namespace KeePass
             return UnlockAsync(file, null, null);
         }
 
-        protected async Task<IKeePassDatabase> UnlockAsync(IFile file, IFile keyfile, string password)
+        public async Task<IKeePassDatabase> UnlockAsync(IFile file, IFile keyfile, string password)
         {
             try
             {

@@ -111,8 +111,6 @@
     <Compile Include="Crypto\HashedStream.cs" />
     <Compile Include="Crypto\IHashProvider.cs" />
     <Compile Include="Crypto\IRandomGenerator.cs" />
-    <Compile Include="Crypto\IRandomGeneratorProvider.cs" />
-    <Compile Include="Crypto\RandomGeneratorProvider.cs" />
     <Compile Include="Crypto\Rc4RandomGenerator.cs" />
     <Compile Include="Crypto\Salsa20Cipher.cs" />
     <Compile Include="Crypto\Salsa20RandomGenerator.cs" />

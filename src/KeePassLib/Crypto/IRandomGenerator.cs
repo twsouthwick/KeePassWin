@@ -1,6 +1,6 @@
 ﻿namespace KeePass.Crypto
 {
-    public interface IRandomGenerator
+    internal interface IRandomGenerator
     {
         /// <summary>
         /// Get a buffer of random bytes of the specified size.

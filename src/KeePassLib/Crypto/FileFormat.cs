@@ -13,11 +13,9 @@ namespace KeePass
     {
         private readonly IHashProvider _hashProvider;
         private readonly Func<Stream, HashedStream> _inputStreamFactory;
-        private readonly IRandomGeneratorProvider _randomGeneratorProvider;
 
-        public FileFormat(IRandomGeneratorProvider randomGeneratorProvider, Func<Stream, HashedStream> inputStreamFactory, IHashProvider hashProvider)
+        public FileFormat(Func<Stream, HashedStream> inputStreamFactory, IHashProvider hashProvider)
         {
-            _randomGeneratorProvider = randomGeneratorProvider;
             _inputStreamFactory = inputStreamFactory;
             _hashProvider = hashProvider;
         }
@@ -67,7 +65,7 @@ namespace KeePass
 
             var seed = sha.GetValueAndReset();
 
-            return Task.FromResult(_hashProvider.DecryptAesCbcPkcs7(seed, input, encryptionIV));
+            return Task.FromResult(_hashProvider.Decrypt(seed, input, encryptionIV));
         }
 
         /// <summary>
@@ -322,7 +320,7 @@ namespace KeePass
                     return protect != null && (bool)protect;
                 });
 
-            var generator = _randomGeneratorProvider.Get(headers.RandomAlgorithm, headers.ProtectedStreamKey);
+            var generator = GetRandomNumberGenerator(headers.RandomAlgorithm, headers.ProtectedStreamKey);
 
             foreach (var protectedString in protectedStrings)
             {
@@ -337,6 +335,17 @@ namespace KeePass
 
                 protectedString.Value = Encoding.UTF8
                     .GetString(encrypted, 0, length);
+            }
+        }
+
+        private IRandomGenerator GetRandomNumberGenerator(CrsAlgorithm algorithm, byte[] protectedStreamKey)
+        {
+            switch (algorithm)
+            {
+                case CrsAlgorithm.ArcFourVariant:
+                    return new Rc4RandomGenerator(protectedStreamKey);
+                default:
+                    return new Salsa20RandomGenerator(_hashProvider, protectedStreamKey);
             }
         }
 

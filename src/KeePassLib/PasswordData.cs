@@ -116,15 +116,12 @@ namespace KeePass
                 var transforms = 0UL;
                 var master = GetMasterKey();
 
-                // AES - ECB
-                var encryptor = _hashProvider.EncryptAesEcb(seed);
-
                 while (true)
                 {
                     for (var i = 0; i < 1000; i++)
                     {
                         // Transform master key
-                        master = encryptor.Encrypt(master, null);
+                        master = _hashProvider.Encrypt(seed, master, null);
 
                         transforms++;
 
