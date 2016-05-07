@@ -1,18 +1,15 @@
 ﻿{
   "dependencies": {
     "Autofac": "4.0.0-beta8-157",
-    "Autofac.Extensions.Moq": "4.0.0",
     "Moq": "4.2.1510.2205",
+    "System.Security.Cryptography.Cng": "4.0.0-beta-23516",
     "xunit": "2.1.0",
     "xunit.runner.visualstudio": "2.1.0"
   },
   "frameworks": {
-    "net461": {
-      "imports": "net45"
-    }
+    "net461": {}
   },
-
   "runtimes": {
-    "win": { }
+    "win": {}
   }
 }
