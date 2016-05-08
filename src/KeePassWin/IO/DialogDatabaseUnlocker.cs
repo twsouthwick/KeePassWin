@@ -9,8 +9,8 @@ namespace KeePass
     {
         private readonly Func<IFile, PasswordDialog> _dialogFactory;
 
-        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory, FileFormat fileFormat, ICryptoProvider hashProvider)
-            : base(fileFormat, hashProvider)
+        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory, FileFormat fileFormat, ICryptoProvider hashProvider, IKeePassIdGenerator idGenerator)
+            : base(fileFormat, hashProvider, idGenerator)
         {
             _dialogFactory = dialogFactory;
         }

@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="IO\Sqlite\Migrations\KeePassSqliteContextModelSnapshot.cs" />
     <Compile Include="IO\Sqlite\SqliteDatabaseTracker.cs" />
+    <Compile Include="IO\WindowsMd5KeePassIdGenerator.cs" />
     <Compile Include="Models\SearchQueryParameter.cs" />
     <Compile Include="Mvvm\INavigator.cs" />
     <Compile Include="IO\CachedDialogDatabseUnlocker.cs" />

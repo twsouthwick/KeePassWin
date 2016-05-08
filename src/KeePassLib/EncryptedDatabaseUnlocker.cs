@@ -10,11 +10,13 @@ namespace KeePass
     {
         private readonly FileFormat _fileFormat;
         private readonly ICryptoProvider _hashProvider;
+        private readonly IKeePassIdGenerator _idGenerator;
 
-        public EncryptedDatabaseUnlocker(FileFormat fileFormat, ICryptoProvider hashProvider)
+        public EncryptedDatabaseUnlocker(FileFormat fileFormat, ICryptoProvider hashProvider,IKeePassIdGenerator idGenerator)
         {
             _hashProvider = hashProvider;
             _fileFormat = fileFormat;
+            _idGenerator = idGenerator;
         }
 
         public virtual Task<IKeePassDatabase> UnlockAsync(IFile file)
@@ -52,7 +54,7 @@ namespace KeePass
 
                     // TODO: verify headers integrity
 
-                    return new XmlKeePassDatabase(doc, file.Path, Path.GetFileNameWithoutExtension(file.Name));
+                    return new XmlKeePassDatabase(doc, _idGenerator.FromPath(file.Path), Path.GetFileNameWithoutExtension(file.Name));
                 }
             }
             catch (Exception e) when ((uint)e.HResult == 0x80070017)

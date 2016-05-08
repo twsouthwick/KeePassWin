@@ -22,6 +22,7 @@ namespace KeePassLib
             builder.RegisterType<EncryptedDatabaseUnlocker>();
             builder.RegisterType<FileFormat>();
             builder.RegisterType<HashedStream>();
+            builder.RegisterType<TestIdGenerator>().As<IKeePassIdGenerator>();
 
             using (var container = builder.Build())
             {

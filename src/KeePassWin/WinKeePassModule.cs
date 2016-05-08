@@ -16,8 +16,12 @@ namespace KeePassWin
 
             BuildCryptoProviders(builder);
 
-            builder.RegisterType<SqliteDatabaseTracker>()
+            builder.RegisterType<FileDatabaseTracker>()
                 .As<IDatabaseTracker>()
+                .SingleInstance();
+
+            builder.RegisterType<WindowsMd5KeePassIdGenerator>()
+                .As<IKeePassIdGenerator>()
                 .SingleInstance();
 
             builder.RegisterType<DialogDatabaseUnlocker>()

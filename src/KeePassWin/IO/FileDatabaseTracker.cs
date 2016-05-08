@@ -1,5 +1,4 @@
-﻿using KeePass.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,24 +6,26 @@ using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 
-namespace KeePass.IO.Database
+namespace KeePass
 {
     public class FileDatabaseTracker : IDatabaseTracker
     {
         private readonly StorageItemAccessList _accessList;
         private readonly IAsyncOperation<StorageFolder> _folder;
+        private readonly IKeePassIdGenerator _idGenerator;
 
-        public FileDatabaseTracker()
+        public FileDatabaseTracker(IKeePassIdGenerator idGenerator)
         {
             _folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("opened_databases", CreationCollisionOption.OpenIfExists);
             _accessList = StorageApplicationPermissions.FutureAccessList;
+            _idGenerator = idGenerator;
         }
 
-        public async Task<bool> AddDatabaseAsync(IStorageFile dbFile)
+        public async Task<bool> AddDatabaseAsync(IFile dbFile)
         {
-            var token = KeePassId.FromPath(dbFile);
+            var token = _idGenerator.FromPath(dbFile.Path);
 
-            _accessList.AddOrReplace(GetDatabaseToken(token), dbFile);
+            _accessList.AddOrReplace(GetDatabaseToken(token), dbFile.AsStorageItem());
 
             var folder = await _folder;
 
@@ -42,18 +43,18 @@ namespace KeePass.IO.Database
             return true;
         }
 
-        public Task AddKeyFileAsync(IStorageFile dbFile, IStorageFile keyFile)
+        public Task AddKeyFileAsync(IFile dbFile, IFile keyFile)
         {
-            var token = GetKeyToken(KeePassId.FromPath(dbFile));
+            var token = GetKeyToken(_idGenerator.FromPath(dbFile.Path));
 
-            _accessList.AddOrReplace(token, keyFile);
+            _accessList.AddOrReplace(token, keyFile.AsStorageItem());
 
             return Task.CompletedTask;
         }
 
-        public async Task<IStorageFile> GetKeyFileAsync(IStorageFile dbFile)
+        public async Task<IFile> GetKeyFileAsync(IFile dbFile)
         {
-            var token = GetKeyToken(KeePassId.FromPath(dbFile));
+            var token = GetKeyToken(_idGenerator.FromPath(dbFile.Path));
 
             if (_accessList.ContainsItem(token))
             {
@@ -65,30 +66,35 @@ namespace KeePass.IO.Database
                     return null;
                 }
 
-                return key;
+                return key.AsFile();
             }
+            else
             {
                 return null;
             }
         }
 
-        public async Task<IStorageFile> GetDatabaseAsync(KeePassId id)
+        public async Task<IFile> GetDatabaseAsync(KeePassId id)
         {
             try
             {
-                return await _accessList.GetFileAsync(GetDatabaseToken(id));
+                var file = await _accessList.GetFileAsync(GetDatabaseToken(id));
+
+                if (file.IsAvailable)
+                {
+                    return file.AsFile();
+                }
             }
-            catch (ArgumentException)
-            {
-                return null;
-            }
+            catch (ArgumentException) { }
+
+            return null;
         }
 
-        public async Task<IEnumerable<IStorageFile>> GetDatabasesAsync()
+        public async Task<IEnumerable<IFile>> GetDatabasesAsync()
         {
             var folder = await _folder;
             var files = await folder.GetFilesAsync();
-            var result = new List<IStorageFile>();
+            var result = new List<IFile>();
 
             foreach (var file in files)
             {
