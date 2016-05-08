@@ -29,11 +29,11 @@ namespace KeePassWin
             return shell;
         }
 
-        protected override async Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
+        protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
         {
-            await KeePassSqliteContext.InitializeAsync();
-
             NavigationService.Navigate("Main", null);
+
+            return Task.CompletedTask;
         }
 
         protected override void ConfigureContainer(ContainerBuilder builder)

@@ -106,13 +106,6 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="IO\FileDatabaseTracker.cs" />
-    <Compile Include="IO\Sqlite\KeePassSqliteContext.cs" />
-    <Compile Include="IO\Sqlite\Migrations\20160229035622_InitialMigration.cs" />
-    <Compile Include="IO\Sqlite\Migrations\20160229035622_InitialMigration.Designer.cs">
-      <DependentUpon>20160229035622_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IO\Sqlite\Migrations\KeePassSqliteContextModelSnapshot.cs" />
-    <Compile Include="IO\Sqlite\SqliteDatabaseTracker.cs" />
     <Compile Include="IO\WindowsMd5KeePassIdGenerator.cs" />
     <Compile Include="Models\SearchQueryParameter.cs" />
     <Compile Include="Mvvm\INavigator.cs" />
