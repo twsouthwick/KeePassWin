@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
         <AutoSuggestBox x:Name="SearchBox" Grid.Row="0"
             QueryIcon="Find"
             QuerySubmitted="AutoSuggestBox_QuerySubmitted" />
@@ -46,25 +47,34 @@
                    Style="{ThemeResource HeaderTextBlockStyle}"
                    Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
         <Grid x:Name="WideView" Grid.Row="3">
-            <RelativePanel>
-                <controls:TreeView x:Name="treeView" Grid.Column="0" Margin="0,0,10,0" ItemsSource="{x:Bind Path=Model.Database.Root.Groups, Mode=OneWay}" SelectedItemChanged="TreeViewSelectedItemChanged">
-                    <controls:TreeView.ItemTemplate>
-                        <DataTemplate x:DataType="keepass:IKeePassGroup">
-                            <TextBlock Text="{x:Bind Path=Name}"/>
-                            <data:DataTemplateExtensions.Hierarchy>
-                                <data:HierarchicalDataTemplate ItemsSource="{Binding Groups}" />
-                            </data:DataTemplateExtensions.Hierarchy>
-                        </DataTemplate>
-                    </controls:TreeView.ItemTemplate>
-                </controls:TreeView>
-                <ListView RelativePanel.RightOf="treeView" 
-                          ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}" ItemTemplate="{StaticResource KeePassEntryTemplate}" />
-            </RelativePanel>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <controls:TreeView Grid.Column="0" x:Name="treeView" Margin="0,0,10,0" ItemsSource="{x:Bind Path=Model.Database.Root.Groups, Mode=OneWay}" 
+                               SelectedItemChanged="TreeViewSelectedItemChanged">
+                <controls:TreeView.ItemTemplate>
+                    <DataTemplate x:DataType="keepass:IKeePassGroup">
+                        <TextBlock Text="{x:Bind Path=Name}"/>
+                        <data:DataTemplateExtensions.Hierarchy>
+                            <data:HierarchicalDataTemplate ItemsSource="{Binding Groups}" />
+                        </data:DataTemplateExtensions.Hierarchy>
+                    </DataTemplate>
+                </controls:TreeView.ItemTemplate>
+            </controls:TreeView>
+            <ListView Grid.Column="1"
+                          ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}" ItemTemplate="{StaticResource KeePassEntryTemplate}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </Grid>
         <Grid x:Name="NarrowView" Grid.Row="3">
             <ListView 
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
-                  HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
                   IsItemClickEnabled="True" 
                   mvvm:MvvmExtensions.Command="{x:Bind Model.ItemClickCommand, Mode=OneWay}">
                 <ListView.ItemContainerStyle>
