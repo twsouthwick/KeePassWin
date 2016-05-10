@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using KeePass;
 using Prism.Autofac.Windows;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
@@ -41,7 +40,7 @@ namespace KeePassWin
             base.ConfigureContainer(builder);
 
             builder.RegisterType<AppShell>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterModule<WinKeePassModule>();
         }

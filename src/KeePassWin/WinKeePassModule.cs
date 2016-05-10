@@ -43,6 +43,10 @@ namespace KeePassWin
             builder.RegisterType<WindowsFilePicker>()
                 .As<IFilePicker>()
                 .SingleInstance();
+
+            builder.RegisterType<AppShellNavPane>()
+                .As<INavigationPane>()
+                .SingleInstance();
         }
 
         private void BuildCryptoProviders(ContainerBuilder builder)
@@ -55,6 +59,25 @@ namespace KeePassWin
                 .As<ICryptoProvider>()
                 .SingleInstance();
 
+        }
+
+        private class AppShellNavPane : INavigationPane
+        {
+            private readonly Func<AppShell> _shell;
+            
+            /// <summary>
+            /// Abstracts navigation pane closing
+            /// </summary>
+            /// <param name="shell">Ask for a Func to delay generation of AppShell, otherwise a StackOverflow will occur</param>
+            public AppShellNavPane(Func<AppShell> shell)
+            {
+                _shell = shell;
+            }
+
+            public void Dismiss()
+            {
+                _shell().Dismiss();
+            }
         }
     }
 }
