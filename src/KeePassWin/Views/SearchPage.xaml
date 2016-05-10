@@ -17,7 +17,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <AutoSuggestBox Text="{x:Bind Path=Model.Text, Mode=TwoWay}" TextChanged="AutoSuggestBox_TextChanged" QueryIcon="Find" />
+        <AutoSuggestBox x:Name="SearchBox" Text="{x:Bind Path=Model.Text, Mode=TwoWay}" TextChanged="AutoSuggestBox_TextChanged" QueryIcon="Find" HorizontalAlignment="Stretch" />
         <ListView Grid.Row="1"
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
                   HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
@@ -31,5 +31,26 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SearchBox.Margin" Value="50,10,10,0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SearchBox.Margin" Value="0,10,10,0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </prismMvvm:SessionStateAwarePage>
