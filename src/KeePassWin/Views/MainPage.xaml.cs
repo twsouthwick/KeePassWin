@@ -11,6 +11,8 @@ namespace KeePassWin.Views
         {
             InitializeComponent();
             DataContextChanged += MainPage_DataContextChanged;
+
+            Loaded += (_, __) => ViewDataContext.Open();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

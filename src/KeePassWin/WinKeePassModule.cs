@@ -64,7 +64,7 @@ namespace KeePassWin
         private class AppShellNavPane : INavigationPane
         {
             private readonly Func<AppShell> _shell;
-            
+
             /// <summary>
             /// Abstracts navigation pane closing
             /// </summary>
@@ -74,10 +74,9 @@ namespace KeePassWin
                 _shell = shell;
             }
 
-            public void Dismiss()
-            {
-                _shell().Dismiss();
-            }
+            public void Dismiss() => _shell().Dismiss();
+
+            public void Open() => _shell().Open();
         }
     }
 }
