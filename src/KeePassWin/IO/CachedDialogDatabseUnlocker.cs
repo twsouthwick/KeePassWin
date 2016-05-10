@@ -1,5 +1,4 @@
-﻿using KeePass.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,7 +24,10 @@ namespace KeePass.IO
 
             var unlocked = await _unlocker.UnlockAsync(file);
 
-            _cache.Add(file.Path, unlocked);
+            if (unlocked != null)
+            {
+                _cache.Add(file.Path, unlocked);
+            }
 
             return unlocked;
         }
