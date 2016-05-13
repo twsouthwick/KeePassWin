@@ -113,6 +113,7 @@
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
+    <Compile Include="UriVisibilityConverter.cs" />
     <EmbeddedResource Include="Properties\KeePassControls.rd.xml" />
   </ItemGroup>
   <ItemGroup>
