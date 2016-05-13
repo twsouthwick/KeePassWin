@@ -1,6 +1,4 @@
-﻿using KeePass;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -47,22 +45,40 @@ namespace KeePass.Controls
             {
                 Command.Execute(e.ClickedItem);
             }
+        }
 
+        private async void GoToWebsite(object sender, RoutedEventArgs e)
+        {
+            var entry = GetEntryFromAppBar(sender);
+            Uri uri;
+
+            if (Uri.TryCreate(entry.Url, UriKind.Absolute, out uri))
+            {
+                if (!(await Windows.System.Launcher.LaunchUriAsync(uri)))
+                {
+                    var dialog = new Windows.UI.Popups.MessageDialog($"Could not launch {entry.Url}");
+                }
+            }
         }
 
         private void CopyPassword(object sender, RoutedEventArgs e)
         {
-            Copy((((AppBarButton)sender).DataContext as IKeePassEntry)?.Password);
+            Copy(GetEntryFromAppBar(sender)?.Password);
         }
 
         private void CopyUserName(object sender, RoutedEventArgs e)
         {
-            Copy((((AppBarButton)sender).DataContext as IKeePassEntry)?.UserName);
+            Copy(GetEntryFromAppBar(sender)?.UserName);
+        }
+
+        private IKeePassEntry GetEntryFromAppBar(object sender)
+        {
+            return ((AppBarButton)sender).DataContext as IKeePassEntry;
         }
 
         private void Copy(string text)
         {
-            if(CopyCommand?.CanExecute(text) == true)
+            if (CopyCommand?.CanExecute(text) == true)
             {
                 CopyCommand.Execute(text);
             }

@@ -10,10 +10,8 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-
     <UserControl.Resources>
         <!-- TODO: Switch to x:Bind when it works. As of 2/15/2016, this causes the error: XBF generation error code 0x09c4 -->
-
         <DataTemplate x:Name="KeePassGroupTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -34,17 +32,24 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
                 <TextBlock Grid.Column="0" Grid.Row="1" Margin="10,0,0,0" Text="{Binding Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
-                <AppBarButton Grid.Column="1" Grid.RowSpan="2" Label="UserName" Click="CopyUserName">
+                <!-- TODO: Only show if valid URI -->
+                <AppBarButton Grid.Column="1" Grid.RowSpan="2" Label="Website" Click="GoToWebsite">
                     <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Copy" />
+                        <SymbolIcon Symbol="Globe" />
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Password" Click="CopyPassword">
+                <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Username" Click="CopyUserName">
                     <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Copy" />
+                        <SymbolIcon Symbol="Contact" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Grid.Column="3" Grid.RowSpan="2" Label="Password" Click="CopyPassword">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Permissions" />
                     </AppBarButton.Icon>
                 </AppBarButton>
             </Grid>
