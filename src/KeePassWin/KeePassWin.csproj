@@ -105,6 +105,7 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IEntryView.cs" />
     <Compile Include="INavigationPane.cs" />
     <Compile Include="IO\FileDatabaseTracker.cs" />
     <Compile Include="IO\WindowsMd5KeePassIdGenerator.cs" />
@@ -121,6 +122,9 @@
     <Compile Include="Services\WindowsHashProvider.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Views\EntryViewDialog.xaml.cs">
+      <DependentUpon>EntryViewDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
@@ -194,6 +198,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DatabasePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntryViewDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -3,6 +3,7 @@ using KeePass;
 using KeePass.Crypto;
 using KeePass.IO;
 using KeePassWin.Mvvm;
+using KeePassWin.Views;
 using System;
 
 namespace KeePassWin
@@ -47,6 +48,9 @@ namespace KeePassWin
             builder.RegisterType<AppShellNavPane>()
                 .As<INavigationPane>()
                 .SingleInstance();
+
+            builder.RegisterType<EntryViewDialog>()
+                .As<IEntryView>();
         }
 
         private void BuildCryptoProviders(ContainerBuilder builder)

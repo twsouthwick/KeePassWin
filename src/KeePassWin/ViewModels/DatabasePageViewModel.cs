@@ -26,14 +26,14 @@ namespace KeePassWin.ViewModels
         private IKeePassGroup _group;
         private IList<IKeePassGroup> _parents;
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, IDatabaseTracker tracker)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, IDatabaseTracker tracker, Func<IKeePassEntry, IEntryView> entryView)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
             _tracker = tracker;
             _navigator = navigator;
 
-            ItemClickCommand = new DelegateCommand<IKeePassId>(item =>
+            ItemClickCommand = new DelegateCommand<IKeePassId>(async item =>
             {
                 if (item is IKeePassGroup)
                 {
@@ -41,6 +41,8 @@ namespace KeePassWin.ViewModels
                 }
                 else if (item is IKeePassEntry)
                 {
+                    var dialog = entryView(item as IKeePassEntry);
+                    await dialog.ShowAsync();
                 }
             });
 
