@@ -3,47 +3,5 @@
                     xmlns:mvvm="using:KeePassWin.Mvvm"
                     xmlns:models="using:KeePass.Models"
                     xmlns:local="using:KeePassWin">
-    <!-- TODO: Switch to x:Bind when it works. As of 2/15/2015, this causes the error: XBF generation error code 0x09c4 -->
 
-    <DataTemplate x:Name="KeePassGroupTemplate">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <SymbolIcon Grid.Column="0" Symbol="Folder" />
-            <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{Binding Path=Name}" TextTrimming="WordEllipsis" />
-        </Grid>
-    </DataTemplate>
-
-    <!--
-        In order to use this template, the following must be set in the root grid element of the XAML:
-            Tag="{Binding}" x:Name="root"
-        And a ICommand<string> named CopyCommand must be available
-    -->
-    <DataTemplate x:Name="KeePassEntryTemplate">
-        <Grid HorizontalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
-            <TextBlock Grid.Column="0" Grid.Row="1" Margin="10,0,0,0" Text="{Binding Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
-            <AppBarButton Grid.Column="1" Grid.RowSpan="2" Label="Username" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding Path=UserName}">
-                <AppBarButton.Icon>
-                    <SymbolIcon Symbol="Copy" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Password" Command="{Binding Tag.CopyCommand, ElementName=root}" CommandParameter="{Binding Path=Password}">
-                <AppBarButton.Icon>
-                    <SymbolIcon Symbol="Copy" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-        </Grid>
-    </DataTemplate>
 </ResourceDictionary>

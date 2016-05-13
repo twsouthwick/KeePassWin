@@ -1,0 +1,72 @@
+﻿<UserControl
+    x:Class="KeePass.Controls.EntryItemListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KeePass.Controls"
+    xmlns:mvvm="using:KeePassWin.Mvvm"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+
+    <UserControl.Resources>
+        <!-- TODO: Switch to x:Bind when it works. As of 2/15/2016, this causes the error: XBF generation error code 0x09c4 -->
+
+        <DataTemplate x:Name="KeePassGroupTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <SymbolIcon Grid.Column="0" Symbol="Folder" />
+                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{Binding Path=Name}" TextTrimming="WordEllipsis" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Name="KeePassEntryTemplate">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Column="0" Grid.Row="1" Margin="10,0,0,0" Text="{Binding Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
+                <AppBarButton Grid.Column="1" Grid.RowSpan="2" Label="UserName" Click="CopyUserName">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Copy" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Password" Click="CopyPassword">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Copy" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <ListView
+                  ItemsSource="{x:Bind Path=ItemsSource, Mode=OneWay}"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
+                  IsItemClickEnabled="True" ItemClick="ListViewItemClick">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplateSelector>
+                <mvvm:TypeTemplateSelector>
+                    <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
+                    <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
+                </mvvm:TypeTemplateSelector>
+            </ListView.ItemTemplateSelector>
+        </ListView>
+    </Grid>
+</UserControl>

@@ -114,10 +114,8 @@
     <Compile Include="IO\IClipboard.cs" />
     <Compile Include="IO\TimedClipboard.cs" />
     <Compile Include="Models\DatabaseGroupParameter.cs" />
-    <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="IO\DialogDatabaseUnlocker.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
-    <Compile Include="Mvvm\TemplateMatch.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
     <Compile Include="Services\WindowsHashProvider.cs" />
@@ -209,6 +207,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KeePassControls\KeePassControls.csproj">
+      <Project>{7a21618f-69b4-439f-bdbd-385d702adbd1}</Project>
+      <Name>KeePassControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KeePassLib\KeePassLib.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
       <Name>KeePassLib</Name>

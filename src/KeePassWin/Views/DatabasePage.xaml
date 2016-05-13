@@ -5,6 +5,7 @@
                                  xmlns:local="using:KeePassWin.Views"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:mvvm="using:KeePassWin.Mvvm"
+                                 xmlns:keepassControls="using:KeePass.Controls"
                                  xmlns:prismMvvm="using:Prism.Windows.Mvvm"
                                  xmlns:models="using:KeePass.Models"
                                  xmlns:controls="using:WinRTXamlToolkit.Controls"
@@ -51,7 +52,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <controls:TreeView Grid.Column="0" x:Name="treeView" Margin="0,0,10,0" ItemsSource="{x:Bind Path=Model.Database.Root.Groups, Mode=OneWay}" 
+            <controls:TreeView Grid.Column="0" x:Name="treeView" Margin="0,0,10,0" ItemsSource="{x:Bind Path=Model.Database.Root.Groups, Mode=OneWay}"
                                SelectedItemChanged="TreeViewSelectedItemChanged">
                 <controls:TreeView.ItemTemplate>
                     <DataTemplate x:DataType="keepass:IKeePassGroup">
@@ -62,33 +63,16 @@
                     </DataTemplate>
                 </controls:TreeView.ItemTemplate>
             </controls:TreeView>
-            <ListView Grid.Column="1"
-                          ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}" ItemTemplate="{StaticResource KeePassEntryTemplate}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
+            <keepassControls:EntryItemListView Grid.Column="1"
+                ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}"
+                Command="{x:Bind Path=Model.ItemClickCommand, Mode=OneTime}"
+                CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
         </Grid>
         <Grid x:Name="NarrowView" Grid.Row="3">
-            <ListView 
-                  ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
-                  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
-                  IsItemClickEnabled="True" 
-                  mvvm:MvvmExtensions.Command="{x:Bind Model.ItemClickCommand, Mode=OneWay}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplateSelector>
-                    <mvvm:TypeTemplateSelector>
-                        <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
-                        <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
-                    </mvvm:TypeTemplateSelector>
-                </ListView.ItemTemplateSelector>
-            </ListView>
+            <keepassControls:EntryItemListView Grid.Column="1"
+                ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
+                Command="{x:Bind Path=Model.ItemClickCommand, Mode=OneTime}"
+                CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
         </Grid>
 
         <VisualStateManager.VisualStateGroups>
