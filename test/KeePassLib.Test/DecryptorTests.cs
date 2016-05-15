@@ -1,11 +1,7 @@
 ﻿using Autofac;
-using Autofac.Extras.Moq;
 using KeePass;
 using KeePass.Crypto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,8 +9,11 @@ namespace KeePassLib
 {
     public class DecryptorTests
     {
-        [Fact]
-        public async Task JustPassword()
+        [InlineData("password-aes_rijndael_256.kdbx", "12345", false)]
+        [InlineData("password-key-aes_rijndael_256.kdbx", "12345", true)]
+        [InlineData("key-aes_rijndael_256.kdbx", null, true)]
+        [Theory]
+        public async Task Decryption(string db, string password, bool hasKey)
         {
             var builder = new ContainerBuilder();
 
@@ -28,10 +27,10 @@ namespace KeePassLib
             {
                 var unlocker = container.Resolve<EncryptedDatabaseUnlocker>();
 
-                var db = TestAssets.GetFile("password-aes_rijndael_256.kdbx");
-                var password = "12345";
-
-                var result = await unlocker.UnlockAsync(db, null, password);
+                var result = await unlocker.UnlockAsync(
+                    TestAssets.GetFile(db),
+                    hasKey ? TestAssets.GetFile($"{Path.GetFileNameWithoutExtension(db)}.key") : null,
+                    password);
 
                 Assert.NotNull(result);
             }

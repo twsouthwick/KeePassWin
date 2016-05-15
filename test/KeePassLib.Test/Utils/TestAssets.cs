@@ -13,7 +13,7 @@ namespace KeePassLib
         {
             var assembly = typeof(TestAssets).GetTypeInfo().Assembly;
             var resource = assembly.GetManifestResourceNames()
-                .Single(n => n.EndsWith(name, StringComparison.Ordinal));
+                .Single(n => n.EndsWith($".{name}", StringComparison.Ordinal));
 
             return new EmbeddedResourceFile(name, resource, assembly);
         }
