@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace KeePass
 {
     public interface IKeePassDatabase
     {
         KeePassId Id { get; }
-
         string Name { get; }
-
-        IEnumerable<IKeePassIcon> Icons { get; }
-
-        IKeePassIcon GetIcon(int idx);
-
+        IList<IKeePassIcon> Icons { get; }
         IKeePassGroup Root { get; }
+        void Save(Stream stream);
     }
 
     public interface IKeePassId
@@ -41,7 +38,6 @@ namespace KeePass
         int? IconId { get; }
         string Title { get; }
         string Notes { get; }
-        IList<KeePassField> Fields { get; }
         IList<IKeePassAttachment> Attachment { get; }
         string Url { get; }
     }

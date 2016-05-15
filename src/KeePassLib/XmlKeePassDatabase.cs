@@ -1,358 +1,146 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace KeePass
 {
-    public class KeePassField
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public bool IsProtected { get; set; }
-    }
-
     public class XmlKeePassDatabase : IKeePassDatabase
     {
-        private readonly IKeePassGroup _root;
-        private readonly IList<IKeePassIcon> _icons;
-        private readonly KeePassId _id;
-        private readonly string _name;
+        private readonly XDocument _doc;
 
         public XmlKeePassDatabase(XDocument doc, KeePassId id, string name)
         {
-            _id = id;
-            _name = name;
-            _root = doc.Descendants("Group")
-                .Select(x => new XmlKeePassGroup(x, null))
-                .Cast<IKeePassGroup>()
-                .First();
-            _icons = doc.Descendants("Icon")
+            _doc = doc;
+
+            Id = id;
+            Name = name;
+            Root = new XmlKeePassGroup(doc.Descendants("Group").First(), null);
+            Icons = doc.Descendants("Icon")
                 .Select(x => new XmlKeePassIcon(x))
                 .Cast<IKeePassIcon>()
                 .ToList();
         }
 
-        public KeePassId Id
-        {
-            get { return _id; }
-        }
+        public KeePassId Id { get; }
 
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
-        public IEnumerable<IKeePassIcon> Icons
-        {
-            get { return _icons; }
-        }
+        public IList<IKeePassIcon> Icons { get; }
 
-        public IKeePassIcon GetIcon(int idx)
-        {
-            if (idx >= 0 && idx < _icons.Count)
-            {
-                return _icons[idx];
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public IKeePassGroup Root { get; }
 
-        public IKeePassGroup Root
-        {
-            get { return _root; }
-        }
+        public void Save(Stream stream) => _doc.Save(stream);
 
         public class XmlKeePassId : IKeePassId
         {
-            private readonly KeePassId _id;
-
             public XmlKeePassId(XElement entry)
             {
-                _id = entry.Element("UUID").Value;
+                Entry = entry;
+
+                // The UUID won't be changed, so it may be cached
+                Id = entry.Element("UUID").Value;
             }
 
-            public KeePassId Id { get { return _id; } }
+            protected XElement Entry { get; }
+
+            public KeePassId Id { get; }
         }
 
         public class XmlKeePassIcon : XmlKeePassId, IKeePassIcon
         {
-            private readonly byte[] _data;
-
             public XmlKeePassIcon(XElement element)
                 : base(element)
             {
-                _data = Convert.FromBase64String((string)element.Element("Data"));
+                // TODO: Add way to modify Data
+                Data = Convert.FromBase64String((string)element.Element("Data"));
             }
 
-            public byte[] Data { get { return _data; } }
+            public byte[] Data { get; }
         }
 
         [DebuggerDisplay("Entry '{Title}'")]
-        public class XmlKeePassEntry : IKeePassEntry
+        public class XmlKeePassEntry : XmlKeePassId, IKeePassEntry
         {
-            private readonly KeePassId _id;
-            private readonly string _title;
-            private readonly string _username;
-            private readonly string _password;
-            private readonly string _notes;
-            private readonly IList<KeePassField> _fields;
-            private readonly string _url;
-            private readonly int? _iconId = 0;
-
-            private static int? GetIconId(XElement element)
-            {
-                if (element == null)
-                {
-                    return null;
-                }
-
-                int icon;
-                if (int.TryParse((string)element, out icon))
-                {
-                    return icon;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
             public XmlKeePassEntry(XElement entry)
-            {
-                var strings = entry.Elements("String")
-                    .ToLookup(x => (string)x.Element("Key"), x => (string)x.Element("Value"));
+                : base(entry)
+            { }
 
-                _id = entry.Element("UUID").Value;
-                _iconId = GetIconId(entry.Element("IconID"));
-                _title = strings["Title"].FirstOrDefault();
-                _username = strings["UserName"].FirstOrDefault();
-                _password = strings["Password"].FirstOrDefault();
-                _notes = strings["Notes"].FirstOrDefault();
+            public string UserName => GetString(nameof(UserName));
 
-                var url = new StringBuilder(strings["URL"].FirstOrDefault() ?? string.Empty);
+            public string Password => GetString(nameof(Password));
 
-                if (url.Length > 0)
-                {
-                    foreach (var item in strings)
-                    {
-                        var key = "{S:" + item.Key + "}";
-                        url.Replace(key, item.First());
-                    }
-                }
+            public string Title => GetString(nameof(Title));
 
-                _url = url.ToString();
+            public string Notes => GetString(nameof(Notes));
 
-                _fields = entry.Elements("String")
-                    .Select(x => new
-                    {
-                        Key = (string)x.Element("Key"),
-                        Value = x.Element("Value"),
-                    })
-                    .Where(x => !IsStandardField(x.Key))
-                    .Select(x => new KeePassField
-                    {
-                        Name = (string)x.Key,
-                        Value = (string)x.Value,
-                        IsProtected = IsProtected(x.Value),
-                    })
-                    .ToList();
+            public string Url => GetString("URL");
 
-                //      var attachments = entry
-                //    .Elements("Binary")
-                //    {
-                //        Key = (string)x.Element("Key"),
-                //        Value = x.Element("Value"),
-                //    })
-                //    .ToList();
-
-                //var references = GetReferences(element);
-                //foreach (var attachment in attachments.ToList())
-                //{
-                //    var value = attachment.Value;
-                //    var reference = value.Attribute("Ref");
-                //    if (reference == null)
-                //        continue;
-
-                //    // Referenced binary, update the reference
-                //    var map = references.Value;
-                //    value = map != null
-                //        ? map[(string)reference].FirstOrDefault()
-                //        : null;
-
-                //    if (value != null)
-                //    {
-                //        attachment.Value = value;
-                //        continue;
-                //    }
-
-                //    // Broken reference, do not display
-                //    attachments.Remove(attachment);
-                //}
-            }
-
-            private Lazy<ILookup<string, XElement>> GetReferences(XElement element)
-            {
-                return new Lazy<ILookup<string, XElement>>(() =>
-                {
-                    var root = element.Parent;
-                    while (true)
-                    {
-                        if (root == null)
-                            return null;
-
-                        if (root.Name == "KeePassFile")
-                            break;
-
-                        root = root.Parent;
-                    }
-
-                    return root
-                        .Element("Meta")
-                        .Element("Binaries")
-                        .Elements("Binary")
-                        .Select(x => new
-                        {
-                            Element = x,
-                            Id = x.Attribute("ID"),
-                        })
-                        .Where(x => x.Id != null)
-                        .ToLookup(x => (string)x.Id, x => x.Element);
-                });
-            }
-
-            private static bool IsProtected(XElement element)
-            {
-                var attr = element.Attribute("Protected");
-                return attr != null && (bool)attr;
-            }
-
-            private static bool IsStandardField(string key)
-            {
-                switch (key)
-                {
-                    case "UserName":
-                    case "Password":
-                    case "URL":
-                    case "Notes":
-                    case "Title":
-                        return true;
-                }
-
-                return false;
-            }
-
-            public KeePassId Id
-            {
-                get { return _id; }
-            }
-
-            public string UserName
-            {
-                get { return _username; }
-            }
-
-            public string Password
-            {
-                get { return _password; }
-            }
-
-            public string Title
-            {
-                get { return _title; }
-            }
-
-            public string Notes
-            {
-                get { return _notes; }
-            }
-
-            public IList<KeePassField> Fields
-            {
-                get { return _fields; }
-            }
-
-
-            public string Url
-            {
-                get { return _url; }
-            }
-
-            public IList<IKeePassAttachment> Attachment
-            {
-                get { return new List<IKeePassAttachment>(); }
-            }
+            public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 
             public int? IconId
             {
-                get { return _iconId; }
+                get
+                {
+                    var element = Entry.Element(nameof(IconId));
+                    if (element == null)
+                    {
+                        return null;
+                    }
+
+                    int icon;
+                    if (int.TryParse((string)element, out icon))
+                    {
+                        return icon;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+
+            private string GetString(string field)
+            {
+                var result = Entry.Elements("String")
+                    .FirstOrDefault(e => string.Equals(field, e.Element("Key").Value, StringComparison.Ordinal));
+
+                return result?.Element("Value").Value ?? string.Empty;
             }
         }
 
         [DebuggerDisplay("Group '{Name}'")]
-        public class XmlKeePassGroup : IKeePassGroup
+        public class XmlKeePassGroup : XmlKeePassId, IKeePassGroup
         {
-            private readonly KeePassId _id;
-            private readonly IKeePassGroup _parent;
-            private readonly List<IKeePassEntry> _entries;
-            private readonly List<IKeePassGroup> _groups;
-            private readonly string _name;
-            private readonly string _notes;
-
             public XmlKeePassGroup(XElement group, IKeePassGroup parent)
+                : base(group)
             {
-                _id = group.Element("UUID").Value;
-
-                _entries = group.Elements("Entry")
+                Entries = group.Elements("Entry")
                     .Select(x => new XmlKeePassEntry(x))
                     .Cast<IKeePassEntry>()
-                    .ToList();
+                    .ToList()
+                    .AsReadOnly();
 
-                _groups = group.Elements("Group")
+                Groups = group.Elements("Group")
                     .Select(x => new XmlKeePassGroup(x, this))
                     .Cast<IKeePassGroup>()
-                    .ToList();
+                    .ToList()
+                    .AsReadOnly();
 
-                _name = (string)group.Element("Name");
-                _notes = (string)group.Element("Notes");
-
-                _parent = parent;
+                Parent = parent;
             }
 
-            public KeePassId Id
-            {
-                get { return _id; }
-            }
+            public IKeePassGroup Parent { get; }
 
-            public IKeePassGroup Parent
-            {
-                get { return _parent; }
-            }
+            public IList<IKeePassEntry> Entries { get; }
 
-            public IList<IKeePassEntry> Entries
-            {
-                get { return _entries; }
-            }
+            public IList<IKeePassGroup> Groups { get; }
 
-            public IList<IKeePassGroup> Groups
-            {
-                get { return _groups; }
-            }
+            public string Name => Entry.Element("Name").Value;
 
-
-            public string Name
-            {
-                get { return _name; }
-            }
-
-            public string Notes
-            {
-                get { return _notes; }
-            }
+            public string Notes => Entry.Element("Notes").Value;
         }
     }
 }
