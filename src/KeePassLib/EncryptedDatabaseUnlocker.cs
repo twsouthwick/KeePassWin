@@ -57,9 +57,9 @@ namespace KeePass
                     return new XmlKeePassDatabase(doc, _idGenerator.FromPath(file.Path), Path.GetFileNameWithoutExtension(file.Name));
                 }
             }
-            catch (Exception e) when ((uint)e.HResult == 0x80070017)
+            catch (DatabaseUnlockException)
             {
-                throw new DatabaseUnlockException("Invalid password or key file", e);
+                throw;
             }
             catch (Exception e)
             {

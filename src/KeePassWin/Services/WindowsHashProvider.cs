@@ -22,17 +22,24 @@ namespace KeePass.Crypto
 
         public byte[] Decrypt(Stream input, byte[] seed, byte[] encryptionIV)
         {
-            var alg = SymmetricKeyAlgorithmProvider
-                .OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7);
-            var aes = alg
-                .CreateSymmetricKey(seed.AsBuffer());
+            try
+            {
+                var alg = SymmetricKeyAlgorithmProvider
+                    .OpenAlgorithm(SymmetricAlgorithmNames.AesCbcPkcs7);
+                var aes = alg
+                    .CreateSymmetricKey(seed.AsBuffer());
 
 
-            var buffer = new byte[(int)(input.Length - input.Position)];
-            var count = input.Read(buffer, 0, buffer.Length);
-            var result = CryptographicEngine.Decrypt(aes, buffer.AsBuffer(), encryptionIV.AsBuffer());
+                var buffer = new byte[(int)(input.Length - input.Position)];
+                var count = input.Read(buffer, 0, buffer.Length);
+                var result = CryptographicEngine.Decrypt(aes, buffer.AsBuffer(), encryptionIV.AsBuffer());
 
-            return result.ToArray();
+                return result.ToArray();
+            }
+            catch (Exception e) when ((uint)e.HResult == 0x80070017)
+            {
+                throw new DatabaseUnlockException("Invalid password or key file", e);
+            }
         }
 
         public byte[] Encrypt(byte[] data, byte[] seed, byte[] iv)
@@ -41,7 +48,7 @@ namespace KeePass.Crypto
                 .OpenAlgorithm(SymmetricAlgorithmNames.AesEcb);
             var key = aes.CreateSymmetricKey(seed.AsBuffer());
 
-            
+
             var blockLength = aes.BlockLength;
             var keySize = key.KeySize;
             return CryptographicEngine
