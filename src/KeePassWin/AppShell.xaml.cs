@@ -3,9 +3,6 @@ using Windows.UI.Xaml.Controls;
 
 namespace KeePassWin
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class AppShell : Page
     {
         public AppShell()
@@ -23,10 +20,11 @@ namespace KeePassWin
             rootSplitView.Pane = content;
         }
 
+        private double WideMinWidth => (double)Application.Current.Resources[nameof(WideMinWidth)];
+
         public void Dismiss()
         {
-            // TODO: This should be dependent on the wide view state of the shell
-            if (ActualWidth < 1280)
+            if (ActualWidth < WideMinWidth)
             {
                 rootSplitView.IsPaneOpen = false;
             }
@@ -34,8 +32,7 @@ namespace KeePassWin
 
         public void Open()
         {
-            // TODO: This should be dependent on the wide view state of the shell
-            if (ActualWidth < 1280)
+            if (ActualWidth < WideMinWidth)
             {
                 rootSplitView.IsPaneOpen = true;
             }

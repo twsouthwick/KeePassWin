@@ -19,7 +19,7 @@
 
         <AutoSuggestBox x:Name="SearchBox" Text="{x:Bind Path=Model.Text, Mode=TwoWay}" TextChanged="AutoSuggestBox_TextChanged" QueryIcon="Find" HorizontalAlignment="Stretch" />
         <ListView Grid.Row="1"
-                  ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}" 
+                  ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
                   HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
                   IsItemClickEnabled="True"
                   mvvm:MvvmExtensions.Command="{x:Bind Model.ItemClickCommand, Mode=OneWay}"
@@ -36,7 +36,7 @@
             <VisualStateGroup>
                 <VisualState x:Name="Narrow">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="SearchBox.Margin" Value="50,10,10,0" />
@@ -44,7 +44,7 @@
                 </VisualState>
                 <VisualState x:Name="Wide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800" />
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="SearchBox.Margin" Value="0,10,10,0" />
