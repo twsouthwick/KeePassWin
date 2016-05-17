@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="EntryItemListView.xaml.cs">
       <DependentUpon>EntryItemListView.xaml</DependentUpon>
     </Compile>

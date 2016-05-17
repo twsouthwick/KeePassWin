@@ -55,6 +55,8 @@ namespace KeePassWin.ViewModels
             });
 
             CopyCommand = new DelegateCommand<string>(_clipboard.SetText);
+
+            GoToSearchCommand = new DelegateCommand<string>(text => _navigator.GoToSearch(Database.Id, text));
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -103,11 +105,6 @@ namespace KeePassWin.ViewModels
             Parents = Group.EnumerateParents().Reverse().ToList();
         }
 
-        public void GoToSearch(string text)
-        {
-            _navigator.GoToSearch(Database.Id, text);
-        }
-
         private async Task<IKeePassDatabase> UnlockAsync(KeePassId id)
         {
             var dbFile = await _tracker.GetDatabaseAsync(id);
@@ -126,6 +123,8 @@ namespace KeePassWin.ViewModels
                 return null;
             }
         }
+
+        public ICommand GoToSearchCommand { get; }
 
         public ICommand GoToParentCommand { get; }
 

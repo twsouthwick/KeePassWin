@@ -3,6 +3,8 @@
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                  xmlns:local="using:KeePassWin.Views"
+                                 xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+                                 xmlns:core="using:Microsoft.Xaml.Interactions.Core"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:mvvm="using:KeePassWin.Mvvm"
                                  xmlns:keepassControls="using:KeePass.Controls"
@@ -22,9 +24,13 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <AutoSuggestBox x:Name="SearchBox" Grid.Row="0"
-            QueryIcon="Find"
-            QuerySubmitted="AutoSuggestBox_QuerySubmitted" />
+        <AutoSuggestBox x:Name="SearchBox" Grid.Row="0" QueryIcon="Find">
+            <Interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="QuerySubmitted" SourceObject="{Binding ElementName=SearchBox}">
+                    <core:InvokeCommandAction Command="{x:Bind Model.GoToSearchCommand}" InputConverter="{StaticResource SearchArgsConverter}" />
+                </core:EventTriggerBehavior>
+            </Interactivity:Interaction.Behaviors>
+        </AutoSuggestBox>
         <ListView Grid.Row="1" x:Name="ParentNavbar"
                   ItemsSource="{x:Bind Path=Model.Parents, Mode=OneWay}"
                   IsItemClickEnabled="True"

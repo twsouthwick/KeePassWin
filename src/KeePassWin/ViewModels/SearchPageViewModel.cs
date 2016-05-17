@@ -31,6 +31,7 @@ namespace KeePassWin.ViewModels
             _navigator = navigator;
 
             CopyCommand = new DelegateCommand<string>(clipboard.SetText);
+            TextChangedCommand = new DelegateCommand(Update);
         }
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -84,7 +85,9 @@ namespace KeePassWin.ViewModels
 
         public ICommand CopyCommand { get; }
 
-        public void Update()
+        public ICommand TextChangedCommand { get; }
+
+        private void Update()
         {
             var text = Text.ToLower();
 

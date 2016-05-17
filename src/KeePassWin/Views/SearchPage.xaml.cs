@@ -1,6 +1,5 @@
 ﻿using KeePassWin.ViewModels;
 using Prism.Windows.Mvvm;
-using Windows.UI.Xaml.Controls;
 
 namespace KeePassWin.Views
 {
@@ -15,11 +14,6 @@ namespace KeePassWin.Views
         public SearchPage()
         {
             this.InitializeComponent();
-        }
-
-        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            Model.Update();
         }
     }
 }
