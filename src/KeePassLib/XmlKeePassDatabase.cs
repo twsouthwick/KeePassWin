@@ -125,6 +125,7 @@ namespace KeePass
 
                 Groups = group.Elements("Group")
                     .Select(x => new XmlKeePassGroup(x, this))
+                    .Where(x => !string.Equals(x.Name, "Recycle Bin", StringComparison.Ordinal))
                     .Cast<IKeePassGroup>()
                     .ToList()
                     .AsReadOnly();
