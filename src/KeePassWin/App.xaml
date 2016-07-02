@@ -3,8 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KeePassWin"
-    xmlns:prism="using:Prism.Autofac.Windows"
-    RequestedTheme="Light">
+    xmlns:prism="using:Prism.Autofac.Windows">
 
     <prism:PrismAutofacApplication.Resources>
         <ResourceDictionary>

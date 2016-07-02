@@ -59,7 +59,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <controls:TreeView Grid.Column="0" x:Name="treeView" Margin="0,0,10,0" ItemsSource="{x:Bind Path=Model.Database.Root.Groups, Mode=OneWay}"
-                               SelectedItemChanged="TreeViewSelectedItemChanged">
+                               SelectedItemChanged="TreeViewSelectedItemChanged"
+                               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}">
                 <controls:TreeView.ItemTemplate>
                     <DataTemplate x:DataType="keepass:IKeePassGroup">
                         <TextBlock Text="{x:Bind Path=Name}"/>

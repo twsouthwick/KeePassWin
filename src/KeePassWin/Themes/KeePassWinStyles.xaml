@@ -6,6 +6,9 @@
         <ResourceDictionary x:Key="Default">
             <SolidColorBrush x:Key="ApplicationMenuBackgroundThemeBrush">LightGray</SolidColorBrush>
         </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="ApplicationMenuBackgroundThemeBrush">#171717</SolidColorBrush>
+        </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="ApplicationMenuBackgroundThemeBrush">LightGray</SolidColorBrush>
         </ResourceDictionary>
