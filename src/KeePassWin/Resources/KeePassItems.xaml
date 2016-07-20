@@ -5,6 +5,6 @@
                     xmlns:models="using:KeePass.Models"
                     xmlns:local="using:KeePassWin">
 
-        <keepassControls:AutoSuggestQueryParameterConverter x:Key="SearchArgsConverter" />
-
+    <keepassControls:AutoSuggestQueryParameterConverter x:Key="SearchArgsConverter" />
+    <keepassControls:NullObjectVisibilityConverter x:Key="NullObjectVisibilityConverter" />
 </ResourceDictionary>

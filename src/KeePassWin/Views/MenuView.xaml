@@ -13,7 +13,7 @@
             <Grid RightTapped="Grid_RightTapped">
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Command="{x:Bind Path=RemoveCommand}" Text="Remove" />
+                        <MenuFlyoutItem Command="{x:Bind Path=RemoveCommand}" Text="Remove" Visibility="{x:Bind Path=RemoveCommand, Converter={StaticResource NullObjectVisibilityConverter}}"/>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
                 <Button AutomationProperties.Name="{Binding DisplayName}"
