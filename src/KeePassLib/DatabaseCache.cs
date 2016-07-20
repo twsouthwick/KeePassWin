@@ -59,6 +59,10 @@ namespace KeePass
             return _databaseTracker.GetDatabasesAsync();
         }
 
+        public Task RemoveDatabaseAsync(IFile dbFile)
+        {
+            return _databaseTracker.RemoveDatabaseAsync(dbFile);
+        }
     }
 }
 

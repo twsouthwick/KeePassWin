@@ -21,6 +21,30 @@ namespace KeePass
             _idGenerator = idGenerator;
         }
 
+        public async Task RemoveDatabaseAsync(IFile dbFile)
+        {
+            var token = _idGenerator.FromPath(dbFile.Path);
+
+            _accessList.Remove(GetDatabaseToken(token));
+
+            var keyToken = GetKeyToken(token);
+            if (_accessList.ContainsItem(keyToken))
+            {
+                _accessList.Remove(keyToken);
+            }
+
+            var folder = await _folder;
+
+            try
+            {
+                var file = await folder.GetFileAsync((string)token);
+
+                await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            }
+            catch (Exception)
+            { }
+        }
+
         public async Task<bool> AddDatabaseAsync(IFile dbFile)
         {
             var token = _idGenerator.FromPath(dbFile.Path);

@@ -32,7 +32,7 @@ namespace KeePassWin.ViewModels
             {
                 DisplayName = LocalizedStrings.MenuItemOpenCommandTitle,
                 FontIcon = Symbol.OpenFile,
-                Command = new DelegateCommand(async () => await _cache.AddDatabaseAsync())
+                Command = new DelegateCommand(async () => await _cache.AddDatabaseAsync()),
             };
 
             Databases = new ObservableCollection<MenuItemViewModel>();
@@ -86,6 +86,12 @@ namespace KeePassWin.ViewModels
                     _navPane.Dismiss();
                 })
             };
+
+            entry.RemoveCommand = new DelegateCommand(async () =>
+            {
+                await _cache.RemoveDatabaseAsync(dbFile);
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Remove(entry));
+            });
 
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Add(entry));
         }

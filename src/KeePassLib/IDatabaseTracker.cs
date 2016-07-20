@@ -16,5 +16,6 @@ namespace KeePass
         Task<IFile> GetDatabaseAsync(KeePassId id);
         Task<IEnumerable<IFile>> GetDatabasesAsync();
         Task<IFile> GetKeyFileAsync(IFile dbFile);
+        Task RemoveDatabaseAsync(IFile dbFile);
     }
 }

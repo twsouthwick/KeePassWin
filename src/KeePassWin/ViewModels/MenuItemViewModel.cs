@@ -12,6 +12,8 @@ namespace KeePassWin.ViewModels
 
         public ICommand Command { get; set; }
 
+        public ICommand RemoveCommand { get; set; }
+
         public override string ToString()
         {
             return DisplayName;
