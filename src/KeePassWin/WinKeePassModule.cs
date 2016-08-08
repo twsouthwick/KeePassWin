@@ -21,10 +21,6 @@ namespace KeePassWin
                 .As<IDatabaseTracker>()
                 .SingleInstance();
 
-            builder.RegisterType<WindowsMd5KeePassIdGenerator>()
-                .As<IKeePassIdGenerator>()
-                .SingleInstance();
-
             builder.RegisterType<DialogDatabaseUnlocker>()
                 .Named<IDatabaseUnlocker>(nameof(DialogDatabaseUnlocker))
                 .SingleInstance();
@@ -59,8 +55,9 @@ namespace KeePassWin
                 .AsSelf()
                 .SingleInstance();
 
-            builder.RegisterType<WindowsHashProvider>()
+            builder.RegisterType<DotNetHashProvider>()
                 .As<ICryptoProvider>()
+                .As<IKeePassIdGenerator>()
                 .SingleInstance();
 
         }

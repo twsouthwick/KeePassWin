@@ -124,7 +124,8 @@ namespace KeePass
             {
                 var dbStorageItem = await GetDatabaseAsync(file.Name);
 
-                if (dbStorageItem != null)
+                // Ensure that the item exists and the ID is consistent with the ID generator
+                if (dbStorageItem != null && string.Equals((string)_idGenerator.FromPath(dbStorageItem.Path), file.Name, StringComparison.Ordinal))
                 {
                     result.Add(dbStorageItem);
                 }
