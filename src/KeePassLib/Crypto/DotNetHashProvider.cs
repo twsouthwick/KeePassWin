@@ -4,20 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace KeePassLib
+namespace KeePass
 {
-    internal class DotNetHashProvider : ICryptoProvider
+    public class DotNetHashProvider : ICryptoProvider
     {
         public byte[] Decrypt(Stream input, byte[] key, byte[] iv)
         {
-            using (var rijndael = new RijndaelManaged
+            using (var rijndael = Aes.Create())
             {
-                KeySize = 256,
-                Key = key,
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7
-            })
-            {
+                rijndael.KeySize = 256;
+                rijndael.Key = key;
+                rijndael.Mode = CipherMode.CBC;
+                rijndael.Padding = PaddingMode.PKCS7;
+
                 if (iv != null)
                 {
                     rijndael.IV = iv;
@@ -38,15 +37,13 @@ namespace KeePassLib
 
         public byte[] Encrypt(byte[] input, byte[] key, byte[] iv)
         {
-            using (var aesAlg = new AesManaged
+            using (var aesAlg = Aes.Create())
             {
-                KeySize = 256,
-                Key = key,
-                BlockSize = 128,
-                Mode = CipherMode.ECB,
-                Padding = PaddingMode.None
-            })
-            {
+                aesAlg.KeySize = 256;
+                aesAlg.Key = key;
+                aesAlg.BlockSize = 128;
+                aesAlg.Mode = CipherMode.ECB;
+                aesAlg.Padding = PaddingMode.None;
 
                 if (iv != null)
                 {
@@ -60,7 +57,7 @@ namespace KeePassLib
 
         public IHash GetSha256()
         {
-            return new DotNetHash(HashAlgorithmName.SHA256);
+            return new DotNet256Hash();
         }
 
         public byte[] GetSha256(byte[] input)
@@ -78,14 +75,12 @@ namespace KeePassLib
                 .ToArray();
         }
 
-        private class DotNetHash : IHash
+        private class DotNet256Hash : IHash
         {
             private readonly MemoryStream _data = new MemoryStream();
-            private readonly string _name;
 
-            public DotNetHash(HashAlgorithmName name)
+            public DotNet256Hash()
             {
-                _name = name.Name;
             }
 
             public void Append(byte[] data)
@@ -95,7 +90,7 @@ namespace KeePassLib
 
             public byte[] GetValueAndReset()
             {
-                using (var hash = HashAlgorithm.Create(_name))
+                using (var hash = SHA256.Create())
                 {
                     _data.Position = 0;
                     var hashValue = hash.ComputeHash(_data);

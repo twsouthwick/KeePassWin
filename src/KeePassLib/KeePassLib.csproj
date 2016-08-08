@@ -118,6 +118,7 @@
     <Compile Include="DatabaseCache.cs" />
     <Compile Include="DatabaseCacheEvent.cs" />
     <Compile Include="DatabaseUnlockException.cs" />
+    <Compile Include="Crypto\DotNetHashProvider.cs" />
     <Compile Include="EncryptedDatabaseUnlocker.cs" />
     <Compile Include="FileFormats.cs" />
     <Compile Include="FileHeaders.cs" />
