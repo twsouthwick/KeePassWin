@@ -1,8 +1,8 @@
 ﻿{
   "dependencies": {
     "Autofac": "4.0.0-beta8-157",
-    "Moq": "4.2.1510.2205",
-    "System.Security.Cryptography.Cng": "4.0.0-beta-23516",
+    "Moq": "4.5.16",
+    "System.Security.Cryptography.Cng": "4.2.0",
     "xunit": "2.1.0",
     "xunit.runner.visualstudio": "2.1.0"
   },
