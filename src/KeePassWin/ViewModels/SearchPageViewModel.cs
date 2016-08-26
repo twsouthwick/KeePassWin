@@ -7,6 +7,7 @@ using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -94,11 +95,22 @@ namespace KeePassWin.ViewModels
 
         private void Update()
         {
-            var text = Text.ToLower();
+            var text = Text;
 
-            Items = _database.EnumerateAllEntries().Where(entry => entry.Title.ToLower().Contains(text))
-                 .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase)
-                 .ToList();
+            Items = _database.EnumerateAllEntries()
+                .Where(entry => FilterEntry(entry, text))
+                .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase)
+                .ToList();
+        }
+
+        private bool FilterEntry(IKeePassEntry entry, string text)
+        {
+            return Contains(entry.Title, text) || Contains(entry.Notes, text);
+        }
+
+        private bool Contains(string source, string searchText)
+        {
+            return CultureInfo.CurrentCulture.CompareInfo.IndexOf(source, searchText, CompareOptions.IgnoreCase) >= 0;
         }
     }
 }
