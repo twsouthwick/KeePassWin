@@ -10,28 +10,54 @@
     PrimaryButtonText="Close">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <x:Double x:Key="TextBoxWidth">300</x:Double>
+        </Grid.Resources>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Username" />
-        <TextBox Grid.Row="0" Grid.Column="2" Text="{x:Bind Path=Entry.UserName}" />
-
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Password" />
-        <PasswordBox Grid.Row="1" Grid.Column="2" Password="{x:Bind Path=Entry.Password}" PasswordRevealMode="Visible" />
-
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Website" />
-        <TextBox Grid.Row="2" Grid.Column="2" Text="{x:Bind Path=Entry.Url}" />
-
-        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Notes" />
-        <TextBox Grid.Row="3" Grid.Column="2" Text="{x:Bind Path=Entry.Notes}" />
+        <ListView>
+            <ListViewItem>
+                <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                    <TextBox Header="Username" Width="{StaticResource TextBoxWidth}" Text="{x:Bind Path=Entry.UserName}" />
+                    <Button Background="Transparent" Margin="5,0,0,0" VerticalAlignment="Top" Command="{x:Bind Path=Copy}" CommandParameter="{x:Bind Path=Entry.UserName}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Copy" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem>
+                <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                    <StackPanel>
+                        <PasswordBox x:Name="passwordBox" Header="Password" Width="{StaticResource TextBoxWidth}" Password="{x:Bind Path=Entry.Password}" PasswordRevealMode="Hidden" />
+                        <CheckBox Content="Show password" IsChecked="False" Checked="PasswordChecked" Unchecked="PasswordChecked" />
+                    </StackPanel>
+                    <Button Background="Transparent" Margin="5,0,0,0" VerticalAlignment="Top" Command="{x:Bind Path=Copy}" CommandParameter="{x:Bind Path=Entry.Password}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Copy" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem>
+                <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                    <TextBox Header="Website" Width="{StaticResource TextBoxWidth}" Text="{x:Bind Path=Entry.Url}" />
+                    <Button Background="Transparent" Margin="5,0,0,0" VerticalAlignment="Top" Command="{x:Bind Path=Copy}" CommandParameter="{x:Bind Path=Entry.Url}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Copy" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem>
+                <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                    <TextBox Header="Notes" Width="{StaticResource TextBoxWidth}" Text="{x:Bind Path=Entry.Notes}" AcceptsReturn="True" TextWrapping="Wrap" Height="172" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                    <Button Background="Transparent" Margin="5,0,0,0" VerticalAlignment="Top" Command="{x:Bind Path=Copy}" CommandParameter="{x:Bind Path=Entry.Notes}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Copy" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </ListViewItem>
+        </ListView>
     </Grid>
 </ContentDialog>
