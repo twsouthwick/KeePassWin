@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace KeePass
 {
@@ -39,20 +40,25 @@ namespace KeePass
             }
         }
 
-        public static IEnumerable<IKeePassEntry> EnumerateAllEntries(this IKeePassGroup group)
+        public static IEnumerable<KeePassEntryWithParent> EnumerateAllEntriesWithParent(this IKeePassGroup group)
         {
             foreach (var entry in group.Entries)
             {
-                yield return entry;
+                yield return new KeePassEntryWithParent(entry, group);
             }
 
             foreach (var subgroup in group.Groups)
             {
-                foreach (var entry in subgroup.EnumerateAllEntries())
+                foreach (var item in subgroup.EnumerateAllEntriesWithParent())
                 {
-                    yield return entry;
+                    yield return item;
                 }
             }
+        }
+
+        public static IEnumerable<IKeePassEntry> EnumerateAllEntries(this IKeePassGroup group)
+        {
+            return group.EnumerateAllEntriesWithParent().Select(p => p.Entry);
         }
 
         public static IEnumerable<IKeePassGroup> EnumerateParents(this IKeePassGroup group)

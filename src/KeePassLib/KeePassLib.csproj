@@ -127,6 +127,7 @@
     <Compile Include="IDatabaseUnlocker.cs" />
     <Compile Include="IFile.cs" />
     <Compile Include="IFilePicker.cs" />
+    <Compile Include="KeePassEntryWithParent.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />

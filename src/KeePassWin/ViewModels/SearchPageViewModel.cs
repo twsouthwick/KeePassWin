@@ -97,15 +97,16 @@ namespace KeePassWin.ViewModels
         {
             var text = Text;
 
-            Items = _database.EnumerateAllEntries()
-                .Where(entry => FilterEntry(entry, text))
+            Items = _database.Root.EnumerateAllEntriesWithParent()
+                .Where(item => FilterEntry(item, text))
+                .Select(item => item.Entry)
                 .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase)
                 .ToList();
         }
 
-        private bool FilterEntry(IKeePassEntry entry, string text)
+        private bool FilterEntry(KeePassEntryWithParent item, string text)
         {
-            return Contains(entry.Title, text) || Contains(entry.Notes, text);
+            return Contains(item.Entry.Title, text) || Contains(item.Entry.Notes, text) || Contains(item.Parent.Name, text);
         }
 
         private bool Contains(string source, string searchText)
