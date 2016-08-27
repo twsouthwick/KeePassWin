@@ -111,7 +111,7 @@
 
     <Grid>
         <Grid.Resources>
-            <x:Double x:Key="TextBoxWidth">300</x:Double>
+            <x:Double x:Key="TextBoxWidth">250</x:Double>
         </Grid.Resources>
 
         <ListView>
