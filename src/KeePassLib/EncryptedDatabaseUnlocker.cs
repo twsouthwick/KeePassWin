@@ -30,15 +30,15 @@ namespace KeePass
             {
                 using (var fs = await file.OpenReadAsync())
                 {
-                    var _password = new PasswordData(_hashProvider) { Password = password ?? string.Empty };
+                    var passwordData = new PasswordData(_hashProvider) { Password = password ?? string.Empty };
 
-                    await _password.AddKeyFileAsync(keyfile);
+                    await passwordData.AddKeyFileAsync(keyfile);
 
                     // TODO: handle errors & display transformation progress
                     var result = await _fileFormat.Headers(fs);
                     var headers = result.Headers;
 
-                    var masterKey = await _password.GetMasterKey(headers);
+                    var masterKey = await passwordData.GetMasterKey(headers);
 
                     var decrypted = await _fileFormat.Decrypt(fs, masterKey, headers);
 
