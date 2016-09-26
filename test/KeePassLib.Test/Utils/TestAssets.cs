@@ -18,6 +18,18 @@ namespace KeePassLib
             return new EmbeddedResourceFile(name, resource, assembly);
         }
 
+        public static IFile TryGetFile(string name)
+        {
+            try
+            {
+                return GetFile(name);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         private class EmbeddedResourceFile : IFile
         {
             private readonly Assembly _assembly;

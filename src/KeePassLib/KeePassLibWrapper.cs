@@ -1,74 +1,36 @@
 ﻿using KeePassLib;
 using KeePassLib.Interfaces;
-using KeePassLib.Keys;
 using KeePassLib.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using KeePassLib.Security;
 
 namespace KeePass
 {
-    public static class KeePassLibWrapper
+    internal sealed class KdbxDatabase : IKeePassDatabase
     {
-        public static async Task<IKeePassDatabase> Load(IFile file, IFile keyFile, string password)
+        private readonly PwDatabase _db;
+        private readonly KdbxFile _file;
+
+        public KdbxDatabase(KdbxFile file, PwDatabase db, KeePassId id)
         {
-            var compositeKey = new CompositeKey();
-
-            if (password != null)
-            {
-                compositeKey.AddUserKey(new KcpPassword(password));
-            }
-
-            if (keyFile != null)
-            {
-                compositeKey.AddUserKey(new KcpKeyFile(await keyFile.ReadFileBytesAsync()));
-            }
-
-            var db = new PwDatabase
-            {
-                MasterKey = compositeKey
-            };
-
-            var kdbx = new KdbxFile(db);
-
-            using (var fs = await file.OpenReadAsync())
-            {
-                await Task.Run(() =>
-                {
-                    kdbx.Load(fs, KdbxFormat.Default, new Logger());
-                });
-
-                return new WrapperDatabase(kdbx, db, file.IdFromPath());
-            }
+            _file = file;
+            _db = db;
+            Id = id;
         }
 
-        private sealed class WrapperDatabase : IKeePassDatabase
-        {
-            private readonly PwDatabase _db;
-            private readonly KdbxFile _file;
-
-            public WrapperDatabase(KdbxFile file, PwDatabase db, KeePassId id)
-            {
-                _file = file;
-                _db = db;
-                Id = id;
-            }
-
-            public IList<IKeePassIcon> Icons { get; } = Array.Empty<IKeePassIcon>();
+        public IList<IKeePassIcon> Icons { get; } = Array.Empty<IKeePassIcon>();
 
             public KeePassId Id { get; }
 
-            public string Name => _db.Name;
+        public string Name => _db.Name;
 
-            public IKeePassGroup Root => new WrappedGroup(_db.RootGroup, null);
+        public IKeePassGroup Root => new WrappedGroup(_db.RootGroup, null);
 
-            public void Save(Stream stream)
-            {
-                _file.Save(stream, _db.RootGroup, KdbxFormat.Default, new Logger());
-            }
+        public void Save(Stream stream)
+        {
+            _file.Save(stream, _db.RootGroup, KdbxFormat.Default, new Logger());
         }
 
         private sealed class WrappedGroup : IKeePassGroup

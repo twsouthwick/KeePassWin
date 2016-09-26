@@ -110,12 +110,13 @@
     <Compile Include="DatabaseCache.cs" />
     <Compile Include="DatabaseCacheEvent.cs" />
     <Compile Include="DatabaseUnlockException.cs" />
-    <Compile Include="EncryptedDatabaseUnlocker.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="IDatabaseTracker.cs" />
     <Compile Include="IDatabaseUnlocker.cs" />
     <Compile Include="IFile.cs" />
     <Compile Include="IFilePicker.cs" />
+    <Compile Include="KdbxBuilder.cs" />
+    <Compile Include="KdbxUnlocker.cs" />
     <Compile Include="KeePassEntryWithParent.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />

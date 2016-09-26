@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace KeePass.IO
 {
-    internal class CachedDatabseUnlocker : IDatabaseUnlocker
+    internal class CachedDatabseUnlocker : IDatabaseUnlockerDialog
     {
         private readonly IDictionary<string, IKeePassDatabase> _cache = new Dictionary<string, IKeePassDatabase>(StringComparer.OrdinalIgnoreCase);
-        private readonly IDatabaseUnlocker _unlocker;
+        private readonly IDatabaseUnlockerDialog _unlocker;
 
-        public CachedDatabseUnlocker(IDatabaseUnlocker unlocker)
+        public CachedDatabseUnlocker(IDatabaseUnlockerDialog unlocker)
         {
             _unlocker = unlocker;
         }

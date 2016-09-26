@@ -4,16 +4,23 @@ using System.Threading.Tasks;
 
 namespace KeePass
 {
-    public class DialogDatabaseUnlocker : EncryptedDatabaseUnlocker, IDatabaseUnlocker
+    public interface IDatabaseUnlockerDialog
+    {
+        Task<IKeePassDatabase> UnlockAsync(IFile file);
+    }
+
+    public class DialogDatabaseUnlocker : IDatabaseUnlockerDialog
     {
         private readonly Func<IFile, PasswordDialog> _dialogFactory;
+        private readonly IDatabaseUnlocker _kdbxUnlocker;
 
-        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory)
+        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory, IDatabaseUnlocker kdbxUnlocker)
         {
+            _kdbxUnlocker = kdbxUnlocker;
             _dialogFactory = dialogFactory;
         }
 
-        public override async Task<IKeePassDatabase> UnlockAsync(IFile file)
+        public async Task<IKeePassDatabase> UnlockAsync(IFile file)
         {
             var dialog = _dialogFactory(file);
 
@@ -26,7 +33,11 @@ namespace KeePass
 
             var model = dialog.Model;
 
-            return await UnlockAsync(file, model.KeyFile, dialog.Model.Password);
+            var builder = KdbxBuilder.Create(file)
+                .AddKey(model.KeyFile)
+                .AddPassword(dialog.Model.Password);
+
+            return await _kdbxUnlocker.UnlockAsync(builder);
         }
     }
 }

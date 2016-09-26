@@ -4,6 +4,6 @@ namespace KeePass
 {
     public interface IDatabaseUnlocker
     {
-        Task<IKeePassDatabase> UnlockAsync(IFile file);
+        Task<IKeePassDatabase> UnlockAsync(KdbxBuilder builder);
     }
 }

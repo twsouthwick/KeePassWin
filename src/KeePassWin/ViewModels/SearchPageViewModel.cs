@@ -19,13 +19,13 @@ namespace KeePassWin.ViewModels
     {
         private readonly INavigator _navigator;
         private readonly IDatabaseTracker _tracker;
-        private readonly IDatabaseUnlocker _unlocker;
+        private readonly IDatabaseUnlockerDialog _unlocker;
 
         private string _text;
         private IList<IKeePassEntry> _items;
         private IKeePassDatabase _database;
 
-        public SearchPageViewModel(INavigator navigator, IDatabaseUnlocker unlocker, IClipboard clipboard, IDatabaseTracker tracker, Func<IKeePassEntry, IEntryView> entryView)
+        public SearchPageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker, Func<IKeePassEntry, IEntryView> entryView)
         {
             _unlocker = unlocker;
             _tracker = tracker;

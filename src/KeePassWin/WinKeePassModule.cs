@@ -18,11 +18,15 @@ namespace KeePassWin
                 .As<IDatabaseTracker>()
                 .SingleInstance();
 
-            builder.RegisterType<DialogDatabaseUnlocker>()
-                .Named<IDatabaseUnlocker>(nameof(DialogDatabaseUnlocker))
+            builder.RegisterType<KdbxUnlocker>()
+                .As<IDatabaseUnlocker>()
                 .SingleInstance();
 
-            builder.RegisterDecorator<IDatabaseUnlocker>((c, inner) => new CachedDatabseUnlocker(inner), fromKey: nameof(DialogDatabaseUnlocker))
+            builder.RegisterType<DialogDatabaseUnlocker>()
+                .Named<IDatabaseUnlockerDialog>(nameof(DialogDatabaseUnlocker))
+                .SingleInstance();
+
+            builder.RegisterDecorator<IDatabaseUnlockerDialog>((c, inner) => new CachedDatabseUnlocker(inner), fromKey: nameof(DialogDatabaseUnlocker))
                 .SingleInstance();
 
             builder.RegisterType<TimedClipboard>()
