@@ -119,9 +119,9 @@
     <EmbeddedResource Include="Properties\KeePassControls.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KeePassLib\KeePassLib.csproj">
+    <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
-      <Name>KeePassLib</Name>
+      <Name>KeePass.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

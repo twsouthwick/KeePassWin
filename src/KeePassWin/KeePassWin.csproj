@@ -219,9 +219,9 @@
       <Project>{7a21618f-69b4-439f-bdbd-385d702adbd1}</Project>
       <Name>KeePassControls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KeePassLib\KeePassLib.csproj">
+    <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
-      <Name>KeePassLib</Name>
+      <Name>KeePass.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
