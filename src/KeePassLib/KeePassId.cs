@@ -9,12 +9,18 @@ namespace KeePass
     {
         private static readonly KeePassId s_empty = new KeePassId(string.Empty);
 
-        private readonly object _id;
-
         public KeePassId(object id)
         {
-            _id = id;
+            Id = id;
         }
+
+        /// <summary>
+        /// The object containing the Id
+        /// </summary>
+        /// <remarks>
+        /// This must be a public property as the DTO between views serializes to JSON and requires this field
+        /// </remarks>
+        public object Id { get; set; }
 
         public bool IsEmpty => ReferenceEquals(s_empty, this);
 
@@ -27,17 +33,17 @@ namespace KeePass
                 return false;
             }
 
-            return Equals(other._id, _id);
+            return Equals(other.Id, Id);
         }
 
         public override int GetHashCode()
         {
-            return _id.GetHashCode();
+            return Id.GetHashCode();
         }
 
         public override string ToString()
         {
-            return _id.ToString();
+            return Id.ToString();
         }
 
         public static implicit operator KeePassId(string id)
@@ -47,22 +53,17 @@ namespace KeePass
 
         public static explicit operator string(KeePassId id)
         {
-            return id._id.ToString();
-        }
-
-        public static implicit operator KeePassId(int id)
-        {
-            return new KeePassId(id.ToString());
+            return id.Id.ToString();
         }
 
         public static implicit operator KeePassId(PwUuid id)
         {
-            return new KeePassId(new Guid(id.UuidBytes).ToString());
+            return new KeePassId(new Guid(id.UuidBytes));
         }
 
         public static implicit operator PwUuid(KeePassId id)
         {
-            if (id._id.GetType() != typeof(Guid))
+            if (id.Id.GetType() != typeof(Guid))
             {
                 if (id.IsEmpty)
                 {
@@ -72,7 +73,7 @@ namespace KeePass
                 throw new InvalidOperationException();
             }
 
-            return new PwUuid(((Guid)id._id).ToByteArray());
+            return new PwUuid(((Guid)id.Id).ToByteArray());
         }
 
         public static KeePassId Empty => s_empty;

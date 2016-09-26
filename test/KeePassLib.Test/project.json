@@ -1,7 +1,5 @@
 ﻿{
   "dependencies": {
-    "Autofac": "4.1.1",
-    "Moq": "4.5.22",
     "xunit": "2.1.0",
     "xunit.runner.visualstudio": "2.1.0"
   },

@@ -3,12 +3,6 @@ using System.Threading.Tasks;
 
 namespace KeePass
 {
-
-    public interface IKeePassIdGenerator
-    {
-        KeePassId FromPath(string path);
-    }
-
     public interface IDatabaseTracker
     {
         Task<bool> AddDatabaseAsync(IFile dbFile);

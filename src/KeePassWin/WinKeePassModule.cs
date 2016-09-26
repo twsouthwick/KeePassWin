@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using KeePass;
-using KeePass.Crypto;
 using KeePass.IO;
 using KeePassWin.Mvvm;
 using KeePassWin.Views;
@@ -14,8 +13,6 @@ namespace KeePassWin
         {
             builder.RegisterType<DatabaseCache>()
                 .SingleInstance();
-
-            BuildCryptoProviders(builder);
 
             builder.RegisterType<FileDatabaseTracker>()
                 .As<IDatabaseTracker>()
@@ -47,19 +44,6 @@ namespace KeePassWin
 
             builder.RegisterType<EntryViewDialog>()
                 .As<IEntryView>();
-        }
-
-        private void BuildCryptoProviders(ContainerBuilder builder)
-        {
-            builder.RegisterType<FileFormat>()
-                .AsSelf()
-                .SingleInstance();
-
-            builder.RegisterType<DotNetHashProvider>()
-                .As<ICryptoProvider>()
-                .As<IKeePassIdGenerator>()
-                .SingleInstance();
-
         }
 
         private class AppShellNavPane : INavigationPane

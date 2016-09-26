@@ -108,7 +108,6 @@
     <Compile Include="IEntryView.cs" />
     <Compile Include="INavigationPane.cs" />
     <Compile Include="IO\FileDatabaseTracker.cs" />
-    <Compile Include="IO\WindowsMd5KeePassIdGenerator.cs" />
     <Compile Include="Models\SearchQueryParameter.cs" />
     <Compile Include="Mvvm\INavigator.cs" />
     <Compile Include="IO\CachedDialogDatabseUnlocker.cs" />
@@ -119,7 +118,6 @@
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
-    <Compile Include="Services\WindowsHashProvider.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchPageViewModel.cs" />
     <Compile Include="Views\EntryViewDialog.xaml.cs">

@@ -12,18 +12,16 @@ namespace KeePass
     {
         private readonly StorageItemAccessList _accessList;
         private readonly IAsyncOperation<StorageFolder> _folder;
-        private readonly IKeePassIdGenerator _idGenerator;
 
-        public FileDatabaseTracker(IKeePassIdGenerator idGenerator)
+        public FileDatabaseTracker()
         {
             _folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("opened_databases", CreationCollisionOption.OpenIfExists);
             _accessList = StorageApplicationPermissions.FutureAccessList;
-            _idGenerator = idGenerator;
         }
 
         public async Task RemoveDatabaseAsync(IFile dbFile)
         {
-            var token = _idGenerator.FromPath(dbFile.Path);
+            var token = dbFile.IdFromPath();
 
             _accessList.Remove(GetDatabaseToken(token));
 
@@ -47,7 +45,7 @@ namespace KeePass
 
         public async Task<bool> AddDatabaseAsync(IFile dbFile)
         {
-            var token = _idGenerator.FromPath(dbFile.Path);
+            var token = dbFile.IdFromPath();
 
             _accessList.AddOrReplace(GetDatabaseToken(token), dbFile.AsStorageItem());
 
@@ -69,7 +67,7 @@ namespace KeePass
 
         public Task AddKeyFileAsync(IFile dbFile, IFile keyFile)
         {
-            var token = GetKeyToken(_idGenerator.FromPath(dbFile.Path));
+            var token = GetKeyToken(dbFile.IdFromPath());
 
             _accessList.AddOrReplace(token, keyFile.AsStorageItem());
 
@@ -78,7 +76,7 @@ namespace KeePass
 
         public async Task<IFile> GetKeyFileAsync(IFile dbFile)
         {
-            var token = GetKeyToken(_idGenerator.FromPath(dbFile.Path));
+            var token = GetKeyToken(dbFile.IdFromPath());
 
             if (_accessList.ContainsItem(token))
             {
@@ -125,7 +123,7 @@ namespace KeePass
                 var dbStorageItem = await GetDatabaseAsync(file.Name);
 
                 // Ensure that the item exists and the ID is consistent with the ID generator
-                if (dbStorageItem != null && string.Equals((string)_idGenerator.FromPath(dbStorageItem.Path), file.Name, StringComparison.Ordinal))
+                if (dbStorageItem != null && string.Equals((string)dbStorageItem.IdFromPath(), file.Name, StringComparison.Ordinal))
                 {
                     result.Add(dbStorageItem);
                 }

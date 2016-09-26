@@ -107,23 +107,11 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrsAlgorithm.cs" />
-    <Compile Include="Crypto\FileFormat.cs" />
-    <Compile Include="Crypto\HashedStream.cs" />
-    <Compile Include="Crypto\ICryptoProvider.cs" />
-    <Compile Include="Crypto\IRandomGenerator.cs" />
-    <Compile Include="Crypto\Rc4RandomGenerator.cs" />
-    <Compile Include="Crypto\Salsa20Cipher.cs" />
-    <Compile Include="Crypto\Salsa20RandomGenerator.cs" />
     <Compile Include="DatabaseCache.cs" />
     <Compile Include="DatabaseCacheEvent.cs" />
     <Compile Include="DatabaseUnlockException.cs" />
-    <Compile Include="Crypto\DotNetHashProvider.cs" />
     <Compile Include="EncryptedDatabaseUnlocker.cs" />
     <Compile Include="FileExtensions.cs" />
-    <Compile Include="FileFormats.cs" />
-    <Compile Include="FileHeaders.cs" />
-    <Compile Include="HeaderFields.cs" />
     <Compile Include="IDatabaseTracker.cs" />
     <Compile Include="IDatabaseUnlocker.cs" />
     <Compile Include="IFile.cs" />
@@ -133,9 +121,7 @@
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />
     <Compile Include="KeePassLibWrapper.cs" />
-    <Compile Include="PasswordData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadHeaderResult.cs" />
     <Compile Include="StreamUtils.cs" />
     <Compile Include="XmlKeePassDatabase.cs" />
   </ItemGroup>
