@@ -66,26 +66,6 @@ namespace KeePass
             return id.Id.ToString();
         }
 
-        public static implicit operator KeePassId(PwUuid id)
-        {
-            return new KeePassId(new Guid(id.UuidBytes));
-        }
-
-        public static implicit operator PwUuid(KeePassId id)
-        {
-            if (id.Id.GetType() != typeof(Guid))
-            {
-                if (id.IsEmpty)
-                {
-                    return new PwUuid(Guid.Empty.ToByteArray());
-                }
-
-                throw new InvalidOperationException();
-            }
-
-            return new PwUuid(((Guid)id.Id).ToByteArray());
-        }
-
         public static KeePassId Empty => s_empty;
     }
 }

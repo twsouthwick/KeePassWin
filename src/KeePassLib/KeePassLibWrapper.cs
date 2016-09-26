@@ -41,7 +41,7 @@ namespace KeePass
             {
                 _group = group;
 
-                Id = group.Uuid;
+                Id = new KeePassId(new Guid(group.Uuid.UuidBytes));
                 Parent = parent;
             }
 
@@ -74,7 +74,7 @@ namespace KeePass
                 _entry = entry;
                 _group = group;
 
-                Id = entry.Uuid;
+                Id = new KeePassId(new Guid(entry.Uuid.UuidBytes));
             }
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
