@@ -6,35 +6,25 @@ using System.Text;
 
 namespace KeePass
 {
-    public class KeePassId
+    public struct KeePassId
     {
-        private static readonly KeePassId s_empty = new KeePassId(Guid.Empty);
+        public static KeePassId Empty { get; } = new KeePassId(Guid.Empty);
 
         public KeePassId(Guid id)
         {
             Id = id;
         }
 
-        /// <summary>
-        /// The object containing the Id
-        /// </summary>
-        /// <remarks>
-        /// This must be a public property as the DTO between views serializes to JSON and requires this field
-        /// </remarks>
-        public Guid Id { get; }
-
-        public bool IsEmpty => ReferenceEquals(s_empty, this);
+        public Guid Id { get; set; }
 
         public override bool Equals(object obj)
         {
-            var other = obj as KeePassId;
-
-            if (other == null)
+            if (!(obj is KeePassId))
             {
                 return false;
             }
 
-            return Equals(other.Id, Id);
+            return Equals(((KeePassId)obj).Id, Id);
         }
 
         public override int GetHashCode()
@@ -65,7 +55,5 @@ namespace KeePass
         {
             return id.Id.ToString();
         }
-
-        public static KeePassId Empty => s_empty;
     }
 }
