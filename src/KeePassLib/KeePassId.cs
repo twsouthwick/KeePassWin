@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KeePassLib;
+using System;
 using System.Diagnostics;
 
 namespace KeePass
@@ -54,6 +55,25 @@ namespace KeePass
         public static implicit operator KeePassId(int id)
         {
             return new KeePassId(id.ToString());
+        }
+
+        public static implicit operator KeePassId(PwUuid id)
+        {
+            return new KeePassId(new Guid(id.UuidBytes).ToString());
+        }
+
+        public static implicit operator PwUuid(KeePassId id)
+        {
+            Guid g;
+
+            if (Guid.TryParse(id.Id, out g))
+            {
+                return new PwUuid(g.ToByteArray());
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         public static KeePassId Empty => s_empty;

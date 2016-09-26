@@ -120,6 +120,7 @@
     <Compile Include="DatabaseUnlockException.cs" />
     <Compile Include="Crypto\DotNetHashProvider.cs" />
     <Compile Include="EncryptedDatabaseUnlocker.cs" />
+    <Compile Include="FileExtensions.cs" />
     <Compile Include="FileFormats.cs" />
     <Compile Include="FileHeaders.cs" />
     <Compile Include="HeaderFields.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />
+    <Compile Include="KeePassLibWrapper.cs" />
     <Compile Include="PasswordData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadHeaderResult.cs" />

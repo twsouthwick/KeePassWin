@@ -1,5 +1,4 @@
-﻿using KeePass.Crypto;
-using KeePassWin.Views;
+﻿using KeePassWin.Views;
 using System;
 using System.Threading.Tasks;
 
@@ -9,8 +8,7 @@ namespace KeePass
     {
         private readonly Func<IFile, PasswordDialog> _dialogFactory;
 
-        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory, FileFormat fileFormat, ICryptoProvider hashProvider, IKeePassIdGenerator idGenerator)
-            : base(fileFormat, hashProvider, idGenerator)
+        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory)
         {
             _dialogFactory = dialogFactory;
         }

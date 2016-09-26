@@ -1,7 +1,7 @@
 ﻿{
   "supports": {},
   "dependencies": {
-    "KeePassLib": "2.34.0-ci0023",
+    "KeePassLib": "2.34.0-ci0025",
     "Microsoft.NETCore": "5.0.1"
   },
   "frameworks": {

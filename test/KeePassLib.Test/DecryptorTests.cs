@@ -1,6 +1,4 @@
-﻿using Autofac;
-using KeePass;
-using KeePass.Crypto;
+﻿using KeePass;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,25 +13,13 @@ namespace KeePassLib
         [Theory]
         public async Task Decryption(string db, string password, bool hasKey)
         {
-            var builder = new ContainerBuilder();
+            var unlocker = new EncryptedDatabaseUnlocker();
+            var result = await unlocker.UnlockAsync(
+                 TestAssets.GetFile(db),
+                 hasKey ? TestAssets.GetFile($"{Path.GetFileNameWithoutExtension(db)}.key") : null,
+                 password);
 
-            builder.RegisterType<DotNetHashProvider>().As<ICryptoProvider>().SingleInstance();
-            builder.RegisterType<EncryptedDatabaseUnlocker>();
-            builder.RegisterType<FileFormat>();
-            builder.RegisterType<HashedStream>();
-            builder.RegisterType<TestIdGenerator>().As<IKeePassIdGenerator>();
-
-            using (var container = builder.Build())
-            {
-                var unlocker = container.Resolve<EncryptedDatabaseUnlocker>();
-
-                var result = await unlocker.UnlockAsync(
-                    TestAssets.GetFile(db),
-                    hasKey ? TestAssets.GetFile($"{Path.GetFileNameWithoutExtension(db)}.key") : null,
-                    password);
-
-                Assert.NotNull(result);
-            }
+            Assert.NotNull(result);
         }
     }
 }
