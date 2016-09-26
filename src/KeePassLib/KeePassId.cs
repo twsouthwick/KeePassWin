@@ -9,16 +9,14 @@ namespace KeePass
     {
         private static readonly KeePassId s_empty = new KeePassId(string.Empty);
 
-        private readonly string _id;
+        private readonly object _id;
 
-        public KeePassId(string id)
+        public KeePassId(object id)
         {
             _id = id;
         }
 
-        public string Id => _id;
-
-        public bool IsEmpty => string.IsNullOrEmpty(_id);
+        public bool IsEmpty => ReferenceEquals(s_empty, this);
 
         public override bool Equals(object obj)
         {
@@ -29,7 +27,7 @@ namespace KeePass
                 return false;
             }
 
-            return string.Equals(other._id, _id, StringComparison.Ordinal);
+            return Equals(other._id, _id);
         }
 
         public override int GetHashCode()
@@ -39,7 +37,7 @@ namespace KeePass
 
         public override string ToString()
         {
-            return _id;
+            return _id.ToString();
         }
 
         public static implicit operator KeePassId(string id)
@@ -49,7 +47,7 @@ namespace KeePass
 
         public static explicit operator string(KeePassId id)
         {
-            return id.Id;
+            return id._id.ToString();
         }
 
         public static implicit operator KeePassId(int id)
@@ -64,16 +62,17 @@ namespace KeePass
 
         public static implicit operator PwUuid(KeePassId id)
         {
-            Guid g;
+            if (id._id.GetType() != typeof(Guid))
+            {
+                if (id.IsEmpty)
+                {
+                    return new PwUuid(Guid.Empty.ToByteArray());
+                }
 
-            if (Guid.TryParse(id.Id, out g))
-            {
-                return new PwUuid(g.ToByteArray());
-            }
-            else
-            {
                 throw new InvalidOperationException();
             }
+
+            return new PwUuid(((Guid)id._id).ToByteArray());
         }
 
         public static KeePassId Empty => s_empty;
