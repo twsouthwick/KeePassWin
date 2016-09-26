@@ -41,7 +41,7 @@ namespace KeePass
                 Entry = entry;
 
                 // The UUID won't be changed, so it may be cached
-                Id = entry.Element("UUID").Value;
+                Id = new KeePassId(Guid.Parse(entry.Element("UUID").Value));
             }
 
             protected XElement Entry { get; }

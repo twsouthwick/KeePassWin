@@ -16,7 +16,7 @@ namespace KeePass
         public static async Task<IKeePassDatabase> Load(IFile file, IFile keyFile, string password)
         {
             var compositeKey = new CompositeKey();
-            
+
             if (password != null)
             {
                 compositeKey.AddUserKey(new KcpPassword(password));
@@ -41,7 +41,7 @@ namespace KeePass
                     kdbx.Load(fs, KdbxFormat.Default, new Logger());
                 });
 
-                return new WrapperDatabase(kdbx, db);
+                return new WrapperDatabase(kdbx, db, file.IdFromPath());
             }
         }
 
@@ -50,15 +50,16 @@ namespace KeePass
             private readonly PwDatabase _db;
             private readonly KdbxFile _file;
 
-            public WrapperDatabase(KdbxFile file, PwDatabase db)
+            public WrapperDatabase(KdbxFile file, PwDatabase db, KeePassId id)
             {
                 _file = file;
                 _db = db;
+                Id = id;
             }
 
             public IList<IKeePassIcon> Icons { get; } = Array.Empty<IKeePassIcon>();
 
-            public KeePassId Id => _db.RootGroup.Uuid;
+            public KeePassId Id { get; }
 
             public string Name => _db.Name;
 

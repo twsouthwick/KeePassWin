@@ -120,16 +120,27 @@ namespace KeePass
 
             foreach (var file in files)
             {
-                var dbStorageItem = await GetDatabaseAsync(file.Name);
+                Guid g;
 
-                // Ensure that the item exists and the ID is consistent with the ID generator
-                if (dbStorageItem != null && string.Equals((string)dbStorageItem.IdFromPath(), file.Name, StringComparison.Ordinal))
+                if (Guid.TryParse(file.Name.Replace("-", ""), out g))
                 {
-                    result.Add(dbStorageItem);
+                    var id = new KeePassId(g);
+                    var dbStorageItem = await GetDatabaseAsync(id);
+
+                    // Ensure that the item exists and the ID is consistent with the ID generator
+                    if (dbStorageItem != null && string.Equals(dbStorageItem.IdFromPath().ToString(), file.Name, StringComparison.Ordinal))
+                    {
+                        result.Add(dbStorageItem);
+                    }
+                    else
+                    {
+                        // There was a problem with the db cache
+                        await file.DeleteAsync();
+                    }
                 }
                 else
                 {
-                    // There was a problem with the db cache
+                    // There was a problem parsing the name
                     await file.DeleteAsync();
                 }
             }

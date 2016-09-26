@@ -1,15 +1,16 @@
 ﻿using KeePassLib;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 
 namespace KeePass
 {
-    [DebuggerDisplay("KeePass ID: {Id}")]
     public class KeePassId
     {
-        private static readonly KeePassId s_empty = new KeePassId(string.Empty);
+        private static readonly KeePassId s_empty = new KeePassId(Guid.Empty);
 
-        public KeePassId(object id)
+        public KeePassId(Guid id)
         {
             Id = id;
         }
@@ -20,7 +21,7 @@ namespace KeePass
         /// <remarks>
         /// This must be a public property as the DTO between views serializes to JSON and requires this field
         /// </remarks>
-        public object Id { get; set; }
+        public Guid Id { get; }
 
         public bool IsEmpty => ReferenceEquals(s_empty, this);
 
@@ -43,12 +44,21 @@ namespace KeePass
 
         public override string ToString()
         {
-            return Id.ToString();
-        }
+            var sb = new StringBuilder();
 
-        public static implicit operator KeePassId(string id)
-        {
-            return string.IsNullOrEmpty(id) ? s_empty : new KeePassId(id);
+            var s = Id.ToString("N").ToUpperInvariant().ToCharArray();
+            for (int i = 0; i < s.Length; i += 2)
+            {
+                sb.Append(s[i]);
+                sb.Append(s[i + 1]);
+
+                if (i + 2 != s.Length)
+                {
+                    sb.Append('-');
+                }
+            }
+
+            return sb.ToString();
         }
 
         public static explicit operator string(KeePassId id)
