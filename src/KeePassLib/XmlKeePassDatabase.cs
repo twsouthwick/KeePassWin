@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageProcessorCore;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -18,17 +19,11 @@ namespace KeePass
             Id = id;
             Name = name;
             Root = new XmlKeePassGroup(doc.Descendants("Group").First(), null);
-            Icons = doc.Descendants("Icon")
-                .Select(x => new XmlKeePassIcon(x))
-                .Cast<IKeePassIcon>()
-                .ToList();
         }
 
         public KeePassId Id { get; }
 
         public string Name { get; }
-
-        public IList<IKeePassIcon> Icons { get; }
 
         public IKeePassGroup Root { get; }
 
@@ -49,18 +44,6 @@ namespace KeePass
             public KeePassId Id { get; }
         }
 
-        public class XmlKeePassIcon : XmlKeePassId, IKeePassIcon
-        {
-            public XmlKeePassIcon(XElement element)
-                : base(element)
-            {
-                // TODO: Add way to modify Data
-                Data = Convert.FromBase64String((string)element.Element("Data"));
-            }
-
-            public byte[] Data { get; }
-        }
-
         [DebuggerDisplay("Entry '{Title}'")]
         public class XmlKeePassEntry : XmlKeePassId, IKeePassEntry
         {
@@ -77,6 +60,8 @@ namespace KeePass
             public string Notes => GetString(nameof(Notes));
 
             public string Url => GetString("URL");
+
+            public Image Icon { get; }
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ImageProcessorCore;
+using System.Collections.Generic;
 using System.IO;
 
 namespace KeePass
@@ -7,7 +8,6 @@ namespace KeePass
     {
         KeePassId Id { get; }
         string Name { get; }
-        IList<IKeePassIcon> Icons { get; }
         IKeePassGroup Root { get; }
         void Save(Stream stream);
     }
@@ -15,11 +15,6 @@ namespace KeePass
     public interface IKeePassId
     {
         KeePassId Id { get; }
-    }
-
-    public interface IKeePassIcon : IKeePassId
-    {
-        byte[] Data { get; }
     }
 
     public interface IKeePassGroup : IKeePassId
@@ -35,11 +30,11 @@ namespace KeePass
     {
         string UserName { get; }
         string Password { get; }
-        int? IconId { get; }
         string Title { get; }
         string Notes { get; }
         IList<IKeePassAttachment> Attachment { get; }
         string Url { get; }
+        Image Icon { get; }
     }
 
     public interface IKeePassAttachment : IKeePassId

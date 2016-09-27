@@ -108,6 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoSuggestQueryParameterConverter.cs" />
+    <Compile Include="ImageProcessorImage.xaml.cs">
+      <DependentUpon>ImageProcessorImage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NullObjectVisibilityConverter.cs" />
     <Compile Include="EntryItemListView.xaml.cs">
       <DependentUpon>EntryItemListView.xaml</DependentUpon>
@@ -126,6 +129,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="EntryItemListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ImageProcessorImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,5 @@
-﻿using KeePassLib;
+﻿using ImageProcessorCore;
+using KeePassLib;
 using KeePassLib.Interfaces;
 using KeePassLib.Serialization;
 using System;
@@ -20,13 +21,11 @@ namespace KeePass
             Id = id;
         }
 
-        public IList<IKeePassIcon> Icons { get; } = Array.Empty<IKeePassIcon>();
-
-            public KeePassId Id { get; }
+        public KeePassId Id { get; }
 
         public string Name => _db.Name;
 
-        public IKeePassGroup Root => new WrappedGroup(_db.RootGroup, null);
+        public IKeePassGroup Root => new WrappedGroup(_db.RootGroup, null, _db);
 
         public void Save(Stream stream)
         {
@@ -35,23 +34,25 @@ namespace KeePass
 
         private sealed class WrappedGroup : IKeePassGroup
         {
+            private readonly PwDatabase _db;
             private readonly PwGroup _group;
 
-            public WrappedGroup(PwGroup group, IKeePassGroup parent)
+            public WrappedGroup(PwGroup group, IKeePassGroup parent, PwDatabase db)
             {
                 _group = group;
+                _db = db;
 
                 Id = new KeePassId(new Guid(group.Uuid.UuidBytes));
                 Parent = parent;
             }
 
             public IList<IKeePassEntry> Entries => _group.Entries
-                .Select(e => new WrappedEntry(e, _group))
+                .Select(e => new WrappedEntry(e, _db))
                 .Cast<IKeePassEntry>()
                 .ToList();
 
             public IList<IKeePassGroup> Groups => _group.Groups
-                .Select(g => new WrappedGroup(g, this))
+                .Select(g => new WrappedGroup(g, this, _db))
                 .Cast<IKeePassGroup>()
                 .ToList();
 
@@ -66,20 +67,31 @@ namespace KeePass
 
         private sealed class WrappedEntry : IKeePassEntry
         {
+            private readonly PwDatabase _db;
             private readonly PwEntry _entry;
-            private readonly PwGroup _group;
 
-            public WrappedEntry(PwEntry entry, PwGroup group)
+            public WrappedEntry(PwEntry entry, PwDatabase db)
             {
                 _entry = entry;
-                _group = group;
+                _db = db;
 
                 Id = new KeePassId(new Guid(entry.Uuid.UuidBytes));
             }
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 
-            public int? IconId { get; }
+            public Image Icon
+            {
+                get
+                {
+                    if (_entry.CustomIconUuid == PwUuid.Zero)
+                    {
+                        return null;
+                    }
+
+                    return _db.GetCustomIcon(_entry.CustomIconUuid);
+                }
+            }
 
             public KeePassId Id { get; }
 
