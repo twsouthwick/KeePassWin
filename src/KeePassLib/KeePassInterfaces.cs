@@ -1,5 +1,4 @@
-﻿using ImageProcessorCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace KeePass
@@ -34,7 +33,7 @@ namespace KeePass
         string Notes { get; }
         IList<IKeePassAttachment> Attachment { get; }
         string Url { get; }
-        Image Icon { get; }
+        byte[] Icon { get; }
     }
 
     public interface IKeePassAttachment : IKeePassId

@@ -1,5 +1,4 @@
-﻿using ImageProcessorCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -61,7 +60,7 @@ namespace KeePass
 
             public string Url => GetString("URL");
 
-            public Image Icon { get; }
+            public byte[] Icon { get; }
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 

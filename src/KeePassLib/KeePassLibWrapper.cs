@@ -1,5 +1,4 @@
-﻿using ImageProcessorCore;
-using KeePassLib;
+﻿using KeePassLib;
 using KeePassLib.Interfaces;
 using KeePassLib.Serialization;
 using System;
@@ -80,18 +79,7 @@ namespace KeePass
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 
-            public Image Icon
-            {
-                get
-                {
-                    if (_entry.CustomIconUuid == PwUuid.Zero)
-                    {
-                        return null;
-                    }
-
-                    return _db.GetCustomIcon(_entry.CustomIconUuid);
-                }
-            }
+            public byte[] Icon => _db.GetCustomIcon(_entry.CustomIconUuid);
 
             public KeePassId Id { get; }
 

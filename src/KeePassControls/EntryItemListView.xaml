@@ -31,13 +31,13 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="32" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <local:ImageProcessorImage Grid.RowSpan="2" Image="{Binding Path=Icon}" VerticalAlignment="Center" />
+                <local:ByteImage Grid.RowSpan="2" Image="{Binding Path=Icon}" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
                 <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Text="{Binding Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
                 <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Website" Click="GoToWebsite" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}">

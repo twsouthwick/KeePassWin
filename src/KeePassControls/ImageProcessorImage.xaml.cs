@@ -2,33 +2,28 @@
 using System.IO;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using ImageProcessorCore.Formats;
-
-using IPImage = ImageProcessorCore.Image;
 
 namespace KeePass.Controls
 {
-    public sealed partial class ImageProcessorImage : UserControl
+    public sealed partial class ByteImage : UserControl
     {
-        private static readonly IImageEncoder s_encoder = new PngEncoder();
-
-        public ImageProcessorImage()
+        public ByteImage()
         {
             this.InitializeComponent();
         }
 
-        public IPImage Image
+        public byte[] Image
         {
-            get { return (IPImage)GetValue(ImageProperty); }
+            get { return (byte[])GetValue(ImageProperty); }
             set { SetValue(ImageProperty, value); }
         }
 
         public static readonly DependencyProperty ImageProperty =
-            DependencyProperty.Register(nameof(Image), typeof(IPImage), typeof(ImageProcessorImage), new PropertyMetadata(null, ImageUpdate));
+            DependencyProperty.Register(nameof(Image), typeof(byte[]), typeof(ByteImage), new PropertyMetadata(null, ImageUpdate));
 
         private static void ImageUpdate(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ImageProcessorImage)d).Update();
+            ((ByteImage)d).Update();
         }
 
         private async void Update()
@@ -40,12 +35,8 @@ namespace KeePass.Controls
                 return;
             }
 
-            using (var ms = new MemoryStream())
+            using (var ms = new MemoryStream(image))
             {
-                image.Save(ms, s_encoder);
-                ms.Flush();
-                ms.Position = 0;
-
                 await BitmapImageSource.SetSourceAsync(ms.AsRandomAccessStream());
             }
         }
