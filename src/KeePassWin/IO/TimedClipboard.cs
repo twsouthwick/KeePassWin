@@ -14,6 +14,11 @@ namespace KeePass
 
         public void SetText(string text)
         {
+            if (text == null)
+            {
+                return;
+            }
+
             var dp = new DataPackage();
 
             dp.SetText(text);

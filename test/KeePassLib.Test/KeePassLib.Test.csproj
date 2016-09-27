@@ -42,7 +42,6 @@
     <Compile Include="DecryptorTests.cs" />
     <Compile Include="Utils\TestAssets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlKeePassTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\key-aes_rijndael_256.kdbx" />

@@ -16,6 +16,15 @@
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
 
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=Model.AddGroupCommand}" />
+                <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=Model.AddEntryCommand}" />
+                <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=Model.SaveCommand}" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

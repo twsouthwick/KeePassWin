@@ -57,6 +57,24 @@ namespace KeePassWin.ViewModels
             CopyCommand = new DelegateCommand<string>(_clipboard.SetText);
 
             GoToSearchCommand = new DelegateCommand<string>(text => _navigator.GoToSearch(Database.Id, text));
+
+            AddEntryCommand = new DelegateCommand(async () =>
+            {
+                var entry = new ReadWriteKeePassEntry();
+
+                var view = entryView(entry);
+                await view.ShowAsync();
+                _group.AddEntry(entry);
+            });
+
+            AddGroupCommand = new DelegateCommand(() =>
+            {
+            }, () => false);
+
+            SaveCommand = new DelegateCommand(() =>
+            {
+
+            }, () => false);
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -131,6 +149,12 @@ namespace KeePassWin.ViewModels
         public ICommand CopyCommand { get; }
 
         public ICommand ItemClickCommand { get; }
+
+        public ICommand AddEntryCommand { get; }
+
+        public ICommand AddGroupCommand { get; }
+
+        public ICommand SaveCommand { get; }
 
         public IKeePassDatabase Database
         {
