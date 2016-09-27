@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace KeePass
 {
@@ -127,24 +129,52 @@ namespace KeePass
             }
         }
 
-        private sealed class WrappedEntry : IKeePassEntry
+        private abstract class KbdxId : IKeePassId, INotifyPropertyChanged
+        {
+            protected KbdxId(PwUuid id)
+            {
+                Id = new KeePassId(new Guid(id.UuidBytes));
+            }
+
+            public KeePassId Id { get; }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected void SetProperty<T>(ref T item, T value, IEqualityComparer<T> equalityComparer = null, [CallerMemberName]string name = null)
+            {
+                var comparer = equalityComparer ?? EqualityComparer<T>.Default;
+
+                if (comparer.Equals(item, value))
+                {
+                    return;
+                }
+
+                item = value;
+
+                NotifyPropertyChanged(name);
+            }
+
+            protected void NotifyPropertyChanged([CallerMemberName]string name = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        private sealed class WrappedEntry : KbdxId, IKeePassEntry
         {
             private readonly PwDatabase _db;
             private readonly PwEntry _entry;
 
             public WrappedEntry(PwEntry entry, PwDatabase db)
+                : base(entry.Uuid)
             {
                 _entry = entry;
                 _db = db;
-
-                Id = new KeePassId(new Guid(entry.Uuid.UuidBytes));
             }
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 
             public byte[] Icon => _db.GetCustomIcon(_entry.CustomIconUuid);
-
-            public KeePassId Id { get; }
 
             public string Notes { get; set; } = string.Empty;
 
@@ -177,7 +207,7 @@ namespace KeePass
                 return _entry.Strings.Get(def)?.ReadString();
             }
 
-            private void Add(string def, string value)
+            private void Add(string def, string value, [CallerMemberName]string name = null)
             {
                 if (value == null)
                 {
@@ -185,6 +215,8 @@ namespace KeePass
                 }
 
                 _entry.Strings.Set(def, new ProtectedString(true, value));
+
+                NotifyPropertyChanged(name);
             }
         }
 
