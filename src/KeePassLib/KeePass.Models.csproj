@@ -121,7 +121,7 @@
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />
-    <Compile Include="KeePassLibWrapper.cs" />
+    <Compile Include="KbdxKeePass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamUtils.cs" />
   </ItemGroup>

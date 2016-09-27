@@ -28,36 +28,36 @@ namespace KeePass
 
         public string Name => _db.Name;
 
-        public IKeePassGroup Root => new WrappedGroup(_db.RootGroup, null, _db);
+        public IKeePassGroup Root => new KbdxGroup(_db.RootGroup, null, _db);
 
         public void Save(Stream stream)
         {
-            _file.Save(stream, _db.RootGroup, KdbxFormat.Default, new Logger());
+            _file.Save(stream, _db.RootGroup, KdbxFormat.Default, null);
         }
 
         public bool Modified => _db.Modified;
 
-        private sealed class WrappedGroup : IKeePassGroup
+        private sealed class KbdxGroup : KbdxId, IKeePassGroup
         {
             private readonly PwDatabase _db;
             private readonly PwGroup _group;
             private readonly Lazy<IList<IKeePassGroup>> _groups;
             private readonly Lazy<IList<IKeePassEntry>> _entries;
 
-            public WrappedGroup(PwGroup group, IKeePassGroup parent, PwDatabase db)
+            public KbdxGroup(PwGroup group, IKeePassGroup parent, PwDatabase db)
+                : base(group.Uuid)
             {
                 _group = group;
                 _db = db;
 
-                Id = new KeePassId(new Guid(group.Uuid.UuidBytes));
                 Parent = parent;
 
                 _entries = new Lazy<IList<IKeePassEntry>>(() => _group.Entries
-                    .Select(e => new WrappedEntry(e, _db))
+                    .Select(e => new KbdxEntry(e, _db))
                     .Cast<IKeePassEntry>()
                     .ToObservableCollection());
                 _groups = new Lazy<IList<IKeePassGroup>>(() => _group.Groups
-                    .Select(g => new WrappedGroup(g, this, _db))
+                    .Select(g => new KbdxGroup(g, this, _db))
                     .Cast<IKeePassGroup>()
                     .ToObservableCollection());
             }
@@ -65,8 +65,6 @@ namespace KeePass
             public IList<IKeePassEntry> Entries => _entries.Value;
 
             public IList<IKeePassGroup> Groups => _groups.Value;
-
-            public KeePassId Id { get; }
 
             public string Name => _group.Name;
 
@@ -105,7 +103,7 @@ namespace KeePass
 
                 _group.AddEntry(pwEntry, true);
 
-                var wrapped = new WrappedEntry(pwEntry, _db);
+                var wrapped = new KbdxEntry(pwEntry, _db);
 
                 Entries.Add(wrapped);
 
@@ -121,7 +119,7 @@ namespace KeePass
 
                 _group.AddGroup(pwGroup, true, true);
 
-                var wrapped = new WrappedGroup(pwGroup, Parent, _db);
+                var wrapped = new KbdxGroup(pwGroup, Parent, _db);
 
                 Groups.Add(wrapped);
 
@@ -160,12 +158,12 @@ namespace KeePass
             }
         }
 
-        private sealed class WrappedEntry : KbdxId, IKeePassEntry
+        private sealed class KbdxEntry : KbdxId, IKeePassEntry
         {
             private readonly PwDatabase _db;
             private readonly PwEntry _entry;
 
-            public WrappedEntry(PwEntry entry, PwDatabase db)
+            public KbdxEntry(PwEntry entry, PwDatabase db)
                 : base(entry.Uuid)
             {
                 _entry = entry;
@@ -217,32 +215,6 @@ namespace KeePass
                 _entry.Strings.Set(def, new ProtectedString(true, value));
 
                 NotifyPropertyChanged(name);
-            }
-        }
-
-        private sealed class Logger : IStatusLogger
-        {
-            public bool ContinueWork()
-            {
-                return true;
-            }
-
-            public void EndLogging()
-            {
-            }
-
-            public bool SetProgress(uint uPercent)
-            {
-                return true;
-            }
-
-            public bool SetText(string strNewText, LogStatusType lsType)
-            {
-                return true;
-            }
-
-            public void StartLogging(string strOperation, bool bWriteOperationToLog)
-            {
             }
         }
     }
