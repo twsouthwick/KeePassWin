@@ -9,6 +9,7 @@ namespace KeePass
         string Name { get; }
         IKeePassGroup Root { get; }
         void Save(Stream stream);
+        bool Modified { get; }
     }
 
     public interface IKeePassId

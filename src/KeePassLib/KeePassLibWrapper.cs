@@ -33,6 +33,8 @@ namespace KeePass
             _file.Save(stream, _db.RootGroup, KdbxFormat.Default, new Logger());
         }
 
+        public bool Modified => _db.Modified;
+
         private sealed class WrappedGroup : IKeePassGroup
         {
             private readonly PwDatabase _db;

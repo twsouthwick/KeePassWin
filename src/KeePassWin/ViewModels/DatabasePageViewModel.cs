@@ -21,6 +21,7 @@ namespace KeePassWin.ViewModels
         private readonly IDatabaseTracker _tracker;
         private readonly INavigator _navigator;
         private readonly IClipboard _clipboard;
+        private readonly DelegateCommand _saveCommand;
 
         private IKeePassDatabase _database;
         private IKeePassGroup _group;
@@ -65,16 +66,18 @@ namespace KeePassWin.ViewModels
                 var view = entryView(entry);
                 await view.ShowAsync();
                 _group.AddEntry(entry);
+
+                _saveCommand.RaiseCanExecuteChanged();
             });
 
             AddGroupCommand = new DelegateCommand(() =>
             {
             }, () => false);
 
-            SaveCommand = new DelegateCommand(() =>
+            _saveCommand = new DelegateCommand(() =>
             {
 
-            }, () => false);
+            }, () => _database?.Modified ?? false);
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -154,7 +157,7 @@ namespace KeePassWin.ViewModels
 
         public ICommand AddGroupCommand { get; }
 
-        public ICommand SaveCommand { get; }
+        public ICommand SaveCommand => _saveCommand;
 
         public IKeePassDatabase Database
         {
