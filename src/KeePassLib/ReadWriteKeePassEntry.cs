@@ -47,6 +47,10 @@ namespace KeePass
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public void Remove()
+        {
+        }
+
         protected void SetProperty<T>(ref T field, T value, [CallerMemberName]string name = null)
         {
             if (object.Equals(field, value))

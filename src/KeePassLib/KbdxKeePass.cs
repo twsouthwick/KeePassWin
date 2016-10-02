@@ -80,29 +80,6 @@ namespace KeePass
 
             public IKeePassGroup Parent { get; }
 
-            // TODO: Move remove entry to entry itself
-            public void RemoveEntry(IKeePassEntry entry)
-            {
-                var kbdxEntry = entry as KbdxEntry;
-
-                Debug.Assert(kbdxEntry != null);
-                if (kbdxEntry == null)
-                {
-                    return;
-                }
-
-                var pe = kbdxEntry.Entry;
-
-                Debug.Assert(pe.ParentGroup.Uuid == _group.Uuid);
-
-                _group.Entries.Remove(pe);
-                var pdo = new PwDeletedObject(pe.Uuid, DateTime.Now);
-                Database.DeletedObjects.Add(pdo);
-                Database.Modified = true;
-
-                _entries.Value.Remove(entry);
-            }
-
             public IKeePassEntry AddEntry(IKeePassEntry entry)
             {
                 var pwEntry = new PwEntry(true, true);
@@ -207,8 +184,6 @@ namespace KeePass
                 Group = group;
             }
 
-            public PwEntry Entry => _entry;
-
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 
             public byte[] Icon
@@ -244,6 +219,20 @@ namespace KeePass
             }
 
             public IKeePassGroup Group { get; set; }
+
+            public void Remove()
+            {
+                _entry.ParentGroup.Entries.Remove(_entry);
+
+                // TODO: Use recycle bin?
+                Database.DeletedObjects.Add(new PwDeletedObject(_entry.Uuid, DateTime.Now));
+
+                // Remove entry from parent group
+                Group.Entries.Remove(this);
+                Group = null;
+
+                Database.Modified = true;
+            }
 
             private string Get(string def)
             {

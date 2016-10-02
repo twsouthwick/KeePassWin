@@ -84,7 +84,7 @@ namespace KeePassWin.ViewModels
 
             RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(entry =>
             {
-                entry?.Group.RemoveEntry(entry);
+                entry.Remove();
                 Items.Remove(entry);
 
                 NotifyAllCommands();
