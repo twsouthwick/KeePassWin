@@ -98,16 +98,23 @@ namespace KeePass
 
         public async Task<IFile> GetDatabaseAsync(KeePassId id)
         {
+            var token = GetDatabaseToken(id);
+
+            if (!_accessList.ContainsItem(token))
+            {
+                return null;
+            }
+
             try
             {
-                var file = await _accessList.GetFileAsync(GetDatabaseToken(id));
+                var file = await _accessList.GetFileAsync(token);
 
                 if (file.IsAvailable)
                 {
                     return file.AsFile();
                 }
             }
-            catch (ArgumentException) { }
+            catch (Exception) { }
 
             return null;
         }
