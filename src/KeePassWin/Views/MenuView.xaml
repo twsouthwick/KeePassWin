@@ -10,12 +10,12 @@
       mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="MenuItemTemplate" x:DataType="viewModels:MenuItemViewModel">
-            <Grid RightTapped="Grid_RightTapped">
-                <FlyoutBase.AttachedFlyout>
+            <Grid>
+                <Grid.ContextFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Command="{x:Bind Path=RemoveCommand}" Text="Remove" Visibility="{x:Bind Path=RemoveCommand, Converter={StaticResource NullObjectVisibilityConverter}}"/>
                     </MenuFlyout>
-                </FlyoutBase.AttachedFlyout>
+                </Grid.ContextFlyout>
                 <Button AutomationProperties.Name="{Binding DisplayName}"
                         Command="{x:Bind Path=Command}"
                         Style="{StaticResource SplitViewMenuButtonStyle}"
