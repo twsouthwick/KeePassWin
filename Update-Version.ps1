@@ -1,4 +1,4 @@
-param ([Parameter(Mandatory = $true)][string] $version)
+param ([Parameter(Mandatory = $true)][string] $version, [string] $informationVersion)
 
 
 function UpdateVersion($path)
@@ -16,3 +16,8 @@ function UpdateVersion($path)
 }
 
 Get-ChildItem $PSScriptRoot -Include *.appxmanifest -Recurse | % { UpdateVersion $_.FullName }
+
+if($informationVersion)
+{
+	$informationVersion | Out-File "src\KeePassWin\version.txt" -NoNewLine -Encoding UTF8
+}
