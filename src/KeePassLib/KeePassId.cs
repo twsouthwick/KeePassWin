@@ -1,7 +1,4 @@
-﻿using KeePassLib;
-using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using System;
 using System.Text;
 
 namespace KeePass
@@ -53,7 +50,7 @@ namespace KeePass
 
         public static explicit operator string(KeePassId id)
         {
-            return id.Id.ToString();
+            return id.ToString();
         }
     }
 }

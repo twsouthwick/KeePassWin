@@ -22,6 +22,11 @@ namespace KeePass
 
         public static KeePassId IdFromPath(this IFile file)
         {
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             using (var md5 = MD5.Create())
             {
                 var bytes = Encoding.Unicode.GetBytes(file.Path.ToLowerInvariant());
@@ -47,7 +52,7 @@ namespace KeePass
                     hash[14],
                     hash[15]
                 };
-                
+
                 return new KeePassId(new Guid(buffer));
             }
         }
