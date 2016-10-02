@@ -26,6 +26,7 @@ namespace KeePass
         IList<IKeePassGroup> Groups { get; }
         IKeePassEntry AddEntry(IKeePassEntry entry);
         IKeePassGroup AddGroup(IKeePassGroup group);
+        void RemoveEntry(IKeePassEntry entry);
     }
 
     public interface IKeePassEntry : IKeePassId
@@ -37,6 +38,8 @@ namespace KeePass
         //IList<IKeePassAttachment> Attachment { get; }
         string Url { get; set; }
         byte[] Icon { get; set; }
+
+        IKeePassGroup Group { get; set; }
     }
 
     public interface IKeePassAttachment : IKeePassId

@@ -1,13 +1,13 @@
 ﻿using KeePassLib;
 using KeePassLib.Security;
-using KeePassLib.Interfaces;
 using KeePassLib.Serialization;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace KeePass
@@ -58,7 +58,7 @@ namespace KeePass
                 Parent = parent;
 
                 _entries = new Lazy<IList<IKeePassEntry>>(() => _group.Entries
-                    .Select(e => new KbdxEntry(e, _db))
+                    .Select(e => new KbdxEntry(e, _db, this))
                     .Cast<IKeePassEntry>()
                     .ToObservableCollection());
                 _groups = new Lazy<IList<IKeePassGroup>>(() => _group.Groups
@@ -76,6 +76,20 @@ namespace KeePass
             public string Notes => _group.Notes;
 
             public IKeePassGroup Parent { get; }
+
+            public void RemoveEntry(IKeePassEntry entry)
+            {
+                var kbdxEntry = entry as KbdxEntry;
+
+                Debug.Assert(kbdxEntry != null);
+                if (kbdxEntry == null)
+                {
+                    return;
+                }
+
+                _group.Entries.Remove(kbdxEntry.Entry);
+                _entries.Value.Remove(entry);
+            }
 
             public IKeePassEntry AddEntry(IKeePassEntry entry)
             {
@@ -108,7 +122,7 @@ namespace KeePass
 
                 _group.AddEntry(pwEntry, true);
 
-                var wrapped = new KbdxEntry(pwEntry, _db);
+                var wrapped = new KbdxEntry(pwEntry, _db, this);
 
                 Entries.Add(wrapped);
 
@@ -168,12 +182,15 @@ namespace KeePass
             private readonly PwDatabase _db;
             private readonly PwEntry _entry;
 
-            public KbdxEntry(PwEntry entry, PwDatabase db)
+            public KbdxEntry(PwEntry entry, PwDatabase db, IKeePassGroup group)
                 : base(entry.Uuid)
             {
                 _entry = entry;
                 _db = db;
+                Group = group;
             }
+
+            public PwEntry Entry => _entry;
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 
@@ -208,6 +225,8 @@ namespace KeePass
                 get { return Get(PwDefs.UserNameField); }
                 set { Add(PwDefs.UserNameField, value); }
             }
+
+            public IKeePassGroup Group { get; set; }
 
             private string Get(string def)
             {

@@ -13,6 +13,8 @@ namespace KeePass
 
         public IList<IKeePassAttachment> Attachment { get; } = new List<IKeePassAttachment>();
 
+        public IKeePassGroup Group { get; set; }
+
         public byte[] Icon { get; set; }
 
         public KeePassId Id { get; set; }

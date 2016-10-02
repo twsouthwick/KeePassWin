@@ -49,7 +49,7 @@ namespace KeePass.Controls
 
         private async void GoToWebsite(object sender, RoutedEventArgs e)
         {
-            var entry = GetEntryFromAppBar(sender);
+            var entry = GetEntryFromFrameworkElement(sender);
             Uri uri;
 
             if (Uri.TryCreate(entry.Url, UriKind.Absolute, out uri))
@@ -63,17 +63,17 @@ namespace KeePass.Controls
 
         private void CopyPassword(object sender, RoutedEventArgs e)
         {
-            Copy(GetEntryFromAppBar(sender)?.Password);
+            Copy(GetEntryFromFrameworkElement(sender)?.Password);
         }
 
         private void CopyUserName(object sender, RoutedEventArgs e)
         {
-            Copy(GetEntryFromAppBar(sender)?.UserName);
+            Copy(GetEntryFromFrameworkElement(sender)?.UserName);
         }
 
-        private IKeePassEntry GetEntryFromAppBar(object sender)
+        private static IKeePassEntry GetEntryFromFrameworkElement(object sender)
         {
-            return ((AppBarButton)sender).DataContext as IKeePassEntry;
+            return ((FrameworkElement)sender).DataContext as IKeePassEntry;
         }
 
         private void Copy(string text)
@@ -81,6 +81,23 @@ namespace KeePass.Controls
             if (CopyCommand?.CanExecute(text) == true)
             {
                 CopyCommand.Execute(text);
+            }
+        }
+
+        private void DeleteItem(object sender, RoutedEventArgs e)
+        {
+            var entry = GetEntryFromFrameworkElement(sender);
+
+            entry?.Group.RemoveEntry(entry);
+        }
+
+        private void EditItem(object sender, RoutedEventArgs e)
+        {
+            var entry = GetEntryFromFrameworkElement(sender);
+
+            if (Command?.CanExecute(entry) == true)
+            {
+                Command.Execute(entry);
             }
         }
     }

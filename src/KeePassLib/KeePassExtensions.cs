@@ -25,6 +25,7 @@ namespace KeePass
             dest.Title = source.Title;
             dest.Url = source.Url;
             dest.UserName = source.UserName;
+            dest.Group = source.Group;
 
 #if DEBUG 
             Debug.Assert(dest.Id.Equals(source.Id));

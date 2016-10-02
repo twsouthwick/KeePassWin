@@ -26,6 +26,16 @@
         </DataTemplate>
         <DataTemplate x:Name="KeePassEntryTemplate">
             <Grid HorizontalAlignment="Stretch">
+                <Grid.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Copy user name" Click="CopyUserName" />
+                        <MenuFlyoutItem Text="Copy password" Click="CopyPassword" />
+                        <MenuFlyoutItem Text="Go to website" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}" Click="GoToWebsite" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem Text="Edit" Click="EditItem" />
+                        <MenuFlyoutItem Text="Delete" Click="DeleteItem" />
+                    </MenuFlyout>
+                </Grid.ContextFlyout>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
