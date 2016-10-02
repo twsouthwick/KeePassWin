@@ -28,7 +28,6 @@ namespace KeePassWin.ViewModels
         private IKeePassGroup _group;
         private IList<IKeePassGroup> _parents;
 
-        private bool _modified;
         private bool _saving;
 
         public DatabasePageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker, Func<IKeePassEntry, IEntryView> entryView)
@@ -49,7 +48,6 @@ namespace KeePassWin.ViewModels
                     var dialog = entryView(item as IKeePassEntry);
                     if (await dialog.ShowAsync())
                     {
-                        _modified = true;
                         _saveCommand.RaiseCanExecuteChanged();
                     }
                 }
@@ -80,7 +78,6 @@ namespace KeePassWin.ViewModels
                     var kdbxEntry = _group.AddEntry(entry);
                     Items.Add(kdbxEntry);
 
-                    _modified = true;
                     NotifyAllCommands();
                 }
             }, () => !_saving);
@@ -90,7 +87,6 @@ namespace KeePassWin.ViewModels
                 entry?.Group.RemoveEntry(entry);
                 Items.Remove(entry);
 
-                _modified = true;
                 NotifyAllCommands();
             });
 
@@ -100,7 +96,6 @@ namespace KeePassWin.ViewModels
 
             _saveCommand = new DelegateCommand(async () =>
             {
-                _modified = true;
                 _saving = true;
                 NotifyAllCommands();
 
@@ -113,14 +108,13 @@ namespace KeePassWin.ViewModels
                     var dialog = new MessageDialog("Error saving file");
                     Debug.WriteLine(e);
                     await dialog.ShowAsync();
-                    _modified = true;
                 }
                 finally
                 {
                     _saving = false;
                     NotifyAllCommands();
                 }
-            }, () => _modified && !_saving);
+            }, () => Database?.Modified == true && !_saving);
         }
 
         private void NotifyAllCommands()

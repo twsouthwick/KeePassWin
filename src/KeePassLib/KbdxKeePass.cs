@@ -49,25 +49,23 @@ namespace KeePass
 
         private sealed class KbdxGroup : KbdxId, IKeePassGroup
         {
-            private readonly PwDatabase _db;
             private readonly PwGroup _group;
             private readonly Lazy<IList<IKeePassGroup>> _groups;
             private readonly Lazy<IList<IKeePassEntry>> _entries;
 
             public KbdxGroup(PwGroup group, IKeePassGroup parent, PwDatabase db)
-                : base(group.Uuid)
+                : base(group.Uuid, db)
             {
                 _group = group;
-                _db = db;
 
                 Parent = parent;
 
                 _entries = new Lazy<IList<IKeePassEntry>>(() => _group.Entries
-                    .Select(e => new KbdxEntry(e, _db, this))
+                    .Select(e => new KbdxEntry(e, db, this))
                     .Cast<IKeePassEntry>()
                     .ToObservableCollection());
                 _groups = new Lazy<IList<IKeePassGroup>>(() => _group.Groups
-                    .Select(g => new KbdxGroup(g, this, _db))
+                    .Select(g => new KbdxGroup(g, this, db))
                     .Cast<IKeePassGroup>()
                     .ToObservableCollection());
             }
@@ -99,7 +97,8 @@ namespace KeePass
 
                 _group.Entries.Remove(pe);
                 var pdo = new PwDeletedObject(pe.Uuid, DateTime.Now);
-                _db.DeletedObjects.Add(pdo);
+                Database.DeletedObjects.Add(pdo);
+                Database.Modified = true;
 
                 _entries.Value.Remove(entry);
             }
@@ -134,8 +133,9 @@ namespace KeePass
                 }
 
                 _group.AddEntry(pwEntry, true);
+                Database.Modified = true;
 
-                var wrapped = new KbdxEntry(pwEntry, _db, this);
+                var wrapped = new KbdxEntry(pwEntry, Database, this);
 
                 Entries.Add(wrapped);
 
@@ -151,9 +151,10 @@ namespace KeePass
 
                 _group.AddGroup(pwGroup, true, true);
 
-                var wrapped = new KbdxGroup(pwGroup, Parent, _db);
+                var wrapped = new KbdxGroup(pwGroup, Parent, Database);
 
                 Groups.Add(wrapped);
+                Database.Modified = true;
 
                 return wrapped;
             }
@@ -161,12 +162,15 @@ namespace KeePass
 
         private abstract class KbdxId : IKeePassId, INotifyPropertyChanged
         {
-            protected KbdxId(PwUuid id)
+            protected KbdxId(PwUuid id, PwDatabase db)
             {
+                Database = db;
                 Id = new KeePassId(new Guid(id.UuidBytes));
             }
 
             public KeePassId Id { get; set; }
+
+            public PwDatabase Database { get; }
 
             public event PropertyChangedEventHandler PropertyChanged;
 
@@ -181,6 +185,8 @@ namespace KeePass
 
                 item = value;
 
+                Database.Modified = true;
+
                 NotifyPropertyChanged(name);
             }
 
@@ -192,14 +198,12 @@ namespace KeePass
 
         private sealed class KbdxEntry : KbdxId, IKeePassEntry
         {
-            private readonly PwDatabase _db;
             private readonly PwEntry _entry;
 
             public KbdxEntry(PwEntry entry, PwDatabase db, IKeePassGroup group)
-                : base(entry.Uuid)
+                : base(entry.Uuid, db)
             {
                 _entry = entry;
-                _db = db;
                 Group = group;
             }
 
@@ -209,7 +213,7 @@ namespace KeePass
 
             public byte[] Icon
             {
-                get { return _db.GetCustomIcon(_entry.CustomIconUuid); }
+                get { return Database.GetCustomIcon(_entry.CustomIconUuid); }
                 set { }
             }
 
@@ -253,7 +257,13 @@ namespace KeePass
                     return;
                 }
 
+                if (string.Equals(Get(def), value, StringComparison.Ordinal))
+                {
+                    return;
+                }
+
                 _entry.Strings.Set(def, new ProtectedString(true, value));
+                Database.Modified = true;
 
                 NotifyPropertyChanged(name);
             }
