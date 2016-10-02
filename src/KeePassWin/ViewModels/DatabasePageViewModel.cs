@@ -100,7 +100,7 @@ namespace KeePassWin.ViewModels
 
             _saveCommand = new DelegateCommand(async () =>
             {
-                _modified = false;
+                _modified = true;
                 _saving = true;
                 NotifyAllCommands();
 
@@ -110,7 +110,9 @@ namespace KeePassWin.ViewModels
                 }
                 catch (Exception e)
                 {
+                    var dialog = new MessageDialog("Error saving file");
                     Debug.WriteLine(e);
+                    await dialog.ShowAsync();
                     _modified = true;
                 }
                 finally

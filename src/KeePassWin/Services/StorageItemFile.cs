@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -22,12 +23,56 @@ namespace KeePass
 
         public async Task<Stream> OpenWriteAsync()
         {
+            CachedFileManager.DeferUpdates(File);
             var fs = await File.OpenAsync(FileAccessMode.ReadWrite);
 
             // Important to ensure the file is overwritten
             fs.Size = 0;
 
-            return fs.AsStreamForWrite();
+            return new CachedFileUpdateStream(File, fs.AsStreamForWrite());
+        }
+
+        private class CachedFileUpdateStream : Stream
+        {
+            private readonly IStorageFile _file;
+            private readonly Stream _stream;
+
+            public CachedFileUpdateStream(IStorageFile file, Stream stream)
+            {
+                _file = file;
+                _stream = stream;
+            }
+
+            public override bool CanRead => _stream.CanRead;
+
+            public override bool CanSeek => _stream.CanSeek;
+
+            public override bool CanWrite => _stream.CanWrite;
+
+            public override long Length => _stream.Length;
+
+            public override long Position
+            {
+                get { return _stream.Position; }
+                set { _stream.Position = value; }
+            }
+
+            public override void Flush() => _stream.Flush();
+
+            protected override async void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+
+                await CachedFileManager.CompleteUpdatesAsync(_file);
+            }
+
+            public override int Read(byte[] buffer, int offset, int count) => _stream.Read(buffer, offset, count);
+
+            public override long Seek(long offset, SeekOrigin origin) => _stream.Seek(offset, origin);
+
+            public override void SetLength(long value) => _stream.SetLength(value);
+
+            public override void Write(byte[] buffer, int offset, int count) => _stream.Write(buffer, offset, count);
         }
     }
 
