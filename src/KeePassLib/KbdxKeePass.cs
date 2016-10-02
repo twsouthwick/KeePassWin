@@ -16,13 +16,11 @@ namespace KeePass
     internal sealed class KdbxDatabase : IKeePassDatabase
     {
         private readonly PwDatabase _db;
-        private readonly KdbxFile _kbdx;
         private readonly IFile _file;
 
-        public KdbxDatabase(IFile file, KdbxFile kbdx, PwDatabase db, KeePassId id)
+        public KdbxDatabase(IFile file, PwDatabase db, KeePassId id)
         {
             _file = file;
-            _kbdx = kbdx;
             _db = db;
             Id = id;
         }
@@ -43,7 +41,8 @@ namespace KeePass
 
         public void Save(Stream stream)
         {
-            _kbdx.Save(stream, _db.RootGroup, KdbxFormat.Default, null);
+            var kdbx = new KdbxFile(_db);
+            kdbx.Save(stream, null, KdbxFormat.Default, null);
         }
 
         public bool Modified => _db.Modified;
@@ -83,6 +82,7 @@ namespace KeePass
 
             public IKeePassGroup Parent { get; }
 
+            // TODO: Move remove entry to entry itself
             public void RemoveEntry(IKeePassEntry entry)
             {
                 var kbdxEntry = entry as KbdxEntry;
@@ -93,7 +93,14 @@ namespace KeePass
                     return;
                 }
 
-                _group.Entries.Remove(kbdxEntry.Entry);
+                var pe = kbdxEntry.Entry;
+
+                Debug.Assert(pe.ParentGroup.Uuid == _group.Uuid);
+
+                _group.Entries.Remove(pe);
+                var pdo = new PwDeletedObject(pe.Uuid, DateTime.Now);
+                _db.DeletedObjects.Add(pdo);
+
                 _entries.Value.Remove(entry);
             }
 

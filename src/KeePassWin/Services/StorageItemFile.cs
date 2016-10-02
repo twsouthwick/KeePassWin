@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -19,7 +20,15 @@ namespace KeePass
 
         public Task<Stream> OpenReadAsync() => File.OpenStreamForReadAsync();
 
-        public Task<Stream> OpenWriteAsync() => File.OpenStreamForWriteAsync();
+        public async Task<Stream> OpenWriteAsync()
+        {
+            var fs = await File.OpenAsync(FileAccessMode.ReadWrite);
+
+            // Important to ensure the file is overwritten
+            fs.Size = 0;
+
+            return fs.AsStreamForWrite();
+        }
     }
 
     public static class StorageItemExtensions
