@@ -82,12 +82,14 @@
             <keepassControls:EntryItemListView Grid.Column="1"
                 ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}"
                 Command="{x:Bind Path=Model.ItemClickCommand, Mode=OneTime}"
+                RemoveEntryCommand="{x:Bind Path=Model.RemoveEntryCommand, Mode=OneTime}"
                 CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
         </Grid>
         <Grid x:Name="NarrowView" Grid.Row="3">
             <keepassControls:EntryItemListView Grid.Column="1"
                 ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
                 Command="{x:Bind Path=Model.ItemClickCommand, Mode=OneTime}"
+                RemoveEntryCommand="{x:Bind Path=Model.RemoveEntryCommand, Mode=OneTime}"
                 CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
         </Grid>
 

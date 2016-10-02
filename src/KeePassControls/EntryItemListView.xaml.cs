@@ -36,8 +36,17 @@ namespace KeePass.Controls
             set { SetValue(CopyCommandProperty, value); }
         }
 
+        public ICommand RemoveEntryCommand
+        {
+            get { return (ICommand)GetValue(RemoveEntryCommandProperty); }
+            set { SetValue(RemoveEntryCommandProperty, value); }
+        }
+
         public static readonly DependencyProperty CopyCommandProperty =
             DependencyProperty.Register(nameof(CopyCommand), typeof(ICommand), typeof(EntryItemListView), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty RemoveEntryCommandProperty =
+            DependencyProperty.Register(nameof(RemoveEntryCommand), typeof(ICommand), typeof(EntryItemListView), new PropertyMetadata(null));
 
         private void ListViewItemClick(object sender, ItemClickEventArgs e)
         {
@@ -88,7 +97,10 @@ namespace KeePass.Controls
         {
             var entry = GetEntryFromFrameworkElement(sender);
 
-            entry?.Group.RemoveEntry(entry);
+            if (RemoveEntryCommand?.CanExecute(entry) == true)
+            {
+                RemoveEntryCommand.Execute(entry);
+            }
         }
 
         private void EditItem(object sender, RoutedEventArgs e)

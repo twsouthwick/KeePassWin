@@ -21,7 +21,7 @@ namespace KeePass
                         kdbx.Load(fs, KdbxFormat.Default, null);
                     });
 
-                    return new KdbxDatabase(kdbx, db, builder.Kdbx.IdFromPath());
+                    return new KdbxDatabase(builder.Kdbx, kdbx, db, builder.Kdbx.IdFromPath());
                 }
             }
             catch (DatabaseUnlockException)

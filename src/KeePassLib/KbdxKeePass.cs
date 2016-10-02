@@ -9,17 +9,20 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace KeePass
 {
     internal sealed class KdbxDatabase : IKeePassDatabase
     {
         private readonly PwDatabase _db;
-        private readonly KdbxFile _file;
+        private readonly KdbxFile _kbdx;
+        private readonly IFile _file;
 
-        public KdbxDatabase(KdbxFile file, PwDatabase db, KeePassId id)
+        public KdbxDatabase(IFile file, KdbxFile kbdx, PwDatabase db, KeePassId id)
         {
             _file = file;
+            _kbdx = kbdx;
             _db = db;
             Id = id;
         }
@@ -30,14 +33,17 @@ namespace KeePass
 
         public IKeePassGroup Root => new KbdxGroup(_db.RootGroup, null, _db);
 
-        public void Save()
+        public async Task SaveAsync()
         {
-
+            using (var fs = await _file.OpenWriteAsync())
+            {
+                Save(fs);
+            }
         }
 
         public void Save(Stream stream)
         {
-            _file.Save(stream, _db.RootGroup, KdbxFormat.Default, null);
+            _kbdx.Save(stream, _db.RootGroup, KdbxFormat.Default, null);
         }
 
         public bool Modified => _db.Modified;

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using System.Threading.Tasks;
 
 namespace KeePass
 {
@@ -8,7 +8,7 @@ namespace KeePass
         KeePassId Id { get; }
         string Name { get; }
         IKeePassGroup Root { get; }
-        void Save();
+        Task SaveAsync();
         bool Modified { get; }
     }
 

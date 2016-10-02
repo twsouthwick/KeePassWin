@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -19,12 +17,9 @@ namespace KeePass
 
         public string Name => File.Name;
 
-        public Task<Stream> OpenReadAsync()
-        {
-            return File.OpenReadAsync()
-                .AsTask()
-                .ContinueWith(f => f.Result.AsStream());
-        }
+        public Task<Stream> OpenReadAsync() => File.OpenStreamForReadAsync();
+
+        public Task<Stream> OpenWriteAsync() => File.OpenStreamForWriteAsync();
     }
 
     public static class StorageItemExtensions

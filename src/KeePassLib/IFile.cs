@@ -10,5 +10,7 @@ namespace KeePass
         string Path { get; }
 
         Task<Stream> OpenReadAsync();
+
+        Task<Stream> OpenWriteAsync();
     }
 }

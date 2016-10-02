@@ -22,10 +22,14 @@ namespace KeePassWin.ViewModels
         private readonly INavigator _navigator;
         private readonly IClipboard _clipboard;
         private readonly DelegateCommand _saveCommand;
+        private readonly DelegateCommand _addEntryCommand;
 
         private IKeePassDatabase _database;
         private IKeePassGroup _group;
         private IList<IKeePassGroup> _parents;
+
+        private bool _modified;
+        private bool _saving;
 
         public DatabasePageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker, Func<IKeePassEntry, IEntryView> entryView)
         {
@@ -43,7 +47,11 @@ namespace KeePassWin.ViewModels
                 else if (item is IKeePassEntry)
                 {
                     var dialog = entryView(item as IKeePassEntry);
-                    await dialog.ShowAsync();
+                    if (await dialog.ShowAsync())
+                    {
+                        _modified = true;
+                        _saveCommand.RaiseCanExecuteChanged();
+                    }
                 }
             });
 
@@ -59,7 +67,7 @@ namespace KeePassWin.ViewModels
 
             GoToSearchCommand = new DelegateCommand<string>(text => _navigator.GoToSearch(Database.Id, text));
 
-            AddEntryCommand = new DelegateCommand(async () =>
+            _addEntryCommand = new DelegateCommand(async () =>
             {
                 var entry = new ReadWriteKeePassEntry();
 
@@ -67,19 +75,49 @@ namespace KeePassWin.ViewModels
                 if (await view.ShowAsync())
                 {
                     _group.AddEntry(entry);
-
-                    _saveCommand.RaiseCanExecuteChanged();
+                    _modified = true;
+                    NotifyAllCommands();
                 }
+            }, () => !_saving);
+
+            RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(entry =>
+            {
+                entry?.Group.RemoveEntry(entry);
+                _modified = true;
+                NotifyAllCommands();
             });
 
             AddGroupCommand = new DelegateCommand(() =>
             {
             }, () => false);
 
-            _saveCommand = new DelegateCommand(() =>
+            _saveCommand = new DelegateCommand(async () =>
             {
+                _modified = false;
+                _saving = true;
+                NotifyAllCommands();
 
-            }, () => _database?.Modified ?? false);
+                try
+                {
+                    await Database.SaveAsync();
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                    _modified = true;
+                }
+                finally
+                {
+                    _saving = false;
+                    NotifyAllCommands();
+                }
+            }, () => _modified && !_saving);
+        }
+
+        private void NotifyAllCommands()
+        {
+            _addEntryCommand.RaiseCanExecuteChanged();
+            _saveCommand.RaiseCanExecuteChanged();
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -155,7 +193,9 @@ namespace KeePassWin.ViewModels
 
         public ICommand ItemClickCommand { get; }
 
-        public ICommand AddEntryCommand { get; }
+        public ICommand RemoveEntryCommand { get; }
+
+        public ICommand AddEntryCommand => _addEntryCommand;
 
         public ICommand AddGroupCommand { get; }
 

@@ -50,6 +50,11 @@ namespace KeePassLib
             {
                 return Task.FromResult(_assembly.GetManifestResourceStream(Path));
             }
+
+            public Task<Stream> OpenWriteAsync()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

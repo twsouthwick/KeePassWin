@@ -39,6 +39,11 @@ namespace KeePassLib
             {
                 return Task.FromResult<Stream>(File.OpenRead(Path));
             }
+
+            public Task<Stream> OpenWriteAsync()
+            {
+                return Task.FromResult<Stream>(File.OpenWrite(Path));
+            }
         }
     }
 }
