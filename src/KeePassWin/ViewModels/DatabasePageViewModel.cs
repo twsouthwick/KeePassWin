@@ -69,12 +69,17 @@ namespace KeePassWin.ViewModels
 
             _addEntryCommand = new DelegateCommand(async () =>
             {
-                var entry = new ReadWriteKeePassEntry();
+                var entry = new ReadWriteKeePassEntry
+                {
+                    Group = _group
+                };
 
                 var view = entryView(entry);
                 if (await view.ShowAsync())
                 {
-                    _group.AddEntry(entry);
+                    var kdbxEntry = _group.AddEntry(entry);
+                    Items.Add(kdbxEntry);
+
                     _modified = true;
                     NotifyAllCommands();
                 }
@@ -83,6 +88,8 @@ namespace KeePassWin.ViewModels
             RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(entry =>
             {
                 entry?.Group.RemoveEntry(entry);
+                Items.Remove(entry);
+
                 _modified = true;
                 NotifyAllCommands();
             });
