@@ -64,10 +64,12 @@ namespace KeePassWin.ViewModels
                 var entry = new ReadWriteKeePassEntry();
 
                 var view = entryView(entry);
-                await view.ShowAsync();
-                _group.AddEntry(entry);
+                if (await view.ShowAsync())
+                {
+                    _group.AddEntry(entry);
 
-                _saveCommand.RaiseCanExecuteChanged();
+                    _saveCommand.RaiseCanExecuteChanged();
+                }
             });
 
             AddGroupCommand = new DelegateCommand(() =>

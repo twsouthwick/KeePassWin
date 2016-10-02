@@ -8,13 +8,13 @@ namespace KeePass
         KeePassId Id { get; }
         string Name { get; }
         IKeePassGroup Root { get; }
-        void Save(Stream stream);
+        void Save();
         bool Modified { get; }
     }
 
     public interface IKeePassId
     {
-        KeePassId Id { get; }
+        KeePassId Id { get; set; }
     }
 
     public interface IKeePassGroup : IKeePassId
@@ -34,9 +34,9 @@ namespace KeePass
         string Password { get; set; }
         string Title { get; set; }
         string Notes { get; set; }
-        IList<IKeePassAttachment> Attachment { get; }
+        //IList<IKeePassAttachment> Attachment { get; }
         string Url { get; set; }
-        byte[] Icon { get; }
+        byte[] Icon { get; set; }
     }
 
     public interface IKeePassAttachment : IKeePassId

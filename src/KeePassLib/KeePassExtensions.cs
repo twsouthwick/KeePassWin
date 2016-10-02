@@ -1,10 +1,41 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace KeePass
 {
     public static class KeePassExtensions
     {
+        public static IKeePassEntry Copy(this IKeePassEntry entry)
+        {
+            var result = new ReadWriteKeePassEntry();
+
+            Copy(entry, result);
+
+            return result;
+        }
+
+        public static void Copy(this IKeePassEntry source, IKeePassEntry dest)
+        {
+            dest.Icon = source.Icon;
+            dest.Id = source.Id;
+            dest.Notes = source.Notes;
+            dest.Password = source.Password;
+            dest.Title = source.Title;
+            dest.Url = source.Url;
+            dest.UserName = source.UserName;
+
+#if DEBUG 
+            Debug.Assert(dest.Id.Equals(source.Id));
+
+            foreach (var property in typeof(IKeePassEntry).GetTypeInfo().DeclaredProperties)
+            {
+                Debug.Assert(Equals(property.GetValue(dest), property.GetValue(source)));
+            }
+#endif
+        }
+
         public static IKeePassGroup GetGroup(this IKeePassDatabase db, KeePassId id)
         {
             foreach (var entry in db.EnumerateAllGroups())

@@ -30,6 +30,11 @@ namespace KeePass
 
         public IKeePassGroup Root => new KbdxGroup(_db.RootGroup, null, _db);
 
+        public void Save()
+        {
+
+        }
+
         public void Save(Stream stream)
         {
             _file.Save(stream, _db.RootGroup, KdbxFormat.Default, null);
@@ -134,7 +139,7 @@ namespace KeePass
                 Id = new KeePassId(new Guid(id.UuidBytes));
             }
 
-            public KeePassId Id { get; }
+            public KeePassId Id { get; set; }
 
             public event PropertyChangedEventHandler PropertyChanged;
 
@@ -172,7 +177,11 @@ namespace KeePass
 
             public IList<IKeePassAttachment> Attachment { get; } = Array.Empty<IKeePassAttachment>();
 
-            public byte[] Icon => _db.GetCustomIcon(_entry.CustomIconUuid);
+            public byte[] Icon
+            {
+                get { return _db.GetCustomIcon(_entry.CustomIconUuid); }
+                set { }
+            }
 
             public string Notes { get; set; } = string.Empty;
 

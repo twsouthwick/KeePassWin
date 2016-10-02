@@ -123,6 +123,7 @@
     <Compile Include="KeePassInterfaces.cs" />
     <Compile Include="KbdxKeePass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadWriteKeePassEntry.cs" />
     <Compile Include="StreamUtils.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

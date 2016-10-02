@@ -4,6 +4,6 @@ namespace KeePassWin
 {
     public interface IEntryView
     {
-        Task ShowAsync();
+        Task<bool> ShowAsync();
     }
 }
