@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -37,6 +36,8 @@ namespace KeePass
             private readonly IStorageFile _file;
             private readonly Stream _stream;
 
+            private bool _completed;
+
             public CachedFileUpdateStream(IStorageFile file, Stream stream)
             {
                 _file = file;
@@ -63,7 +64,11 @@ namespace KeePass
             {
                 base.Dispose(disposing);
 
-                await CachedFileManager.CompleteUpdatesAsync(_file);
+                if (!_completed)
+                {
+                    _completed = true;
+                    await CachedFileManager.CompleteUpdatesAsync(_file);
+                }
             }
 
             public override int Read(byte[] buffer, int offset, int count) => _stream.Read(buffer, offset, count);

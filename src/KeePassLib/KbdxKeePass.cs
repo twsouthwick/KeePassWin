@@ -36,6 +36,7 @@ namespace KeePass
             using (var fs = await _file.OpenWriteAsync())
             {
                 Save(fs);
+                _db.Modified = false;
             }
         }
 
