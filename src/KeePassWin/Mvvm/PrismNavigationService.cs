@@ -1,4 +1,5 @@
-﻿using KeePass;
+﻿using System;
+using KeePass;
 using KeePass.Models;
 using Prism.Windows.Navigation;
 
@@ -11,6 +12,11 @@ namespace KeePassWin.Mvvm
         public PrismNavigationService(INavigationService navigationService)
         {
             _navigationService = navigationService;
+        }
+
+        public void CreateNewDatabase()
+        {
+            _navigationService.Navigate("NewDatabase", null);
         }
 
         public void GoBack()

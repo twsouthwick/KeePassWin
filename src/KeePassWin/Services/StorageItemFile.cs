@@ -27,7 +27,7 @@ namespace KeePass
 
             // Important to ensure the file is overwritten
             fs.Size = 0;
-
+            var j = await File.GetBasicPropertiesAsync();
             return new CachedFileUpdateStream(File, fs.AsStreamForWrite());
         }
 

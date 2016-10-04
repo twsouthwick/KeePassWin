@@ -8,5 +8,6 @@ namespace KeePassWin.Mvvm
         bool GoToMain();
         void GoBack();
         bool GoToSearch(KeePassId id, string text);
+        void CreateNewDatabase();
     }
 }

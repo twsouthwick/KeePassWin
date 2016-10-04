@@ -6,6 +6,7 @@ using Prism.Windows.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
@@ -33,8 +34,15 @@ namespace KeePassWin.ViewModels
                 Command = new DelegateCommand(async () => await _cache.AddDatabaseAsync()),
             };
 
+            var create = new MenuItemViewModel
+            {
+                DisplayName = "New database",
+                FontIcon = Symbol.Add,
+                Command = new DelegateCommand(() => _navigator.CreateNewDatabase())
+            };
+
             Databases = new ObservableCollection<MenuItemViewModel>();
-            Commands = new ObservableCollection<MenuItemViewModel> { open };
+            Commands = new ObservableCollection<MenuItemViewModel> { create, open };
 
             _cache.DatabaseUpdated += DataBaseCacheUpdate;
             _cache.GetDatabaseFilesAsync().ContinueWith(async r =>
