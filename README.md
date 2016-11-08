@@ -1,3 +1,5 @@
+[Install from Windows Store](https://www.microsoft.com/en-us/store/p/keepasswin/9wzdncrd91jm). It currently won't show up in searches, but it should soon.
+
 This is a UWP implementation of [KeePass](http://keepass.info). This app currently supports the following:
 
 - Load a file from any file picker source (including key files)
