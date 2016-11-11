@@ -6,6 +6,7 @@ using Prism.Windows.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
@@ -35,6 +36,7 @@ namespace KeePassWin.ViewModels
 
             Databases = new ObservableCollection<MenuItemViewModel>();
             Commands = new ObservableCollection<MenuItemViewModel> { open };
+            SettingsCommand = new DelegateCommand(() => _navigator.GoToSettings());
 
             _cache.DatabaseUpdated += DataBaseCacheUpdate;
             _cache.GetDatabaseFilesAsync().ContinueWith(async r =>
@@ -93,6 +95,8 @@ namespace KeePassWin.ViewModels
 
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Add(entry));
         }
+
+        public ICommand SettingsCommand { get; }
 
         public ObservableCollection<MenuItemViewModel> Commands { get; set; }
 

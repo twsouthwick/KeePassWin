@@ -71,12 +71,7 @@
 
             <Button Grid.Row="1"
                     Style="{StaticResource SplitViewMenuButtonStyle}"
-                    ToolTipService.ToolTip="Settings">
-                <Button.Flyout>
-                    <Flyout>
-                        <TextBlock IsTextSelectionEnabled="True" Text="{x:Bind Version}" />
-                    </Flyout>
-                </Button.Flyout>
+                    ToolTipService.ToolTip="Settings" Command="{x:Bind Path=Model.SettingsCommand}">
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Setting" Style="{StaticResource SplitViewMenuSymbolIconStyle}" />
                     <TextBlock AutomationProperties.AccessibilityView="Raw"

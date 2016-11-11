@@ -9,12 +9,8 @@ namespace KeePassWin.Views
         public MenuView()
         {
             InitializeComponent();
-
-            Version = File.ReadAllText("version.txt").Trim();
         }
 
         public MenuViewModel Model => DataContext as MenuViewModel;
-
-        public string Version { get; set; }
     }
 }

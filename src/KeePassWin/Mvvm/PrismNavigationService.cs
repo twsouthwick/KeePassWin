@@ -32,5 +32,10 @@ namespace KeePassWin.Mvvm
         {
             return _navigationService.Navigate("Search", SearchQueryParameter.Encode(database, text));
         }
+
+        public bool GoToSettings()
+        {
+            return _navigationService.Navigate("Settings", null);
+        }
     }
 }
