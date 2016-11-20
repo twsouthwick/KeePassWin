@@ -129,6 +129,7 @@
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
     <Compile Include="Services\StorageItemExtensions.cs" />
+    <Compile Include="Services\WindowsKeyboardShortcuts.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
     <Compile Include="Services\WinKeePassSettings.cs" />
