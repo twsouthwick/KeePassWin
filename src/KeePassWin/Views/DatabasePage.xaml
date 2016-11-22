@@ -103,7 +103,6 @@
                         <Setter Target="WideView.Visibility" Value="Collapsed" />
                         <Setter Target="NarrowView.Visibility" Value="Visible" />
                         <Setter Target="ParentNavbar.Visibility" Value="Visible" />
-                        <Setter Target="SearchBox.Margin" Value="50,10,10,0" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Wide">
@@ -114,7 +113,6 @@
                         <Setter Target="WideView.Visibility" Value="Visible" />
                         <Setter Target="NarrowView.Visibility" Value="Collapsed" />
                         <Setter Target="ParentNavbar.Visibility" Value="Collapsed" />
-                        <Setter Target="SearchBox.Margin" Value="0,10,10,0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

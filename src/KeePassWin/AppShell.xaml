@@ -4,52 +4,52 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:KeePassWin"
       xmlns:views="using:KeePassWin.Views"
+      xmlns:viewModels="using:KeePassWin.ViewModels"
+      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
 
+    <Page.Resources>
+        <DataTemplate x:Key="HamburgerOptionsMenuItem" x:DataType="local:HamburgerMenuGlyphCommandItem">
+            <StackPanel Orientation="Horizontal">
+                <SymbolIcon Symbol="{x:Bind Glyph}" Style="{StaticResource SplitViewMenuSymbolIconStyle}" />
+                <TextBlock Style="{StaticResource SplitViewMenuItemTextStyle}" Text="{x:Bind Label}" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="MenuItemTemplate" x:DataType="viewModels:MenuItemViewModel">
+            <Grid>
+                <Grid.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Command="{x:Bind Path=RemoveCommand}" Text="Remove" Visibility="{x:Bind Path=RemoveCommand, Converter={StaticResource NullObjectVisibilityConverter}}"/>
+                    </MenuFlyout>
+                </Grid.ContextFlyout>
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="{x:Bind Path=FontIcon}" Style="{StaticResource SplitViewMenuSymbolIconStyle}" />
+                    <TextBlock AutomationProperties.AccessibilityView="Raw"
+                                   Style="{StaticResource SplitViewMenuItemTextStyle}"
+                                   Text="{x:Bind Path=DisplayName}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="MenuStates">
-                <VisualState x:Name="Wide">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="rootSplitView.DisplayMode" Value="Inline" />
-                        <Setter Target="rootSplitView.IsPaneOpen" Value="True" />
-                        <Setter Target="togglePaneButton.IsEnabled" Value="False" />
-                        <Setter Target="togglePaneButton.Opacity" Value="0" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="Medium">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="rootSplitView.DisplayMode" Value="CompactOverlay" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="Narrow">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        <controls:HamburgerMenu x:Name="Menu"
+            PaneBackground="{ThemeResource ApplicationMenuBackgroundThemeBrush}"
+            DisplayMode="CompactOverlay"
+            ItemsSource="{x:Bind Path=Model.Databases}"
+            ItemTemplate="{StaticResource MenuItemTemplate}"
+            OptionsItemClick="HamburgerMenuOptionsItemClick"
+            ItemClick="HamburgerMenuItemClick"
+            OptionsItemTemplate="{StaticResource HamburgerOptionsMenuItem}">
 
-        <SplitView x:Name="rootSplitView" Style="{StaticResource MenuSplitViewStyle}">
-            <Frame x:Name="contentFrame" />
-            <SplitView.Pane>
-                <views:MenuView/>
-            </SplitView.Pane>
-        </SplitView>
+            <controls:HamburgerMenu.OptionsItemsSource>
+                <controls:HamburgerMenuItemCollection>
+                    <local:HamburgerMenuGlyphCommandItem Label="Open" Glyph="OpenFile" Command="{x:Bind Path=Model.OpenCommand, Mode=OneWay}" />
+                    <local:HamburgerMenuGlyphCommandItem Label="Settings" Glyph="Setting" Command="{x:Bind Path=Model.SettingsCommand, Mode=OneWay}" />
+                </controls:HamburgerMenuItemCollection>
+            </controls:HamburgerMenu.OptionsItemsSource>
 
-        <!--  Declared last to have it rendered above everything else, but it needs to be the first item in the tab sequence.  -->
-        <ToggleButton x:Name="togglePaneButton"
-                      IsChecked="{Binding IsPaneOpen,
-                                          ElementName=rootSplitView,
-                                          Mode=TwoWay}"
-                      Style="{StaticResource SplitViewTogglePaneButtonStyle}"
-                      TabIndex="1" />
+        </controls:HamburgerMenu>
     </Grid>
 </Page>

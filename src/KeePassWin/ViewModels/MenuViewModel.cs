@@ -27,16 +27,9 @@ namespace KeePassWin.ViewModels
             _cache = cache;
             _navPane = navPane;
 
-            var open = new MenuItemViewModel
-            {
-                DisplayName = LocalizedStrings.MenuItemOpenCommandTitle,
-                FontIcon = Symbol.OpenFile,
-                Command = new DelegateCommand(async () => await _cache.AddDatabaseAsync()),
-            };
-
             Databases = new ObservableCollection<MenuItemViewModel>();
-            Commands = new ObservableCollection<MenuItemViewModel> { open };
             SettingsCommand = new DelegateCommand(() => _navigator.GoToSettings());
+            OpenCommand = new DelegateCommand(async () => await _cache.AddDatabaseAsync());
 
             _cache.DatabaseUpdated += DataBaseCacheUpdate;
             _cache.GetDatabaseFilesAsync().ContinueWith(async r =>
@@ -97,6 +90,8 @@ namespace KeePassWin.ViewModels
         }
 
         public ICommand SettingsCommand { get; }
+
+        public ICommand OpenCommand { get; }
 
         public ObservableCollection<MenuItemViewModel> Commands { get; set; }
 
