@@ -105,6 +105,9 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
+    <Compile Include="Converters\NullObjectVisibilityConverter.cs" />
+    <Compile Include="Converters\UriVisibilityConverter.cs" />
     <Compile Include="IEntryView.cs" />
     <Compile Include="INavigationPane.cs" />
     <Compile Include="IO\FileDatabaseTracker.cs" />
@@ -115,14 +118,22 @@
     <Compile Include="IO\TimedClipboard.cs" />
     <Compile Include="Models\DatabaseGroupParameter.cs" />
     <Compile Include="IO\DialogDatabaseUnlocker.cs" />
+    <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
+    <Compile Include="Mvvm\TemplateMatch.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="Views\EntryItemListView.xaml.cs">
+      <DependentUpon>EntryItemListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntryViewDialog.xaml.cs">
       <DependentUpon>EntryViewDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ImageProcessorImage.xaml.cs">
+      <DependentUpon>ImageProcessorImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -192,6 +203,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntryItemListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ImageProcessorImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -218,10 +237,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KeePassControls\KeePassControls.csproj">
-      <Project>{7a21618f-69b4-439f-bdbd-385d702adbd1}</Project>
-      <Name>KeePassControls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
       <Name>KeePass.Models</Name>
