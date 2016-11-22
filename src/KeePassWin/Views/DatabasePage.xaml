@@ -16,21 +16,13 @@
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
 
-    <Page.BottomAppBar>
-        <CommandBar>
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=Model.AddGroupCommand}" />
-                <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=Model.AddEntryCommand}" />
-                <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=Model.SaveCommand}" />
-            </CommandBar.PrimaryCommands>
-        </CommandBar>
-    </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <AutoSuggestBox x:Name="SearchBox" Grid.Row="0" QueryIcon="Find">
@@ -92,6 +84,14 @@
                 RemoveEntryCommand="{x:Bind Path=Model.RemoveEntryCommand, Mode=OneTime}"
                 CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
         </Grid>
+
+        <CommandBar Grid.Row="4">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=Model.AddGroupCommand}" />
+                <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=Model.AddEntryCommand}" />
+                <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=Model.SaveCommand}" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
