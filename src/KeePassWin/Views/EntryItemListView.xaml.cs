@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace KeePass.Controls
 {
@@ -10,6 +13,26 @@ namespace KeePass.Controls
         public EntryItemListView()
         {
             this.InitializeComponent();
+        }
+
+        private bool IsInState(IEnumerable<VisualStateGroup> groups, string groupName, string stateName)
+        {
+            var currentState = groups.First(g => string.Equals(g.Name, groupName, StringComparison.Ordinal)).CurrentState;
+
+            return string.Equals(currentState?.Name, stateName, StringComparison.Ordinal);
+        }
+
+        public bool DetailsOpen
+        {
+            get
+            {
+                var groups = VisualStateManager.GetVisualStateGroups(VisualTreeHelper.GetChild(ItemsList, 0) as FrameworkElement);
+
+                var wide = IsInState(groups, "WidthStates", "NarrowState");
+                var selection = IsInState(groups, "SelectionStates", "HasSelection");
+
+                return wide && selection;
+            }
         }
 
         public object ItemsSource
@@ -26,6 +49,16 @@ namespace KeePass.Controls
             get { return (ICommand)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         }
+
+        public KeePassWin.ViewModels.DatabasePageViewModel Model
+        {
+            get { return (KeePassWin.ViewModels.DatabasePageViewModel)GetValue(ModelProperty); }
+            set { SetValue(ModelProperty, value); }
+        }
+
+        public static readonly DependencyProperty ModelProperty =
+            DependencyProperty.Register(nameof(Model), typeof(KeePassWin.ViewModels.DatabasePageViewModel), typeof(EntryItemListView), new PropertyMetadata(null));
+
 
         public static readonly DependencyProperty CommandProperty =
             DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(EntryItemListView), new PropertyMetadata(null));
@@ -47,14 +80,6 @@ namespace KeePass.Controls
 
         public static readonly DependencyProperty RemoveEntryCommandProperty =
             DependencyProperty.Register(nameof(RemoveEntryCommand), typeof(ICommand), typeof(EntryItemListView), new PropertyMetadata(null));
-
-        private void ListViewItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (Command?.CanExecute(e.ClickedItem) == true)
-            {
-                Command.Execute(e.ClickedItem);
-            }
-        }
 
         private async void GoToWebsite(object sender, RoutedEventArgs e)
         {
@@ -111,6 +136,23 @@ namespace KeePass.Controls
             {
                 Command.Execute(entry);
             }
+        }
+
+        private void MasterDetailsViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var groups = e.AddedItems.OfType<IKeePassGroup>();
+
+            foreach (var group in groups)
+            {
+                if (Command?.CanExecute(group) == true)
+                {
+                    Command.Execute(group);
+                }
+            }
+        }
+
+        private void PasswordChecked(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

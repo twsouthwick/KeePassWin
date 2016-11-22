@@ -16,6 +16,11 @@ namespace KeePassWin.Mvvm
 
         protected override DataTemplate SelectTemplateCore(object item)
         {
+            if (item == null)
+            {
+                return null;
+            }
+
             return Matches.FirstOrDefault(m => m.Type.GetTypeInfo().IsAssignableFrom(item.GetType().GetTypeInfo()))?.TemplateContent;
         }
 

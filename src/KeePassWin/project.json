@@ -5,8 +5,7 @@
     "Microsoft.Toolkit.Uwp.UI.Controls": "1.2.0",
     "Microsoft.Xaml.Behaviors.Uwp.Managed": "1.1.0",
     "Newtonsoft.Json": "9.0.1",
-    "Prism.Autofac": "6.2.0",
-    "winrtxamltoolkit": "2.0.0"
+    "Prism.Autofac": "6.2.0"
   },
   "frameworks": {
     "uap10.0": {}

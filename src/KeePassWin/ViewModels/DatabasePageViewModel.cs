@@ -30,26 +30,18 @@ namespace KeePassWin.ViewModels
 
         private bool _saving;
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker, Func<IKeePassEntry, IEntryView> entryView)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
             _tracker = tracker;
             _navigator = navigator;
 
-            ItemClickCommand = new DelegateCommand<IKeePassId>(async item =>
+            ItemClickCommand = new DelegateCommand<IKeePassId>(item =>
             {
                 if (item is IKeePassGroup)
                 {
                     GroupClicked(item as IKeePassGroup);
-                }
-                else if (item is IKeePassEntry)
-                {
-                    var dialog = entryView(item as IKeePassEntry);
-                    if (await dialog.ShowAsync())
-                    {
-                        _saveCommand.RaiseCanExecuteChanged();
-                    }
                 }
             });
 
@@ -65,21 +57,12 @@ namespace KeePassWin.ViewModels
 
             GoToSearchCommand = new DelegateCommand<string>(text => _navigator.GoToSearch(Database.Id, text));
 
-            _addEntryCommand = new DelegateCommand(async () =>
+            _addEntryCommand = new DelegateCommand(() =>
             {
-                var entry = new ReadWriteKeePassEntry
-                {
-                    Group = _group
-                };
+                var kdbxEntry = _group.CreateEntry();
+                Items.Add(kdbxEntry);
 
-                var view = entryView(entry);
-                if (await view.ShowAsync())
-                {
-                    var kdbxEntry = _group.AddEntry(entry);
-                    Items.Add(kdbxEntry);
-
-                    NotifyAllCommands();
-                }
+                NotifyAllCommands();
             }, () => !_saving);
 
             RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(entry =>

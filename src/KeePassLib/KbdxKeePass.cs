@@ -81,6 +81,19 @@ namespace KeePass
 
             public IKeePassGroup Parent { get; }
 
+            public IKeePassEntry CreateEntry()
+            {
+                var pwEntry = new PwEntry(true, true);
+                _group.AddEntry(pwEntry, true);
+                Database.Modified = true;
+
+                var wrapped = new KbdxEntry(pwEntry, Database, this);
+
+                Entries.Add(wrapped);
+
+                return wrapped;
+            }
+
             public IKeePassEntry AddEntry(IKeePassEntry entry)
             {
                 var pwEntry = new PwEntry(true, true);

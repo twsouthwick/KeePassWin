@@ -24,7 +24,7 @@ namespace KeePass
         IKeePassGroup Parent { get; }
         IList<IKeePassEntry> Entries { get; }
         IList<IKeePassGroup> Groups { get; }
-        IKeePassEntry AddEntry(IKeePassEntry entry);
+        IKeePassEntry CreateEntry();
         IKeePassGroup AddGroup(IKeePassGroup group);
     }
 

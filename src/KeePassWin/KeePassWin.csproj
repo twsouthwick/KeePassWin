@@ -108,7 +108,6 @@
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Converters\NullObjectVisibilityConverter.cs" />
     <Compile Include="Converters\UriVisibilityConverter.cs" />
-    <Compile Include="IEntryView.cs" />
     <Compile Include="INavigationPane.cs" />
     <Compile Include="IO\FileDatabaseTracker.cs" />
     <Compile Include="Models\SearchQueryParameter.cs" />
@@ -129,8 +128,8 @@
     <Compile Include="Views\EntryItemListView.xaml.cs">
       <DependentUpon>EntryItemListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EntryViewDialog.xaml.cs">
-      <DependentUpon>EntryViewDialog.xaml</DependentUpon>
+    <Compile Include="Views\EntryViewControl.xaml.cs">
+      <DependentUpon>EntryViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ImageProcessorImage.xaml.cs">
       <DependentUpon>ImageProcessorImage.xaml</DependentUpon>
@@ -196,14 +195,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\KeePassItems.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\KeePassWinStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\MasterDetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntryItemListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntryViewControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -216,10 +223,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DatabasePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntryViewDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -242,6 +245,7 @@
       <Name>KeePass.Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

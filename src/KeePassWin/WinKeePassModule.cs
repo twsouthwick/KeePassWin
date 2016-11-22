@@ -45,9 +45,6 @@ namespace KeePassWin
             builder.RegisterType<AppShellNavPane>()
                 .As<INavigationPane>()
                 .SingleInstance();
-
-            builder.RegisterType<EntryViewDialog>()
-                .As<IEntryView>();
         }
 
         private class AppShellNavPane : INavigationPane

@@ -3,9 +3,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KeePass.Controls"
+    xmlns:views="using:KeePassWin.Views"
+    xmlns:models="using:KeePass"
     xmlns:mvvm="using:KeePassWin.Mvvm"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:vm="using:KeePassWin.ViewModels"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -13,18 +17,22 @@
     <UserControl.Resources>
         <local:UriVisibilityConverter x:Key="uriVisibilityConverter"/>
 
-        <!-- TODO: Switch to x:Bind when it works. As of 2/15/2016, this causes the error: XBF generation error code 0x09c4 -->
-        <DataTemplate x:Name="KeePassGroupTemplate">
+        <DataTemplate x:Name="KeePassEntryDetailsTemplate" x:DataType="models:IKeePassEntry">
+            <local:EntryViewControl Entry="{x:Bind}" Margin="20,0,0,0" />
+        </DataTemplate>
+
+        <DataTemplate x:Name="KeePassGroupTemplate" x:DataType="models:IKeePassGroup">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <SymbolIcon Grid.Column="0" Symbol="Folder" />
-                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{Binding Path=Name}" TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{x:Bind Name}" TextTrimming="WordEllipsis" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Name="KeePassEntryTemplate">
+
+        <DataTemplate x:Name="KeePassEntryTemplate" x:DataType="models:IKeePassEntry">
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ContextFlyout>
                     <MenuFlyout>
@@ -47,9 +55,9 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <local:ByteImage Grid.RowSpan="2" Image="{Binding Path=Icon}" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Path=Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
-                <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Text="{Binding Path=UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
+                <local:ByteImage Grid.RowSpan="2" Image="{Binding Icon}" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Text="{Binding UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
                 <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Website" Click="GoToWebsite" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Globe" />
@@ -70,21 +78,45 @@
     </UserControl.Resources>
 
     <Grid>
-        <ListView
-                  ItemsSource="{x:Bind Path=ItemsSource, Mode=OneWay}"
-                  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
-                  IsItemClickEnabled="True" ItemClick="ListViewItemClick">
-            <ListView.ItemContainerStyle>
+        <controls:MasterDetailsView x:Name="ItemsList"
+          MasterPaneWidth="520"
+          ItemsSource="{x:Bind Path=ItemsSource, Mode=OneWay}"
+          NoSelectionContent="{x:Bind Model}"
+          SelectionChanged="MasterDetailsViewSelectionChanged"
+          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <controls:MasterDetailsView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplateSelector>
+            </controls:MasterDetailsView.ItemContainerStyle>
+            <controls:MasterDetailsView.ItemTemplateSelector>
                 <mvvm:TypeTemplateSelector>
                     <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
                     <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
                 </mvvm:TypeTemplateSelector>
-            </ListView.ItemTemplateSelector>
-        </ListView>
+            </controls:MasterDetailsView.ItemTemplateSelector>
+            <controls:MasterDetailsView.DetailsTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding}" HorizontalContentAlignment="Stretch">
+                        <ContentControl.ContentTemplateSelector>
+                            <mvvm:TypeTemplateSelector>
+                                <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryDetailsTemplate}" />
+                            </mvvm:TypeTemplateSelector>
+                        </ContentControl.ContentTemplateSelector>
+                    </ContentControl>
+                </DataTemplate>
+            </controls:MasterDetailsView.DetailsTemplate>
+            <controls:MasterDetailsView.NoSelectionContentTemplate>
+                <DataTemplate x:DataType="vm:DatabasePageViewModel">
+                    <CommandBar Grid.Row="4">
+                        <CommandBar.PrimaryCommands>
+                            <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=AddGroupCommand}" />
+                            <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=AddEntryCommand}" />
+                            <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=SaveCommand}" />
+                        </CommandBar.PrimaryCommands>
+                    </CommandBar>
+                </DataTemplate>
+            </controls:MasterDetailsView.NoSelectionContentTemplate>
+        </controls:MasterDetailsView>
     </Grid>
 </UserControl>

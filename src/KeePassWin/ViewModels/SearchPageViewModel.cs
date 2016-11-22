@@ -25,7 +25,7 @@ namespace KeePassWin.ViewModels
         private IList<IKeePassEntry> _items;
         private IKeePassDatabase _database;
 
-        public SearchPageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker, Func<IKeePassEntry, IEntryView> entryView)
+        public SearchPageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker)
         {
             _unlocker = unlocker;
             _tracker = tracker;
@@ -33,11 +33,6 @@ namespace KeePassWin.ViewModels
 
             CopyCommand = new DelegateCommand<string>(clipboard.SetText);
             TextChangedCommand = new DelegateCommand(Update);
-            ItemClickCommand = new DelegateCommand<IKeePassEntry>(async item =>
-            {
-                var dialog = entryView(item as IKeePassEntry);
-                await dialog.ShowAsync();
-            });
         }
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -86,8 +81,6 @@ namespace KeePassWin.ViewModels
             get { return _items; }
             set { SetProperty(ref _items, value); }
         }
-
-        public ICommand ItemClickCommand { get; }
 
         public ICommand CopyCommand { get; }
 

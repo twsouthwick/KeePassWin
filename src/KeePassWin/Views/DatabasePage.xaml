@@ -10,8 +10,6 @@
                                  xmlns:keepassControls="using:KeePass.Controls"
                                  xmlns:prismMvvm="using:Prism.Windows.Mvvm"
                                  xmlns:models="using:KeePass.Models"
-                                 xmlns:controls="using:WinRTXamlToolkit.Controls"
-                                 xmlns:data="using:WinRTXamlToolkit.Controls.Data"
                                  xmlns:keepass="using:KeePass"
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
@@ -32,6 +30,7 @@
                 </core:EventTriggerBehavior>
             </Interactivity:Interaction.Behaviors>
         </AutoSuggestBox>
+        
         <ListView Grid.Row="1" x:Name="ParentNavbar"
                   ItemsSource="{x:Bind Path=Model.Parents, Mode=OneWay}"
                   IsItemClickEnabled="True"
@@ -50,72 +49,19 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        
         <TextBlock Grid.Row="2"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Style="{ThemeResource HeaderTextBlockStyle}"
                    Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
-        <Grid x:Name="WideView" Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <controls:TreeView Grid.Column="0" x:Name="treeView" Margin="0,0,10,0" ItemsSource="{x:Bind Path=Model.Database.Root.Groups, Mode=OneWay}"
-                               SelectedItemChanged="TreeViewSelectedItemChanged"
-                               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}">
-                <controls:TreeView.ItemTemplate>
-                    <DataTemplate x:DataType="keepass:IKeePassGroup">
-                        <TextBlock Text="{x:Bind Path=Name}"/>
-                        <data:DataTemplateExtensions.Hierarchy>
-                            <data:HierarchicalDataTemplate ItemsSource="{Binding Groups}" />
-                        </data:DataTemplateExtensions.Hierarchy>
-                    </DataTemplate>
-                </controls:TreeView.ItemTemplate>
-            </controls:TreeView>
-            <keepassControls:EntryItemListView Grid.Column="1"
-                ItemsSource="{x:Bind Path=Model.Group.Entries, Mode=OneWay}"
-                Command="{x:Bind Path=Model.ItemClickCommand, Mode=OneTime}"
-                RemoveEntryCommand="{x:Bind Path=Model.RemoveEntryCommand, Mode=OneTime}"
-                CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
-        </Grid>
-        <Grid x:Name="NarrowView" Grid.Row="3">
-            <keepassControls:EntryItemListView Grid.Column="1"
+
+        <Grid Grid.Row="3">
+            <keepassControls:EntryItemListView Grid.Column="1" x:Name="ItemList"
+                Model="{x:Bind Model}"
                 ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
                 Command="{x:Bind Path=Model.ItemClickCommand, Mode=OneTime}"
                 RemoveEntryCommand="{x:Bind Path=Model.RemoveEntryCommand, Mode=OneTime}"
                 CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
         </Grid>
-
-        <CommandBar Grid.Row="4">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=Model.AddGroupCommand}" />
-                <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=Model.AddEntryCommand}" />
-                <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=Model.SaveCommand}" />
-            </CommandBar.PrimaryCommands>
-        </CommandBar>
-
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState x:Name="Narrow">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="WideView.Visibility" Value="Collapsed" />
-                        <Setter Target="NarrowView.Visibility" Value="Visible" />
-                        <Setter Target="ParentNavbar.Visibility" Value="Visible" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="Wide">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="WideView.Visibility" Value="Visible" />
-                        <Setter Target="NarrowView.Visibility" Value="Collapsed" />
-                        <Setter Target="ParentNavbar.Visibility" Value="Collapsed" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
     </Grid>
 </prismMvvm:SessionStateAwarePage>
