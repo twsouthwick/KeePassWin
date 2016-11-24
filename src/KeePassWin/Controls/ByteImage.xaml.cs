@@ -3,7 +3,7 @@ using System.IO;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace KeePass.Controls
+namespace KeePass.Win.Controls
 {
     public sealed partial class ByteImage : UserControl
     {

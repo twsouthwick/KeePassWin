@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel.DataTransfer;
 
-namespace KeePass
+namespace KeePass.Win.Services
 {
     public class TimedClipboard : IClipboard
     {

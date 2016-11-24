@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
-namespace KeePassWin.ViewModels
+namespace KeePass.Win.ViewModels
 {
     public class MenuItemViewModel : ViewModelBase
     {

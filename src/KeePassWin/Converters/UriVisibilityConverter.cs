@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace KeePass.Controls
+namespace KeePass.Win.Converters
 {
     internal class UriVisibilityConverter : IValueConverter
     {

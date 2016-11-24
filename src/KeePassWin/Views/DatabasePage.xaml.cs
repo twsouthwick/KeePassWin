@@ -1,5 +1,5 @@
 ﻿using KeePass;
-using KeePassWin.ViewModels;
+using KeePass.Win.ViewModels;
 using Prism.Windows.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace KeePassWin.Views
+namespace KeePass.Win.Views
 {
     public sealed partial class DatabasePage : SessionStateAwarePage
     {

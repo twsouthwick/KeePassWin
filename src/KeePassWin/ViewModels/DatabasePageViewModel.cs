@@ -1,6 +1,4 @@
-﻿using KeePass;
-using KeePass.Models;
-using KeePassWin.Mvvm;
+﻿using KeePass.Models;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
@@ -12,9 +10,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.System;
 using Windows.UI.Popups;
 
-namespace KeePassWin.ViewModels
+namespace KeePass.Win.ViewModels
 {
     public class DatabasePageViewModel : ViewModelBase
     {
@@ -64,7 +63,7 @@ namespace KeePassWin.ViewModels
 
                 if (Uri.TryCreate(entry.Url, UriKind.Absolute, out uri))
                 {
-                    if (!(await Windows.System.Launcher.LaunchUriAsync(uri)))
+                    if (!(await Launcher.LaunchUriAsync(uri)))
                     {
                         var dialog = new MessageDialog($"Could not launch {entry.Url}");
                     }

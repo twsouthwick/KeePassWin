@@ -1,10 +1,10 @@
-﻿using KeePassWin.ViewModels;
+﻿using KeePass.Win.ViewModels;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace KeePassWin
+namespace KeePass.Win
 {
     public sealed partial class AppShell : Page
     {

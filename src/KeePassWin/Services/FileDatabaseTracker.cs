@@ -6,7 +6,7 @@ using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 
-namespace KeePass
+namespace KeePass.Win.Services
 {
     public class FileDatabaseTracker : IDatabaseTracker
     {

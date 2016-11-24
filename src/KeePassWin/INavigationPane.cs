@@ -1,4 +1,4 @@
-﻿namespace KeePassWin
+﻿namespace KeePass.Win
 {
     public interface INavigationPane
     {

@@ -111,8 +111,10 @@
     <Compile Include="DatabaseCacheEvent.cs" />
     <Compile Include="DatabaseUnlockException.cs" />
     <Compile Include="FileExtensions.cs" />
+    <Compile Include="IClipboard.cs" />
     <Compile Include="IDatabaseTracker.cs" />
     <Compile Include="IDatabaseUnlocker.cs" />
+    <Compile Include="IDatabaseUnlockerDialog.cs" />
     <Compile Include="IFile.cs" />
     <Compile Include="IFilePicker.cs" />
     <Compile Include="KdbxBuilder.cs" />

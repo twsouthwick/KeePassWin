@@ -1,9 +1,9 @@
-﻿using KeePassWin.ViewModels;
+﻿using KeePass.Win.ViewModels;
 using Prism.Windows.Mvvm;
 using System.ComponentModel;
 using Windows.UI.Xaml;
 
-namespace KeePassWin.Views
+namespace KeePass.Win.Views
 {
     public sealed partial class MainPage : SessionStateAwarePage, INotifyPropertyChanged
     {

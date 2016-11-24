@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace KeePass.Controls
+namespace KeePass.Win.Controls
 {
     public sealed partial class EntryViewControl : UserControl
     {
@@ -38,7 +38,7 @@ namespace KeePass.Controls
             set { SetValue(SaveCommandProperty, value); }
         }
 
-        private void PasswordChecked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void PasswordChecked(object sender, RoutedEventArgs e)
         {
             var checkBox = sender as CheckBox;
 

@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="KeePass.Controls.ByteImage"
+    x:Class="KeePass.Win.Controls.ByteImage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KeePass.Controls"

@@ -2,7 +2,7 @@
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
-namespace KeePass.Controls
+namespace KeePass.Win.Converters
 {
     public class AutoSuggestQueryParameterConverter : IValueConverter
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{6A6ABD82-C76B-4392-95B2-95EB64F628FD}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KeePassWin</RootNamespace>
+    <RootNamespace>KeePass.Win</RootNamespace>
     <AssemblyName>KeePassWin</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
@@ -109,27 +109,27 @@
     <Compile Include="Converters\NullObjectVisibilityConverter.cs" />
     <Compile Include="Converters\UriVisibilityConverter.cs" />
     <Compile Include="INavigationPane.cs" />
-    <Compile Include="IO\FileDatabaseTracker.cs" />
+    <Compile Include="Services\FileDatabaseTracker.cs" />
     <Compile Include="Models\SearchQueryParameter.cs" />
-    <Compile Include="Mvvm\INavigator.cs" />
-    <Compile Include="IO\CachedDialogDatabseUnlocker.cs" />
-    <Compile Include="IO\IClipboard.cs" />
-    <Compile Include="IO\TimedClipboard.cs" />
+    <Compile Include="INavigator.cs" />
+    <Compile Include="Services\CachedDialogDatabseUnlocker.cs" />
+    <Compile Include="Services\TimedClipboard.cs" />
     <Compile Include="Models\DatabaseGroupParameter.cs" />
-    <Compile Include="IO\DialogDatabaseUnlocker.cs" />
+    <Compile Include="Services\DialogDatabaseUnlocker.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
+    <Compile Include="Services\StorageItemExtensions.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
-    <Compile Include="Views\EntryViewControl.xaml.cs">
+    <Compile Include="Controls\EntryViewControl.xaml.cs">
       <DependentUpon>EntryViewControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ImageProcessorImage.xaml.cs">
-      <DependentUpon>ImageProcessorImage.xaml</DependentUpon>
+    <Compile Include="Controls\ByteImage.xaml.cs">
+      <DependentUpon>ByteImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -160,7 +160,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <PRIResource Include="Resources\en\LocalizedStrings.resw">
-      <CustomToolNamespace>KeePassWin.Resources</CustomToolNamespace>
+      <CustomToolNamespace>KeePass.Win</CustomToolNamespace>
       <Generator>InternalReswFileCodeGenerator</Generator>
       <LastGenOutput>LocalizedStrings.cs</LastGenOutput>
     </PRIResource>
@@ -200,11 +200,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntryViewControl.xaml">
+    <Page Include="Controls\EntryViewControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ImageProcessorImage.xaml">
+    <Page Include="Controls\ByteImage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace KeePass
+namespace KeePass.Win.Services
 {
     public class StorageItemFile : IFile
     {
@@ -78,26 +78,6 @@ namespace KeePass
             public override void SetLength(long value) => _stream.SetLength(value);
 
             public override void Write(byte[] buffer, int offset, int count) => _stream.Write(buffer, offset, count);
-        }
-    }
-
-    public static class StorageItemExtensions
-    {
-        public static IFile AsFile(this IStorageItem item) => AsFile(item as IStorageFile);
-
-        public static IFile AsFile(this IStorageFile file)
-        {
-            if (file == null)
-            {
-                return null;
-            }
-
-            return new StorageItemFile(file);
-        }
-
-        public static IStorageItem AsStorageItem(this IFile file)
-        {
-            return (file as StorageItemFile)?.File;
         }
     }
 }

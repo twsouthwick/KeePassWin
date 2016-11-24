@@ -1,11 +1,9 @@
 ﻿using Autofac;
-using KeePass;
-using KeePass.IO;
-using KeePassWin.Mvvm;
-using KeePassWin.Views;
+using KeePass.Win.Mvvm;
+using KeePass.Win.Services;
 using System;
 
-namespace KeePassWin
+namespace KeePass.Win
 {
     internal class WinKeePassModule : Module
     {

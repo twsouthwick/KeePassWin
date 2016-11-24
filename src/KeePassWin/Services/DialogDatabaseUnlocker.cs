@@ -1,14 +1,9 @@
-﻿using KeePassWin.Views;
+﻿using KeePass.Win.Views;
 using System;
 using System.Threading.Tasks;
 
-namespace KeePass
+namespace KeePass.Win.Services
 {
-    public interface IDatabaseUnlockerDialog
-    {
-        Task<IKeePassDatabase> UnlockAsync(IFile file);
-    }
-
     public class DialogDatabaseUnlocker : IDatabaseUnlockerDialog
     {
         private readonly Func<IFile, PasswordDialog> _dialogFactory;

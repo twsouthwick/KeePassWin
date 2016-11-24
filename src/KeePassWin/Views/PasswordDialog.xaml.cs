@@ -1,11 +1,11 @@
 ﻿using KeePass;
-using KeePassWin.ViewModels;
+using KeePass.Win.ViewModels;
 using System;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
-namespace KeePassWin.Views
+namespace KeePass.Win.Views
 {
     public sealed partial class PasswordDialog : ContentDialog
     {

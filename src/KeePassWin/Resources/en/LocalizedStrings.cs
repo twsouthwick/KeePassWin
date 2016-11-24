@@ -17,10 +17,10 @@
 // 	This code contains a helper class exposing property representations
 // 	of the string resources defined in the specified .ResW file
 // 
-// 	Generated: 11/08/2015 13:56:38
+// 	Generated: 11/23/2016 22:48:45
 // </auto-generatedInfo>
 // --------------------------------------------------------------------------------------------------
-namespace KeePassWin.Resources
+namespace KeePass.Win
 {
     using Windows.ApplicationModel.Resources;
     

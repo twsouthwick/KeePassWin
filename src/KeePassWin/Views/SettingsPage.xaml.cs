@@ -1,7 +1,7 @@
-﻿using KeePassWin.ViewModels;
+﻿using KeePass.Win.ViewModels;
 using Prism.Windows.Mvvm;
 
-namespace KeePassWin.Views
+namespace KeePass.Win.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.

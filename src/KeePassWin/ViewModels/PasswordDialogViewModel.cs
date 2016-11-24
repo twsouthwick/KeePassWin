@@ -4,8 +4,9 @@ using Prism.Windows.Mvvm;
 using System;
 using System.Windows.Input;
 using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 
-namespace KeePassWin.ViewModels
+namespace KeePass.Win.ViewModels
 {
     public class PasswordDialogViewModel : ViewModelBase
     {
@@ -22,7 +23,7 @@ namespace KeePassWin.ViewModels
 
             tracker.GetKeyFileAsync(db).ContinueWith(async r =>
             {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => KeyFile = r.Result);
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => KeyFile = r.Result);
             });
         }
 

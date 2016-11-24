@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
 using System.Reflection;
 
-namespace KeePassWin.Mvvm
+namespace KeePass.Win.Mvvm
 {
     [ContentProperty(Name = nameof(Matches))]
     public class TypeTemplateSelector : DataTemplateSelector

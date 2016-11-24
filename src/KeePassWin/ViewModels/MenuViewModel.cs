@@ -1,17 +1,15 @@
-﻿using KeePass;
-using KeePassWin.Mvvm;
-using KeePassWin.Resources;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Windows.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
-namespace KeePassWin.ViewModels
+namespace KeePass.Win.ViewModels
 {
     public class MenuViewModel : ViewModelBase
     {
@@ -83,10 +81,10 @@ namespace KeePassWin.ViewModels
             entry.RemoveCommand = new DelegateCommand(async () =>
             {
                 await _cache.RemoveDatabaseAsync(dbFile);
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Remove(entry));
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => Databases.Remove(entry));
             });
 
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => Databases.Add(entry));
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => Databases.Add(entry));
         }
 
         public ICommand SettingsCommand { get; }

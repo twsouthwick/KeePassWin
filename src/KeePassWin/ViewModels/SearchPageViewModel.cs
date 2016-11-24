@@ -1,6 +1,7 @@
 ﻿using KeePass;
 using KeePass.Models;
-using KeePassWin.Mvvm;
+using KeePass.Win;
+using KeePass.Win.Mvvm;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Popups;
 
-namespace KeePassWin.ViewModels
+namespace KeePass.Win.ViewModels
 {
     public class SearchPageViewModel : ViewModelBase
     {

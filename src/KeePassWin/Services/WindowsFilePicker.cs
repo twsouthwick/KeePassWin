@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
 
-namespace KeePass.IO
+namespace KeePass.Win.Services
 {
     public class WindowsFilePicker : IFilePicker
     {

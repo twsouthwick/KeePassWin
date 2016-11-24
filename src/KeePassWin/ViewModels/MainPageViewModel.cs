@@ -1,6 +1,6 @@
 ﻿using Prism.Windows.Mvvm;
 
-namespace KeePassWin.ViewModels
+namespace KeePass.Win.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {

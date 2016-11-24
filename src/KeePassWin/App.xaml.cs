@@ -5,7 +5,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace KeePassWin
+namespace KeePass.Win
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

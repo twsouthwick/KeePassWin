@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace KeePass.IO
+namespace KeePass.Win.Services
 {
     internal class CachedDatabseUnlocker : IDatabaseUnlockerDialog
     {

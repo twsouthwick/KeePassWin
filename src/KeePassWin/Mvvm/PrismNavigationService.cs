@@ -2,7 +2,7 @@
 using KeePass.Models;
 using Prism.Windows.Navigation;
 
-namespace KeePassWin.Mvvm
+namespace KeePass.Win.Mvvm
 {
     internal class PrismNavigationService : INavigator
     {

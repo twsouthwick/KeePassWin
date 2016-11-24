@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace KeePassWin.ViewModels
+namespace KeePass.Win.ViewModels
 {
     public class SettingsPageViewModel
     {
