@@ -3,17 +3,82 @@
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                  xmlns:local="using:KeePassWin.Views"
+                                 xmlns:localc="using:KeePass.Controls"
                                  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:mvvm="using:KeePassWin.Mvvm"
                                  xmlns:keepassControls="using:KeePass.Controls"
                                  xmlns:prismMvvm="using:Prism.Windows.Mvvm"
-                                 xmlns:models="using:KeePass.Models"
+                                 xmlns:models="using:KeePass"
                                  xmlns:keepass="using:KeePass"
+                                 xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+                                 xmlns:vm="using:KeePassWin.ViewModels"
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <prismMvvm:SessionStateAwarePage.Resources>
+        <localc:UriVisibilityConverter x:Key="uriVisibilityConverter"/>
+
+        <DataTemplate x:Name="KeePassEntryDetailsTemplate" x:DataType="models:IKeePassEntry">
+            <localc:EntryViewControl Entry="{x:Bind}" Margin="20,0,0,0" />
+        </DataTemplate>
+
+        <DataTemplate x:Name="KeePassGroupTemplate" x:DataType="models:IKeePassGroup">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <SymbolIcon Grid.Column="0" Symbol="Folder" />
+                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{x:Bind Name}" TextTrimming="WordEllipsis" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="KeePassEntryTemplate" x:DataType="models:IKeePassEntry">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Copy user name" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding UserName}" />
+                        <MenuFlyoutItem Text="Copy password" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding Password}" />
+                        <MenuFlyoutItem Text="Go to website" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem Text="Delete" Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root}" />
+                    </MenuFlyout>
+                </Grid.ContextFlyout>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="32" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <localc:ByteImage Grid.RowSpan="2" Image="{Binding Icon}" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Text="{Binding UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
+                <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Website" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Globe" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Grid.Column="3" Grid.RowSpan="2" Label="Username" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding UserName}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Contact" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Grid.Column="4" Grid.RowSpan="2" Label="Password" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding Password}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Permissions" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </Grid>
+        </DataTemplate>
+    </prismMvvm:SessionStateAwarePage.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -31,20 +96,60 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="keepass:IKeePassGroup">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Bind Path=Name}" />
+                        <TextBlock Text="{x:Bind Name}" />
                         <TextBlock Text="\" Margin="5,0,0,0" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
+
         <Grid Grid.Row="1">
-            <keepassControls:EntryItemListView Grid.Column="1" x:Name="ItemList"
-                Model="{x:Bind Model}"
-                ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
-                Command="{x:Bind Path=Model.ItemClickCommand, Mode=OneTime}"
-                RemoveEntryCommand="{x:Bind Path=Model.RemoveEntryCommand, Mode=OneTime}"
-                CopyCommand="{x:Bind Path=Model.CopyCommand, Mode=OneTime}" />
+            <controls:MasterDetailsView x:Name="ItemsList"
+                  MasterPaneWidth="520"
+                  ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
+                  NoSelectionContent="{x:Bind Model}"
+                  MasterHeader="{x:Bind Model}"
+                  SelectionChanged="MasterDetailsViewSelectionChanged"
+                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <controls:MasterDetailsView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </controls:MasterDetailsView.ItemContainerStyle>
+                <controls:MasterDetailsView.ItemTemplateSelector>
+                    <mvvm:TypeTemplateSelector>
+                        <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupTemplate}" />
+                        <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryTemplate}" />
+                    </mvvm:TypeTemplateSelector>
+                </controls:MasterDetailsView.ItemTemplateSelector>
+                <controls:MasterDetailsView.DetailsTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}" HorizontalContentAlignment="Stretch">
+                            <ContentControl.ContentTemplateSelector>
+                                <mvvm:TypeTemplateSelector>
+                                    <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryDetailsTemplate}" />
+                                </mvvm:TypeTemplateSelector>
+                            </ContentControl.ContentTemplateSelector>
+                        </ContentControl>
+                    </DataTemplate>
+                </controls:MasterDetailsView.DetailsTemplate>
+                <controls:MasterDetailsView.MasterHeaderTemplate>
+                    <DataTemplate>
+                        <AutoSuggestBox QueryIcon="Find" TextChanged="SearchTextChanged" />
+                    </DataTemplate>
+                </controls:MasterDetailsView.MasterHeaderTemplate>
+                <controls:MasterDetailsView.NoSelectionContentTemplate>
+                    <DataTemplate x:DataType="vm:DatabasePageViewModel">
+                        <CommandBar Grid.Row="4">
+                            <CommandBar.PrimaryCommands>
+                                <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=AddGroupCommand}" />
+                                <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=AddEntryCommand}" />
+                                <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=SaveCommand}" />
+                            </CommandBar.PrimaryCommands>
+                        </CommandBar>
+                    </DataTemplate>
+                </controls:MasterDetailsView.NoSelectionContentTemplate>
+            </controls:MasterDetailsView>
         </Grid>
     </Grid>
 </prismMvvm:SessionStateAwarePage>

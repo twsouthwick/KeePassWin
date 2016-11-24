@@ -58,6 +58,19 @@ namespace KeePassWin.ViewModels
 
             CopyCommand = new DelegateCommand<string>(_clipboard.SetText);
 
+            OpenUrlCommand = new DelegateCommand<IKeePassEntry>(async entry =>
+            {
+                Uri uri;
+
+                if (Uri.TryCreate(entry.Url, UriKind.Absolute, out uri))
+                {
+                    if (!(await Windows.System.Launcher.LaunchUriAsync(uri)))
+                    {
+                        var dialog = new MessageDialog($"Could not launch {entry.Url}");
+                    }
+                }
+            });
+
             _addEntryCommand = new DelegateCommand(() =>
             {
                 var kdbxEntry = _group.CreateEntry();
@@ -215,6 +228,8 @@ namespace KeePassWin.ViewModels
         }
 
         public ICommand GoToParentCommand { get; }
+
+        public ICommand OpenUrlCommand { get; }
 
         public ICommand CopyCommand { get; }
 

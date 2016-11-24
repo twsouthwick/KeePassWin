@@ -125,9 +125,6 @@
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
-    <Compile Include="Views\EntryItemListView.xaml.cs">
-      <DependentUpon>EntryItemListView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\EntryViewControl.xaml.cs">
       <DependentUpon>EntryViewControl.xaml</DependentUpon>
     </Compile>
@@ -200,10 +197,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\MasterDetailsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntryItemListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
