@@ -28,11 +28,6 @@ namespace KeePassWin.Mvvm
             return _navigationService.Navigate("Main", null);
         }
 
-        public bool GoToSearch(KeePassId database, string text)
-        {
-            return _navigationService.Navigate("Search", SearchQueryParameter.Encode(database, text));
-        }
-
         public bool GoToSettings()
         {
             return _navigationService.Navigate("Settings", null);

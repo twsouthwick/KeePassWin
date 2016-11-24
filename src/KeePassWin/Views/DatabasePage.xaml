@@ -3,7 +3,6 @@
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                  xmlns:local="using:KeePassWin.Views"
-                                 xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
                                  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:mvvm="using:KeePassWin.Mvvm"
@@ -17,21 +16,10 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <AutoSuggestBox x:Name="SearchBox" Grid.Row="0" QueryIcon="Find">
-            <Interactivity:Interaction.Behaviors>
-                <core:EventTriggerBehavior EventName="QuerySubmitted" SourceObject="{Binding ElementName=SearchBox}">
-                    <core:InvokeCommandAction Command="{x:Bind Model.GoToSearchCommand}" InputConverter="{StaticResource SearchArgsConverter}" />
-                </core:EventTriggerBehavior>
-            </Interactivity:Interaction.Behaviors>
-        </AutoSuggestBox>
-        
-        <ListView Grid.Row="1" x:Name="ParentNavbar"
+        <ListView Grid.Row="0" x:Name="ParentNavbar"
                   ItemsSource="{x:Bind Path=Model.Parents, Mode=OneWay}"
                   IsItemClickEnabled="True"
                   mvvm:MvvmExtensions.Command="{x:Bind Path=Model.GoToParentCommand, Mode=OneWay}">
@@ -50,12 +38,7 @@
             </ListView.ItemTemplate>
         </ListView>
         
-        <TextBlock Grid.Row="2"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                   Style="{ThemeResource HeaderTextBlockStyle}"
-                   Text="{x:Bind Path=Model.Group.Name, Mode=OneWay}" />
-
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="1">
             <keepassControls:EntryItemListView Grid.Column="1" x:Name="ItemList"
                 Model="{x:Bind Model}"
                 ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"

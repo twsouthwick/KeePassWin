@@ -15,7 +15,15 @@ namespace KeePassWin.Views
         {
             if (!e.Cancel && e.NavigationMode == NavigationMode.Back)
             {
-                e.Cancel = ItemList.DetailsOpen;
+                if (ItemList.DetailsOpen)
+                {
+                    e.Cancel = true;
+                }
+                else if(Model.TryClearSearch())
+                {
+                    e.Cancel = true;
+                    ItemList.ClearSearch();
+                }
             }
 
             base.OnNavigatingFrom(e);

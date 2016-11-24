@@ -151,8 +151,27 @@ namespace KeePass.Controls
             }
         }
 
-        private void PasswordChecked(object sender, RoutedEventArgs e)
+        private AutoSuggestBox _autoSuggestBox;
+
+        public void ClearSearch()
         {
+            _autoSuggestBox?.ClearValue(AutoSuggestBox.TextProperty);
+        }
+
+        private void SearchTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            // Store so we can clear the search if needed
+            _autoSuggestBox = sender;
+
+            var text = sender.Text;
+
+            if (text.Length < 3)
+            {
+                Model.TryClearSearch();
+                return;
+            }
+
+            Model.Search(text);
         }
     }
 }

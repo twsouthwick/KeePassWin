@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -29,6 +30,8 @@ namespace KeePassWin.ViewModels
         private IList<IKeePassGroup> _parents;
 
         private bool _saving;
+        private bool _activeSearch;
+
 
         public DatabasePageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker)
         {
@@ -54,8 +57,6 @@ namespace KeePassWin.ViewModels
             });
 
             CopyCommand = new DelegateCommand<string>(_clipboard.SetText);
-
-            GoToSearchCommand = new DelegateCommand<string>(text => _navigator.GoToSearch(Database.Id, text));
 
             _addEntryCommand = new DelegateCommand(() =>
             {
@@ -111,6 +112,45 @@ namespace KeePassWin.ViewModels
             _navigator.GoToDatabaseView(Database.Id, group.Id);
         }
 
+        public void Search(string query)
+        {
+            _activeSearch = true;
+            var items = _database.Root.EnumerateAllEntriesWithParent()
+                .Where(item => FilterEntry(item, query))
+                .Select(item => item.Entry)
+                .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase);
+
+            Items.Clear();
+
+            foreach (var item in items)
+            {
+                Items.Add(item);
+            }
+        }
+
+        public bool TryClearSearch()
+        {
+            if (!_activeSearch)
+            {
+                return false;
+            }
+
+            _activeSearch = false;
+            UpdateItems(Group, true);
+
+            return true;
+        }
+
+        private bool FilterEntry(KeePassEntryWithParent item, string text)
+        {
+            return Contains(item.Entry.Title, text) || Contains(item.Entry.Notes, text) || Contains(item.Parent.Name, text);
+        }
+
+        private bool Contains(string source, string searchText)
+        {
+            return CultureInfo.CurrentCulture.CompareInfo.IndexOf(source, searchText, CompareOptions.IgnoreCase) >= 0;
+        }
+
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             var key = DatabaseGroupParameter.Parse(((string)e.Parameter));
@@ -126,11 +166,14 @@ namespace KeePassWin.ViewModels
             UpdateItems(db.GetGroup(key.Group));
         }
 
-        public void UpdateItems(IKeePassGroup group)
+        public void UpdateItems(IKeePassGroup group, bool force = false)
         {
-            if (group != null && Group == group)
+            if (!force)
             {
-                return;
+                if (group != null && Group == group)
+                {
+                    return;
+                }
             }
 
             Items.Clear();
@@ -170,8 +213,6 @@ namespace KeePassWin.ViewModels
                 return null;
             }
         }
-
-        public ICommand GoToSearchCommand { get; }
 
         public ICommand GoToParentCommand { get; }
 

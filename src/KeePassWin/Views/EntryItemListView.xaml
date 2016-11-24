@@ -82,6 +82,7 @@
           MasterPaneWidth="520"
           ItemsSource="{x:Bind Path=ItemsSource, Mode=OneWay}"
           NoSelectionContent="{x:Bind Model}"
+          MasterHeader="{Binding}"
           SelectionChanged="MasterDetailsViewSelectionChanged"
           VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <controls:MasterDetailsView.ItemContainerStyle>
@@ -106,6 +107,11 @@
                     </ContentControl>
                 </DataTemplate>
             </controls:MasterDetailsView.DetailsTemplate>
+            <controls:MasterDetailsView.MasterHeaderTemplate>
+                <DataTemplate>
+                    <AutoSuggestBox QueryIcon="Find" TextChanged="SearchTextChanged" />
+                </DataTemplate>
+            </controls:MasterDetailsView.MasterHeaderTemplate>
             <controls:MasterDetailsView.NoSelectionContentTemplate>
                 <DataTemplate x:DataType="vm:DatabasePageViewModel">
                     <CommandBar Grid.Row="4">
