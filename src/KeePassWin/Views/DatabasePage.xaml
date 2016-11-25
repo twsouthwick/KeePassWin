@@ -3,12 +3,11 @@
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                  xmlns:converters="using:KeePass.Win.Converters"
-                                 xmlns:keepasscontrols="using:KeePass.Win.Controls"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:mvvm="using:KeePass.Win.Mvvm"
                                  xmlns:prismMvvm="using:Prism.Windows.Mvvm"
                                  xmlns:keepass="using:KeePass"
-                                 xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+                                 xmlns:controls="using:KeePass.Win.Controls"
                                  xmlns:vm="using:KeePass.Win.ViewModels"
                                  prismMvvm:ViewModelLocator.AutoWireViewModel="True"
                                  mc:Ignorable="d">
@@ -17,7 +16,7 @@
         <converters:UriVisibilityConverter x:Key="uriVisibilityConverter"/>
 
         <DataTemplate x:Name="KeePassEntryDetailsTemplate" x:DataType="keepass:IKeePassEntry">
-            <keepasscontrols:EntryViewControl Entry="{x:Bind}" Margin="20,0,0,0" />
+            <controls:EntryViewControl Entry="{x:Bind}" Margin="20,0,0,0" />
         </DataTemplate>
 
         <DataTemplate x:Name="KeePassGroupTemplate" x:DataType="keepass:IKeePassGroup">
@@ -53,7 +52,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <keepasscontrols:ByteImage Grid.RowSpan="2" Image="{Binding Icon}" VerticalAlignment="Center" />
+                <controls:ByteImage Grid.RowSpan="2" Image="{Binding Icon}" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
                 <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Text="{Binding UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
                 <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Website" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}">
@@ -104,7 +103,7 @@
             <controls:MasterDetailsView x:Name="ItemsList"
                   MasterPaneWidth="520"
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
-                  NoSelectionContent="{x:Bind Model}"
+                  FooterContent="{x:Bind Model}"
                   MasterHeader="{x:Bind Model}"
                   SelectionChanged="MasterDetailsViewSelectionChanged"
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
@@ -135,7 +134,7 @@
                         <AutoSuggestBox QueryIcon="Find" TextChanged="SearchTextChanged" />
                     </DataTemplate>
                 </controls:MasterDetailsView.MasterHeaderTemplate>
-                <controls:MasterDetailsView.NoSelectionContentTemplate>
+                <controls:MasterDetailsView.FooterTemplate>
                     <DataTemplate x:DataType="vm:DatabasePageViewModel">
                         <CommandBar>
                             <CommandBar.PrimaryCommands>
@@ -145,7 +144,7 @@
                             </CommandBar.PrimaryCommands>
                         </CommandBar>
                     </DataTemplate>
-                </controls:MasterDetailsView.NoSelectionContentTemplate>
+                </controls:MasterDetailsView.FooterTemplate>
             </controls:MasterDetailsView>
         </Grid>
     </Grid>

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls">
+                    xmlns:controls="using:KeePass.Win.Controls">
 
     <Style TargetType="controls:MasterDetailsView">
         <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
@@ -43,12 +43,14 @@
                                           ItemsSource="{TemplateBinding ItemsSource}"
                                           SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <ContentPresenter Grid.Row="2"
-                                                  Content="{TemplateBinding NoSelectionContent}"
-                                                  ContentTemplate="{TemplateBinding NoSelectionContentTemplate}" />
+                                                  Content="{TemplateBinding FooterContent}"
+                                                  ContentTemplate="{TemplateBinding FooterTemplate}" />
                             </Grid>
                             <Grid x:Name="DetailsPanel"
                                   Grid.Column="1">
-                                <ContentPresenter x:Name="NoSelectionPresenter" />
+                                <ContentPresenter x:Name="NoSelectionPresenter"
+                                                  Content="{TemplateBinding NoSelectionContent}"
+                                                  ContentTemplate="{TemplateBinding NoSelectionContentTemplate}" />
                                 <ContentPresenter x:Name="DetailsPresenter"
                                                   Background="{TemplateBinding Background}"
                                                   ContentTemplate="{TemplateBinding DetailsTemplate}" />

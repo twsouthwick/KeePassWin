@@ -1,12 +1,7 @@
-﻿using KeePass;
-using KeePass.Win.ViewModels;
+﻿using KeePass.Win.ViewModels;
 using Prism.Windows.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace KeePass.Win.Views
@@ -18,21 +13,11 @@ namespace KeePass.Win.Views
             InitializeComponent();
         }
 
-        private bool IsInState(IEnumerable<VisualStateGroup> groups, string groupName, string stateName)
-        {
-            var currentState = groups.First(g => string.Equals(g.Name, groupName, StringComparison.Ordinal)).CurrentState;
-
-            return string.Equals(currentState?.Name, stateName, StringComparison.Ordinal);
-        }
-
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             if (!e.Cancel && e.NavigationMode == NavigationMode.Back)
             {
-                var groups = VisualStateManager.GetVisualStateGroups(VisualTreeHelper.GetChild(ItemsList, 0) as FrameworkElement);
-
-                // This is a way to determine if the details is open in the narrow state; if so, we should not handle the back event
-                if (IsInState(groups, "WidthStates", "NarrowState") && IsInState(groups, "SelectionStates", "HasSelection"))
+                if (ItemsList.IsDetailsOpen)
                 {
                     e.Cancel = true;
                 }
