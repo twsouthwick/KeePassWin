@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 
 namespace KeePass.Models
 {
-    internal class DatabaseGroupParameter
+    internal struct DatabaseGroupParameter
     {
         public KeePassId Database { get; }
         public KeePassId Group { get; }
@@ -15,17 +15,15 @@ namespace KeePass.Models
 
         public static DatabaseGroupParameter Parse(string entry)
         {
-            return JsonConvert.DeserializeObject<DatabaseGroupParameter>(entry);
+            var db = Guid.Parse(entry.Substring(0, 32));
+            var group = Guid.Parse(entry.Substring(32));
+
+            return new DatabaseGroupParameter(new KeePassId(db), new KeePassId(group));
         }
 
         public static string Encode(KeePassId database, KeePassId group)
         {
-            return new DatabaseGroupParameter(database, group).ToString();
-        }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
+            return database.Id.ToString("N") + group.Id.ToString("N");
         }
     }
 }

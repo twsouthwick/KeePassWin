@@ -110,7 +110,6 @@
     <Compile Include="Converters\UriVisibilityConverter.cs" />
     <Compile Include="INavigationPane.cs" />
     <Compile Include="Services\FileDatabaseTracker.cs" />
-    <Compile Include="Models\SearchQueryParameter.cs" />
     <Compile Include="INavigator.cs" />
     <Compile Include="Services\CachedDialogDatabseUnlocker.cs" />
     <Compile Include="Services\TimedClipboard.cs" />
@@ -123,7 +122,6 @@
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
-    <Compile Include="ViewModels\SearchPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Controls\EntryViewControl.xaml.cs">
       <DependentUpon>EntryViewControl.xaml</DependentUpon>
