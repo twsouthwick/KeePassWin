@@ -41,6 +41,7 @@
                                           ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                           ItemTemplate="{TemplateBinding ItemTemplate}"
                                           ItemsSource="{TemplateBinding ItemsSource}"
+                                          IsItemClickEnabled="true"
                                           SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <ContentPresenter Grid.Row="2"
                                                   Content="{TemplateBinding FooterContent}"

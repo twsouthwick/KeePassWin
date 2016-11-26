@@ -19,6 +19,10 @@
             <controls:EntryViewControl Entry="{x:Bind}" Margin="20,0,0,0" />
         </DataTemplate>
 
+        <DataTemplate x:Name="KeePassGroupDetailsTemplate" x:DataType="keepass:IKeePassGroup">
+            <ContentPresenter />
+        </DataTemplate>
+
         <DataTemplate x:Name="KeePassGroupTemplate" x:DataType="keepass:IKeePassGroup">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -105,7 +109,7 @@
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
                   FooterContent="{x:Bind Model}"
                   MasterHeader="{x:Bind Model}"
-                  SelectionChanged="MasterDetailsViewSelectionChanged"
+                  ItemClickCommand="{x:Bind Path=Model.ItemClickCommand}"
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <controls:MasterDetailsView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
@@ -124,6 +128,7 @@
                             <ContentControl.ContentTemplateSelector>
                                 <mvvm:TypeTemplateSelector>
                                     <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryDetailsTemplate}" />
+                                    <mvvm:GroupTemplateMatch TemplateContent="{StaticResource KeePassGroupDetailsTemplate}" />
                                 </mvvm:TypeTemplateSelector>
                             </ContentControl.ContentTemplateSelector>
                         </ContentControl>

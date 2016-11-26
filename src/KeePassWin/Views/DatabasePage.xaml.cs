@@ -33,19 +33,6 @@ namespace KeePass.Win.Views
 
         public DatabasePageViewModel Model => DataContext as DatabasePageViewModel;
 
-        private void MasterDetailsViewSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var groups = e.AddedItems.OfType<IKeePassGroup>();
-
-            foreach (var group in groups)
-            {
-                if (Model.ItemClickCommand?.CanExecute(group) == true)
-                {
-                    Model.ItemClickCommand.Execute(group);
-                }
-            }
-        }
-
         #region Search functionality
         private AutoSuggestBox _autoSuggestBox;
 
