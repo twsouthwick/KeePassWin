@@ -18,6 +18,13 @@ namespace KeePass.Win.Controls
         public EntryViewControl()
         {
             this.InitializeComponent();
+
+            Loaded += EntryViewControlLoaded;
+        }
+
+        private void EntryViewControlLoaded(object sender, RoutedEventArgs e)
+        {
+            Focus(FocusState.Keyboard);
         }
 
         public IKeePassEntry Entry
