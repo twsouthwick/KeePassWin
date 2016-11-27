@@ -73,7 +73,7 @@ namespace KeePass.Win.ViewModels
                 FontIcon = Symbol.ProtectedDocument,
                 Command = new DelegateCommand(() =>
                 {
-                    _navigator.GoToDatabaseView(dbFile.IdFromPath(), KeePassId.Empty);
+                    _navigator.UnlockDatabase(dbFile.IdFromPath());
                     _navPane.Dismiss();
                 })
             };

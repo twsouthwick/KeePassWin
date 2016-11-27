@@ -51,7 +51,7 @@ namespace KeePass.Win.ViewModels
             {
                 if (_database != null)
                 {
-                    _navigator.GoToDatabaseView(_database.Id, group.Id);
+                    _navigator.GoToDatabaseView(_database, group);
                 }
             });
 
@@ -121,7 +121,7 @@ namespace KeePass.Win.ViewModels
 
         private void GroupClicked(IKeePassGroup group)
         {
-            _navigator.GoToDatabaseView(Database.Id, group.Id);
+            _navigator.GoToDatabaseView(Database, group);
         }
 
         public void Search(string query)

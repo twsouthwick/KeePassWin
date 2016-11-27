@@ -2,12 +2,14 @@
 {
     public interface INavigator
     {
-        bool GoToDatabaseView(KeePassId database, KeePassId group);
+        bool UnlockDatabase(KeePassId database);
 
         bool GoToMain();
 
         void GoBack();
 
         bool GoToSettings();
+
+        bool GoToDatabaseView(IKeePassDatabase db, IKeePassGroup keePassGroup);
     }
 }
