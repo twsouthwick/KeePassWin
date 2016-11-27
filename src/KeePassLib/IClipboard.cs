@@ -2,6 +2,6 @@
 {
     public interface IClipboard
     {
-        void SetText(string text);
+        bool SetText(string text);
     }
 }

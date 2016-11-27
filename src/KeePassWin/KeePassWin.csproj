@@ -114,10 +114,10 @@
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Converters\NullObjectVisibilityConverter.cs" />
     <Compile Include="Converters\UriVisibilityConverter.cs" />
+    <Compile Include="Services\DataPackageClipboard.cs" />
     <Compile Include="Services\FileDatabaseTracker.cs" />
     <Compile Include="INavigator.cs" />
     <Compile Include="Services\SimpleDatabaseCache.cs" />
-    <Compile Include="Services\TimedClipboard.cs" />
     <Compile Include="Models\DatabaseGroupParameter.cs" />
     <Compile Include="Services\DialogCredentialProvider.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />

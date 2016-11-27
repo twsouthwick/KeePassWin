@@ -24,8 +24,7 @@ namespace KeePass.Win
             builder.RegisterDecorator<IDatabaseCache>((c, inner) => new SimpleDatabaseCache(inner), fromKey: nameof(DatabaseCache))
                 .SingleInstance();
 
-            builder.RegisterType<TimedClipboard>()
-                .WithParameter(TypedParameter.From(TimeSpan.FromSeconds(10)))
+            builder.RegisterType<DataPackageClipboard>()
                 .As<IClipboard>()
                 .SingleInstance();
 

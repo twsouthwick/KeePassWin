@@ -54,7 +54,7 @@ namespace KeePass.Win.ViewModels
                 }
             });
 
-            CopyCommand = new DelegateCommand<string>(_clipboard.SetText);
+            CopyCommand = new DelegateCommand<string>(text => _clipboard.SetText(text));
 
             OpenUrlCommand = new DelegateCommand<IKeePassEntry>(async entry =>
             {
@@ -203,7 +203,7 @@ namespace KeePass.Win.ViewModels
             Parents = Group.EnumerateParents(includeSelf: true).Reverse().ToList();
         }
 
-       
+
 
         public ICommand GoToParentCommand { get; }
 
