@@ -2,8 +2,6 @@
 {
     public interface INavigator
     {
-        bool UnlockDatabase(KeePassId database);
-
         bool GoToMain();
 
         void GoBack();

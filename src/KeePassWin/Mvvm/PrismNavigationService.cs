@@ -27,12 +27,6 @@ namespace KeePass.Win.Mvvm
             return _navigationService.Navigate("Database", DatabaseGroupParameter.Encode(database.Id, group.Id));
         }
 
-        public bool UnlockDatabase(KeePassId database)
-        {
-            _shell.Value.Dismiss();
-            return _navigationService.Navigate("Database", DatabaseGroupParameter.Encode(database, KeePassId.Empty));
-        }
-
         public bool GoToMain()
         {
             _shell.Value.Open();

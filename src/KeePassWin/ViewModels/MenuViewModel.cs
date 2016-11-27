@@ -15,13 +15,15 @@ namespace KeePass.Win.ViewModels
     {
         private readonly INavigator _navigator;
         private readonly DatabaseCache _cache;
+        private readonly IDatabaseCache _dbCache;
 
-        public MenuViewModel(INavigator navigator, DatabaseCache cache)
+        public MenuViewModel(INavigator navigator, DatabaseCache cache, IDatabaseCache dbCache)
         {
             // TODO: Add ability to indicate which page your on by listening for navigation events once the NuGet package has been updated. Change CanNavigate to use whether or not your on that page to return false.
             // As-is, if navigation occurs via the back button, we won't know and can't update the _canNavigate value
             _navigator = navigator;
             _cache = cache;
+            _dbCache = dbCache;
 
             Databases = new ObservableCollection<MenuItemViewModel>();
             SettingsCommand = new DelegateCommand(() => _navigator.GoToSettings());
@@ -65,13 +67,17 @@ namespace KeePass.Win.ViewModels
 
         private async Task AddDatabaseEntry(IFile dbFile)
         {
+            var id = dbFile.IdFromPath();
+
             var entry = new MenuItemViewModel
             {
                 DisplayName = dbFile.Name,
                 FontIcon = Symbol.ProtectedDocument,
-                Command = new DelegateCommand(() =>
+                Command = new DelegateCommand(async () =>
                 {
-                    _navigator.UnlockDatabase(dbFile.IdFromPath());
+                    var db = await _dbCache.UnlockAsync(id);
+
+                    _navigator.GoToDatabaseView(db, db.Root);
                 })
             };
 
