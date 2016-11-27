@@ -10,7 +10,7 @@ namespace KeePass.Win.Controls
 {
     public class MasterDetailsView : Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView
     {
-        public static readonly DependencyProperty FooterProperty =
+        public static readonly DependencyProperty FooterTemplateProperty =
             DependencyProperty.Register(nameof(FooterTemplate), typeof(DataTemplate), typeof(MasterDetailsView), new PropertyMetadata(null));
 
         public static readonly DependencyProperty FooterContentProperty =
@@ -21,8 +21,8 @@ namespace KeePass.Win.Controls
 
         public DataTemplate FooterTemplate
         {
-            get { return (DataTemplate)GetValue(FooterProperty); }
-            set { SetValue(FooterProperty, value); }
+            get { return (DataTemplate)GetValue(FooterTemplateProperty); }
+            set { SetValue(FooterTemplateProperty, value); }
         }
 
         public object FooterContent
