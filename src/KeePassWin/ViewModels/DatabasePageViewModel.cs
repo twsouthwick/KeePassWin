@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.System;
 using Windows.UI.Popups;
@@ -20,6 +19,8 @@ namespace KeePass.Win.ViewModels
         private readonly IDatabaseCache _unlocker;
         private readonly INavigator _navigator;
         private readonly IClipboard _clipboard;
+        private readonly ICredentialProvider _credentialProvider;
+
         private readonly DelegateCommand _saveCommand;
         private readonly DelegateCommand _addEntryCommand;
 
@@ -30,12 +31,12 @@ namespace KeePass.Win.ViewModels
         private bool _saving;
         private bool _activeSearch;
 
-
-        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard clipboard)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard clipboard, ICredentialProvider credentialProvider)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
             _navigator = navigator;
+            _credentialProvider = credentialProvider;
 
             ItemClickCommand = new DelegateCommand<IKeePassId>(item =>
             {
@@ -164,7 +165,7 @@ namespace KeePass.Win.ViewModels
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             var key = DatabaseGroupParameter.Parse(((string)e.Parameter));
-            var db = await _unlocker.UnlockAsync(key.Database);
+            var db = await _unlocker.UnlockAsync(key.Database, _credentialProvider);
 
             if (db == null)
             {

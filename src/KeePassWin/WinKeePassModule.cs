@@ -10,21 +10,18 @@ namespace KeePass.Win
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<DatabaseCache>()
+                .Named<IDatabaseCache>(nameof(DatabaseCache))
                 .SingleInstance();
 
             builder.RegisterType<FileDatabaseTracker>()
                 .As<IDatabaseFileAccess>()
                 .SingleInstance();
 
-            builder.RegisterType<KdbxUnlocker>()
-                .As<IKdbxUnlocker>()
+            builder.RegisterType<DialogCredentialProvider>()
+                .As<ICredentialProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DialogDatabaseUnlocker>()
-                .Named<IDatabaseCache>(nameof(DialogDatabaseUnlocker))
-                .SingleInstance();
-
-            builder.RegisterDecorator<IDatabaseCache>((c, inner) => new CachedDatabseUnlocker(inner), fromKey: nameof(DialogDatabaseUnlocker))
+            builder.RegisterDecorator<IDatabaseCache>((c, inner) => new SimpleDatabaseCache(inner), fromKey: nameof(DatabaseCache))
                 .SingleInstance();
 
             builder.RegisterType<TimedClipboard>()

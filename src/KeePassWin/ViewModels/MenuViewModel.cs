@@ -14,22 +14,31 @@ namespace KeePass.Win.ViewModels
     public class MenuViewModel : ViewModelBase
     {
         private readonly INavigator _navigator;
-        private readonly DatabaseCache _cache;
-        private readonly IDatabaseCache _dbCache;
+        private readonly IDatabaseCache _cache;
+        private readonly ICredentialProvider _credentialProvider;
 
-        public MenuViewModel(INavigator navigator, DatabaseCache cache, IDatabaseCache dbCache)
+        public MenuViewModel(INavigator navigator, IDatabaseCache cache, ICredentialProvider credentialProvider)
         {
-            // TODO: Add ability to indicate which page your on by listening for navigation events once the NuGet package has been updated. Change CanNavigate to use whether or not your on that page to return false.
-            // As-is, if navigation occurs via the back button, we won't know and can't update the _canNavigate value
             _navigator = navigator;
             _cache = cache;
-            _dbCache = dbCache;
+            _credentialProvider = credentialProvider;
 
             Databases = new ObservableCollection<MenuItemViewModel>();
             SettingsCommand = new DelegateCommand(() => _navigator.GoToSettings());
-            OpenCommand = new DelegateCommand(async () => await _cache.AddDatabaseAsync());
+            OpenCommand = new DelegateCommand(async () =>
+            {
+                try
+                {
+                    var db = await _cache.AddDatabaseAsync();
+                }
+                catch (DatabaseAlreadyExistsException)
+                {
+                    var dialog = new MessageDialog(LocalizedStrings.MenuItemOpenSameFileContent, LocalizedStrings.MenuItemOpenSameFileTitle);
 
-            _cache.DatabaseUpdated += DataBaseCacheUpdate;
+                    await dialog.ShowAsync();
+                }
+            });
+
             _cache.GetDatabaseFilesAsync().ContinueWith(async r =>
             {
                 if (r.IsFaulted)
@@ -44,27 +53,6 @@ namespace KeePass.Win.ViewModels
             });
         }
 
-        private async void DataBaseCacheUpdate(object sender, DatabaseCacheEvent arg, IFile database)
-        {
-            if (arg == DatabaseCacheEvent.Added)
-            {
-                await AddDatabaseEntry(database);
-            }
-            else if (arg == DatabaseCacheEvent.AlreadyExists)
-            {
-                var dialog = new MessageDialog(LocalizedStrings.MenuItemOpenSameFileContent, LocalizedStrings.MenuItemOpenSameFileTitle);
-
-                await dialog.ShowAsync();
-            }
-            else if (arg == DatabaseCacheEvent.Removed)
-            {
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(arg), arg, "Unknown cache event");
-            }
-        }
-
         private async Task AddDatabaseEntry(IFile dbFile)
         {
             var id = dbFile.IdFromPath();
@@ -75,7 +63,7 @@ namespace KeePass.Win.ViewModels
                 FontIcon = Symbol.ProtectedDocument,
                 Command = new DelegateCommand(async () =>
                 {
-                    var db = await _dbCache.UnlockAsync(id);
+                    var db = await _cache.UnlockAsync(id, _credentialProvider);
 
                     _navigator.GoToDatabaseView(db, db.Root);
                 })

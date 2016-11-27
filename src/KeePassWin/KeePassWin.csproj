@@ -116,10 +116,10 @@
     <Compile Include="Converters\UriVisibilityConverter.cs" />
     <Compile Include="Services\FileDatabaseTracker.cs" />
     <Compile Include="INavigator.cs" />
-    <Compile Include="Services\CachedDialogDatabseUnlocker.cs" />
+    <Compile Include="Services\SimpleDatabaseCache.cs" />
     <Compile Include="Services\TimedClipboard.cs" />
     <Compile Include="Models\DatabaseGroupParameter.cs" />
-    <Compile Include="Services\DialogDatabaseUnlocker.cs" />
+    <Compile Include="Services\DialogCredentialProvider.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />

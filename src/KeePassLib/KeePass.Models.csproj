@@ -108,17 +108,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseCache.cs" />
-    <Compile Include="DatabaseCacheEvent.cs" />
+    <Compile Include="DatabaseAlreadyExistsException.cs" />
     <Compile Include="DatabaseUnlockException.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="IClipboard.cs" />
+    <Compile Include="ICredentialProvider.cs" />
     <Compile Include="IDatabaseFileAccess.cs" />
-    <Compile Include="IKdbxUnlocker.cs" />
     <Compile Include="IDatabaseCache.cs" />
     <Compile Include="IFile.cs" />
     <Compile Include="IFilePicker.cs" />
-    <Compile Include="KdbxBuilder.cs" />
-    <Compile Include="KdbxUnlocker.cs" />
+    <Compile Include="KeePassCredentials.cs" />
     <Compile Include="KeePassEntryWithParent.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
