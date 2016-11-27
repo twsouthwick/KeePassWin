@@ -39,6 +39,11 @@ namespace KeePass
 
         public static IKeePassGroup GetGroup(this IKeePassDatabase db, KeePassId id)
         {
+            if (id.IsEmpty)
+            {
+                return db.Root;
+            }
+
             foreach (var entry in db.EnumerateAllGroups())
             {
                 if (entry.Id.Equals(id))
@@ -46,6 +51,8 @@ namespace KeePass
                     return entry;
                 }
             }
+
+            Debug.Assert(false, "Must find a group in the database");
 
             return null;
         }
@@ -57,11 +64,16 @@ namespace KeePass
 
         public static IEnumerable<IKeePassGroup> EnumerateAllGroups(this IKeePassDatabase db)
         {
-            return db.Root.EnumerateAllGroups();
+            return db.Root.EnumerateAllGroups(true);
         }
 
-        public static IEnumerable<IKeePassGroup> EnumerateAllGroups(this IKeePassGroup group)
+        public static IEnumerable<IKeePassGroup> EnumerateAllGroups(this IKeePassGroup group, bool includeSelf = false)
         {
+            if (includeSelf)
+            {
+                yield return group;
+            }
+
             foreach (var subgroup in group.Groups)
             {
                 yield return subgroup;
@@ -93,11 +105,16 @@ namespace KeePass
             return group.EnumerateAllEntriesWithParent().Select(p => p.Entry);
         }
 
-        public static IEnumerable<IKeePassGroup> EnumerateParents(this IKeePassGroup group)
+        public static IEnumerable<IKeePassGroup> EnumerateParents(this IKeePassGroup group, bool includeSelf = false)
         {
             if (group == null)
             {
                 yield break;
+            }
+
+            if (includeSelf)
+            {
+                yield return group;
             }
 
             while (group != null && group.Parent != null)

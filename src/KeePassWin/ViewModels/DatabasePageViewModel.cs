@@ -180,18 +180,15 @@ namespace KeePass.Win.ViewModels
 
         public void UpdateItems(IKeePassGroup group, bool force = false)
         {
-            if (!force)
+            if (!force && Equals(Group, group))
             {
-                if (group != null && Group == group)
-                {
-                    return;
-                }
+                return;
             }
 
             Items.Clear();
 
             // Set group and entries into the Items container
-            Group = group ?? Database.Root;
+            Group = group;
 
             foreach (var item in Group.Groups)
             {
@@ -204,7 +201,7 @@ namespace KeePass.Win.ViewModels
             }
 
             // Add parents to generate breadcrump navigation
-            Parents = Group.EnumerateParents().Reverse().ToList();
+            Parents = Group.EnumerateParents(includeSelf: true).Reverse().ToList();
         }
 
         private async Task<IKeePassDatabase> UnlockAsync(KeePassId id)

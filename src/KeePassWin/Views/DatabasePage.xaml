@@ -84,25 +84,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ListView Grid.Row="0" x:Name="ParentNavbar"
-                  ItemsSource="{x:Bind Path=Model.Parents, Mode=OneWay}"
-                  IsItemClickEnabled="True"
-                  mvvm:MvvmExtensions.Command="{x:Bind Path=Model.GoToParentCommand, Mode=OneWay}">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="keepass:IKeePassGroup">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Bind Name}" />
-                        <TextBlock Text="\" Margin="5,0,0,0" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
         <Grid Grid.Row="1">
             <controls:MasterDetailsView x:Name="ItemsList"
                   MasterPaneWidth="520"
@@ -135,8 +116,21 @@
                     </DataTemplate>
                 </controls:MasterDetailsView.DetailsTemplate>
                 <controls:MasterDetailsView.MasterHeaderTemplate>
-                    <DataTemplate>
-                        <AutoSuggestBox QueryIcon="Find" TextChanged="SearchTextChanged" />
+                    <DataTemplate x:DataType="vm:DatabasePageViewModel">
+                        <StackPanel>
+                            <controls:BreadCrumbView 
+                                ItemsSource="{x:Bind Path=Parents, Mode=OneWay}"
+                                Command="{x:Bind Path=GoToParentCommand, Mode=OneWay}">
+                                <controls:BreadCrumbView.ItemTemplate>
+                                    <DataTemplate x:DataType="keepass:IKeePassGroup">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{x:Bind Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </controls:BreadCrumbView.ItemTemplate>
+                            </controls:BreadCrumbView>
+                            <AutoSuggestBox QueryIcon="Find" TextChanged="SearchTextChanged" />
+                        </StackPanel>
                     </DataTemplate>
                 </controls:MasterDetailsView.MasterHeaderTemplate>
                 <controls:MasterDetailsView.FooterTemplate>

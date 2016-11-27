@@ -105,6 +105,11 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\BreadCrumbView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Controls\BreadCrumbView.cs" />
     <Compile Include="Controls\MasterDetailsView.cs" />
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Converters\NullObjectVisibilityConverter.cs" />

@@ -14,6 +14,8 @@ namespace KeePass
 
         public Guid Id { get; set; }
 
+        public bool IsEmpty => Id == Guid.Empty;
+
         public override bool Equals(object obj)
         {
             if (!(obj is KeePassId))

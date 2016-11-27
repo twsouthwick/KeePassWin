@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="ms-appx:///Themes/KeePassWinStyles.xaml" />
                 <ResourceDictionary Source="Resources/KeePassItems.xaml" />
                 <ResourceDictionary Source="Resources/MasterDetailsView.xaml" />
+                <ResourceDictionary Source="Controls/BreadCrumbView.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </prism:PrismAutofacApplication.Resources>
