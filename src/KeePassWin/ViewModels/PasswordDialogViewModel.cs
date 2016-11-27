@@ -12,7 +12,7 @@ namespace KeePass.Win.ViewModels
     {
         private IFile _keyFile;
 
-        public PasswordDialogViewModel(IFile db, DatabaseCache cache, IDatabaseTracker tracker)
+        public PasswordDialogViewModel(IFile db, DatabaseCache cache, IDatabaseFileAccess tracker)
         {
             Name = db.Name;
 

@@ -7,10 +7,10 @@ namespace KeePass
     {
         public delegate void DatabaseCacheUpdatedHandler(object sender, DatabaseCacheEvent arg, IFile database);
 
-        private readonly IDatabaseTracker _databaseTracker;
+        private readonly IDatabaseFileAccess _databaseTracker;
         private readonly IFilePicker _filePicker;
 
-        public DatabaseCache(IDatabaseTracker databaseTracker, IFilePicker filePicker)
+        public DatabaseCache(IDatabaseFileAccess databaseTracker, IFilePicker filePicker)
         {
             _databaseTracker = databaseTracker;
             _filePicker = filePicker;

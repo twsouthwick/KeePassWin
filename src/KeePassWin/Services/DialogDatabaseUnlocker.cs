@@ -10,9 +10,9 @@ namespace KeePass.Win.Services
     {
         private readonly Func<IFile, PasswordDialog> _dialogFactory;
         private readonly IKdbxUnlocker _kdbxUnlocker;
-        private readonly IDatabaseTracker _tracker;
+        private readonly IDatabaseFileAccess _tracker;
 
-        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory, IKdbxUnlocker kdbxUnlocker, IDatabaseTracker tracker)
+        public DialogDatabaseUnlocker(Func<IFile, PasswordDialog> dialogFactory, IKdbxUnlocker kdbxUnlocker, IDatabaseFileAccess tracker)
         {
             _kdbxUnlocker = kdbxUnlocker;
             _dialogFactory = dialogFactory;

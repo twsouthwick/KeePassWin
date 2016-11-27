@@ -13,7 +13,7 @@ namespace KeePass.Win
                 .SingleInstance();
 
             builder.RegisterType<FileDatabaseTracker>()
-                .As<IDatabaseTracker>()
+                .As<IDatabaseFileAccess>()
                 .SingleInstance();
 
             builder.RegisterType<KdbxUnlocker>()

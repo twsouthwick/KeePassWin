@@ -8,7 +8,7 @@ using Windows.Storage.AccessCache;
 
 namespace KeePass.Win.Services
 {
-    public class FileDatabaseTracker : IDatabaseTracker
+    public class FileDatabaseTracker : IDatabaseFileAccess
     {
         private readonly StorageItemAccessList _accessList;
         private readonly IAsyncOperation<StorageFolder> _folder;
