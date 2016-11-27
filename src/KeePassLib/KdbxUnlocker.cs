@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace KeePass
 {
-    public class KdbxUnlocker : IDatabaseUnlocker
+    public class KdbxUnlocker : IKdbxUnlocker
     {
         public async Task<IKeePassDatabase> UnlockAsync(KdbxBuilder builder)
         {

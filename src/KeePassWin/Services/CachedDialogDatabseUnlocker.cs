@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace KeePass.Win.Services
 {
-    internal class CachedDatabseUnlocker : IDatabaseUnlockerDialog
+    internal class CachedDatabseUnlocker : IDatabaseCache
     {
-        private readonly IDictionary<string, IKeePassDatabase> _cache = new Dictionary<string, IKeePassDatabase>(StringComparer.OrdinalIgnoreCase);
-        private readonly IDatabaseUnlockerDialog _unlocker;
+        private readonly Dictionary<KeePassId, IKeePassDatabase> _cache = new Dictionary<KeePassId, IKeePassDatabase>();
+        private readonly IDatabaseCache _unlocker;
 
-        public CachedDatabseUnlocker(IDatabaseUnlockerDialog unlocker)
+        public CachedDatabseUnlocker(IDatabaseCache unlocker)
         {
             _unlocker = unlocker;
         }
 
-        public async Task<IKeePassDatabase> UnlockAsync(IFile file)
+        public async Task<IKeePassDatabase> UnlockAsync(KeePassId id)
         {
             IKeePassDatabase db;
-            if (_cache.TryGetValue(file.Path, out db))
+            if (_cache.TryGetValue(id, out db))
             {
                 return db;
             }
 
-            var unlocked = await _unlocker.UnlockAsync(file);
+            var unlocked = await _unlocker.UnlockAsync(id);
 
             if (unlocked != null)
             {
-                _cache.Add(file.Path, unlocked);
+                _cache.Add(id, unlocked);
             }
 
             return unlocked;

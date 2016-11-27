@@ -17,8 +17,7 @@ namespace KeePass.Win.ViewModels
 {
     public class DatabasePageViewModel : ViewModelBase
     {
-        private readonly IDatabaseUnlockerDialog _unlocker;
-        private readonly IDatabaseTracker _tracker;
+        private readonly IDatabaseCache _unlocker;
         private readonly INavigator _navigator;
         private readonly IClipboard _clipboard;
         private readonly DelegateCommand _saveCommand;
@@ -32,11 +31,10 @@ namespace KeePass.Win.ViewModels
         private bool _activeSearch;
 
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseUnlockerDialog unlocker, IClipboard clipboard, IDatabaseTracker tracker)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard clipboard)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
-            _tracker = tracker;
             _navigator = navigator;
 
             ItemClickCommand = new DelegateCommand<IKeePassId>(item =>
@@ -166,7 +164,7 @@ namespace KeePass.Win.ViewModels
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             var key = DatabaseGroupParameter.Parse(((string)e.Parameter));
-            var db = await UnlockAsync(key.Database);
+            var db = await _unlocker.UnlockAsync(key.Database);
 
             if (db == null)
             {
@@ -204,24 +202,7 @@ namespace KeePass.Win.ViewModels
             Parents = Group.EnumerateParents(includeSelf: true).Reverse().ToList();
         }
 
-        private async Task<IKeePassDatabase> UnlockAsync(KeePassId id)
-        {
-            var dbFile = await _tracker.GetDatabaseAsync(id);
-
-            Debug.Assert(dbFile != null);
-
-            try
-            {
-                return await _unlocker.UnlockAsync(dbFile);
-            }
-            catch (DatabaseUnlockException e)
-            {
-                var message = new MessageDialog(e.Message, "Could not open database");
-
-                await message.ShowAsync();
-                return null;
-            }
-        }
+       
 
         public ICommand GoToParentCommand { get; }
 
