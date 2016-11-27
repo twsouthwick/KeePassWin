@@ -8,7 +8,6 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mvvm="using:KeePass.Win.Mvvm"
-    xmlns:keepassControls="using:KeePass.Controls"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     xmlns:models="using:KeePass.Models"
     xmlns:vm="using:KeePass.Win.ViewModels"

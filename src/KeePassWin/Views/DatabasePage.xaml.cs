@@ -1,6 +1,5 @@
 ﻿using KeePass.Win.ViewModels;
 using Prism.Windows.Mvvm;
-using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 

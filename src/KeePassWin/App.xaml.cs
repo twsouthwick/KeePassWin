@@ -30,7 +30,7 @@ namespace KeePass.Win
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
         {
-            NavigationService.Navigate("Main", null);
+            Container.Resolve<INavigator>().GoToMain();
 
             return Task.CompletedTask;
         }

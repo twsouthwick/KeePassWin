@@ -114,7 +114,6 @@
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Converters\NullObjectVisibilityConverter.cs" />
     <Compile Include="Converters\UriVisibilityConverter.cs" />
-    <Compile Include="INavigationPane.cs" />
     <Compile Include="Services\FileDatabaseTracker.cs" />
     <Compile Include="INavigator.cs" />
     <Compile Include="Services\CachedDialogDatabseUnlocker.cs" />
