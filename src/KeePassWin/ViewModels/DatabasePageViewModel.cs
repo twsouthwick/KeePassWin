@@ -38,13 +38,7 @@ namespace KeePass.Win.ViewModels
             _navigator = navigator;
             _credentialProvider = credentialProvider;
 
-            ItemClickCommand = new DelegateCommand<IKeePassId>(item =>
-            {
-                if (item is IKeePassGroup)
-                {
-                    GroupClicked(item as IKeePassGroup);
-                }
-            });
+            ItemClickCommand = new DelegateCommand<IKeePassId>(item => GroupClicked(item as IKeePassGroup), item => (item as IKeePassGroup) != null);
 
             GoToParentCommand = new DelegateCommand<IKeePassGroup>(group =>
             {

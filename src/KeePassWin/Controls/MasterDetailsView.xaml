@@ -36,13 +36,13 @@
                                                   ContentTemplate="{TemplateBinding MasterHeaderTemplate}"
                                                   Visibility="Collapsed" />
                                 <ListView x:Name="MasterList"
-                                          Grid.Row="1"
+                                          Grid.Row="1" TabIndex="-1000"
                                           ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                                           ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                           ItemTemplate="{TemplateBinding ItemTemplate}"
                                           ItemsSource="{TemplateBinding ItemsSource}"
                                           IsItemClickEnabled="true"
-                                          SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                                          SelectedItem="{Binding SelectedMasterItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <ContentPresenter Grid.Row="2"
                                                   Content="{TemplateBinding FooterContent}"
                                                   ContentTemplate="{TemplateBinding FooterTemplate}" />

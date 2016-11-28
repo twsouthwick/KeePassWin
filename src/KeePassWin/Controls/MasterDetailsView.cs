@@ -19,6 +19,15 @@ namespace KeePass.Win.Controls
         public static readonly DependencyProperty ItemClickCommandProperty =
             DependencyProperty.Register(nameof(ItemClickCommand), typeof(ICommand), typeof(MasterDetailsView), new PropertyMetadata(null));
 
+        public static readonly DependencyProperty SelectedMasterItemProperty =
+            DependencyProperty.Register(nameof(SelectedMasterItem), typeof(object), typeof(MasterDetailsView), new PropertyMetadata(null, ListSelectedItemPropertyChanged));
+
+        public object SelectedMasterItem
+        {
+            get { return (object)GetValue(SelectedMasterItemProperty); }
+            set { SetValue(SelectedMasterItemProperty, value); }
+        }
+
         public DataTemplate FooterTemplate
         {
             get { return (DataTemplate)GetValue(FooterTemplateProperty); }
@@ -63,13 +72,32 @@ namespace KeePass.Win.Controls
             return string.Equals(currentState?.Name, stateName, StringComparison.Ordinal);
         }
 
+        private static void ListSelectedItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (MasterDetailsView)d;
+
+            if (view.ItemClickCommand?.CanExecute(e.NewValue) == false)
+            {
+                view.SelectedItem = e.NewValue;
+            }
+            else
+            {
+                view.SelectedItem = null;
+            }
+        }
+
         private void ListItemClick(object sender, ItemClickEventArgs e)
         {
             var command = ItemClickCommand;
+            var newItem = e.ClickedItem;
 
-            if (command?.CanExecute(e.ClickedItem) == true)
+            if (command?.CanExecute(newItem) == true)
             {
-                command.Execute(e.ClickedItem);
+                command.Execute(newItem);
+            }
+            else
+            {
+                SelectedItem = newItem;
             }
         }
     }
