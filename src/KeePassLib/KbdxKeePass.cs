@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -206,7 +205,11 @@ namespace KeePass
                 set { }
             }
 
-            public string Notes { get; set; } = string.Empty;
+            public string Notes
+            {
+                get { return Get(PwDefs.NotesField); }
+                set { Add(PwDefs.NotesField, value); }
+            }
 
             public string Password
             {
@@ -250,7 +253,7 @@ namespace KeePass
 
             private string Get(string def)
             {
-                return _entry.Strings.Get(def)?.ReadString();
+                return _entry.Strings.Get(def)?.ReadString() ?? string.Empty;
             }
 
             private void Add(string def, string value, [CallerMemberName]string name = null)
