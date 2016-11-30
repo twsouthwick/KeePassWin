@@ -42,7 +42,7 @@
                         <MenuFlyoutItem Text="Copy password" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding Password}" />
                         <MenuFlyoutItem Text="Go to website" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" />
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Delete" Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root}" />
+                        <MenuFlyoutItem Text="Delete" Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root}" CommandParameter="{Binding}"  />
                     </MenuFlyout>
                 </Grid.ContextFlyout>
                 <Grid.RowDefinitions>
