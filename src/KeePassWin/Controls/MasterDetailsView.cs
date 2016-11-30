@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prism.Windows.AppModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -21,6 +22,15 @@ namespace KeePass.Win.Controls
 
         public static readonly DependencyProperty SelectedMasterItemProperty =
             DependencyProperty.Register(nameof(SelectedMasterItem), typeof(object), typeof(MasterDetailsView), new PropertyMetadata(null, ListSelectedItemPropertyChanged));
+
+        public static readonly DependencyProperty DeviceGestureServiceProperty =
+            DependencyProperty.Register(nameof(DeviceGestureService), typeof(IDeviceGestureService), typeof(MasterDetailsView), new PropertyMetadata(null, DeviceGestureServicePropertyChanged));
+
+        public IDeviceGestureService DeviceGestureService
+        {
+            get { return (IDeviceGestureService)GetValue(DeviceGestureServiceProperty); }
+            set { SetValue(DeviceGestureServiceProperty, value); }
+        }
 
         public object SelectedMasterItem
         {
@@ -70,6 +80,35 @@ namespace KeePass.Win.Controls
             var currentState = groups.First(g => string.Equals(g.Name, groupName, StringComparison.Ordinal)).CurrentState;
 
             return string.Equals(currentState?.Name, stateName, StringComparison.Ordinal);
+        }
+
+        private static void DeviceGestureServicePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (MasterDetailsView)d;
+
+            var previous = e.OldValue as IDeviceGestureService;
+            var newValue = e.NewValue as IDeviceGestureService;
+
+            if (previous != null)
+            {
+                previous.GoBackRequested -= view.DeviceGoBackRequested;
+            }
+
+            if (newValue != null)
+            {
+                newValue.GoBackRequested += view.DeviceGoBackRequested;
+            }
+        }
+
+        private void DeviceGoBackRequested(object sender, DeviceGestureEventArgs e)
+        {
+            if (SelectedItem != null)
+            {
+                e.Handled = true;
+                e.Cancel = true;
+
+                SelectedItem = null;
+            }
         }
 
         private static void ListSelectedItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

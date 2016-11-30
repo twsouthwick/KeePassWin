@@ -1,5 +1,6 @@
 ﻿using KeePass.Models;
 using Prism.Commands;
+using Prism.Windows.AppModel;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using System;
@@ -31,12 +32,14 @@ namespace KeePass.Win.ViewModels
         private bool _saving;
         private bool _activeSearch;
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard clipboard, ICredentialProvider credentialProvider)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard clipboard, ICredentialProvider credentialProvider, IDeviceGestureService deviceGestureService)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
             _navigator = navigator;
             _credentialProvider = credentialProvider;
+
+            DeviceGestureService = deviceGestureService;
 
             ItemClickCommand = new DelegateCommand<IKeePassId>(item => GroupClicked(item as IKeePassGroup), item => (item as IKeePassGroup) != null);
 
@@ -214,6 +217,8 @@ namespace KeePass.Win.ViewModels
         public ICommand AddGroupCommand { get; }
 
         public ICommand SaveCommand => _saveCommand;
+
+        public IDeviceGestureService DeviceGestureService { get; }
 
         public IKeePassDatabase Database
         {
