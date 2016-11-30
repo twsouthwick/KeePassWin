@@ -1,19 +1,28 @@
-[Install from Windows Store](https://www.microsoft.com/en-us/store/p/keepasswin/9wzdncrd91jm). It currently won't show up in searches, but it should soon.
+# KeePassWin
 
-This is a UWP implementation of [KeePass](http://keepass.info). This app currently supports the following:
+## Install
+Install from the [Windows Store](https://www.microsoft.com/en-us/store/p/keepasswin/9wzdncrd91jm).
 
-- Load a file from any file picker source (including key files)
-- Add entries
-- Open webpage
-- Copy username/password to clipboard
-- Works on mobile and desktop
+Build status: ![Build Status](https://twsouthwick.visualstudio.com/_apis/public/build/definitions/9ae74bf6-22af-40aa-bd59-8f82c58631ef/37/badge)
 
-Things that are currently missing:
+## Overview
 
-- Create a new database
-- Create new groups
-- Password generator
-- On mobile, the file picker does not seem to work correctly with OneDrive (DropBox works to save, but must be readded every time)
-- probably more, but those are the big ones
+This is a universal Windows implementation of [KeePass](http://keepass.info) that supports all Windows 10 devices.
 
-This is a side project I have worked on off and on and figured others would appreciate it and maybe help contribute. Any help is very much appreciated. Please create an issue and submit PRs if interested.
+## Features
+
+For a list of features, please see the [changelog](CHANGELOG.md).
+
+### Narrow view:
+
+| List view | Details View |
+| --------- | ------------ |
+| ![Narrow List View](assets/screenshots/narrow_list.png) | ![Narrow Details View](assets/screenshots/narrow_details.png)|
+
+### Wide view
+
+![assets](assets/screenshots/wide_details.png)
+
+## Contribute
+
+This is a side project I have worked on off and on and figured others would appreciate it and maybe help contribute. Any help is very much appreciated. Please see [here](CONTRIBUTING.md) for steps to contribute
