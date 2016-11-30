@@ -66,7 +66,10 @@ namespace KeePass.Win.ViewModels
                 {
                     var db = await _cache.UnlockAsync(id, _credentialProvider);
 
-                    _navigator.GoToDatabaseView(db, db.Root);
+                    if (db != null)
+                    {
+                        _navigator.GoToDatabaseView(db, db.Root);
+                    }
                 })
             };
 
