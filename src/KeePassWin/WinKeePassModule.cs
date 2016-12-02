@@ -27,6 +27,8 @@ namespace KeePass.Win
 
             builder.RegisterType<DataPackageClipboard>()
                 .As<IClipboard<string>>()
+                .As<IClipboard<ILogView>>()
+                .As<IMailClient<ILogView>>()
                 .SingleInstance();
 
             builder.RegisterType<PrismNavigationService>()

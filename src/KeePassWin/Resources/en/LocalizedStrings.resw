@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmailMessageBody" xml:space="preserve">
+    <value>Attached is a usage log of KeePassWin</value>
+  </data>
+  <data name="EmailMessageSubject" xml:space="preserve">
+    <value>KeePass [{0}] ({1})</value>
+  </data>
+  <data name="EmailMessageTo" xml:space="preserve">
+    <value>keepasswin@outlook.com</value>
+  </data>
+  <data name="EmailMessageToName" xml:space="preserve">
+    <value>KeePassWin</value>
+  </data>
   <data name="MainPageMenuItemDisplayName" xml:space="preserve">
     <value>Main page</value>
   </data>
@@ -128,5 +140,8 @@
   </data>
   <data name="MenuItemOpenSameFileTitle" xml:space="preserve">
     <value>Database already open!</value>
+  </data>
+  <data name="SettingsLogDescription" xml:space="preserve">
+    <value>Logging is a useful tool to help diagnose issues that you may encounter. By default, logging is turned off but may be turned on here. If you encounter a problem with the application, please enable logging, reproduce the error, and then send the log.</value>
   </data>
 </root>
