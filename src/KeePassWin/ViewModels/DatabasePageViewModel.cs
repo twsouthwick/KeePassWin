@@ -19,7 +19,7 @@ namespace KeePass.Win.ViewModels
     {
         private readonly IDatabaseCache _unlocker;
         private readonly INavigator _navigator;
-        private readonly IClipboard _clipboard;
+        private readonly IClipboard<string> _clipboard;
         private readonly ICredentialProvider _credentialProvider;
 
         private readonly DelegateCommand _saveCommand;
@@ -32,7 +32,7 @@ namespace KeePass.Win.ViewModels
         private bool _saving;
         private bool _activeSearch;
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard clipboard, ICredentialProvider credentialProvider, IDeviceGestureService deviceGestureService)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard<string> clipboard, ICredentialProvider credentialProvider, IDeviceGestureService deviceGestureService)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
@@ -51,7 +51,7 @@ namespace KeePass.Win.ViewModels
                 }
             });
 
-            CopyCommand = new DelegateCommand<string>(text => _clipboard.SetText(text));
+            CopyCommand = new DelegateCommand<string>(text => _clipboard.Copy(text));
 
             OpenUrlCommand = new DelegateCommand<IKeePassEntry>(async entry =>
             {

@@ -25,7 +25,7 @@ namespace KeePass.Win
                 .SingleInstance();
 
             builder.RegisterType<DataPackageClipboard>()
-                .As<IClipboard>()
+                .As<IClipboard<string>>()
                 .SingleInstance();
 
             builder.RegisterType<PrismNavigationService>()

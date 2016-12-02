@@ -2,9 +2,9 @@
 
 namespace KeePass.Win.Services
 {
-    public class DataPackageClipboard : IClipboard
+    public class DataPackageClipboard : IClipboard<string>
     {
-        public virtual bool SetText(string text)
+        public virtual bool Copy(string text)
         {
             if (text == null)
             {

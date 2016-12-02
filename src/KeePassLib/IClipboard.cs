@@ -1,7 +1,7 @@
 ﻿namespace KeePass
 {
-    public interface IClipboard
+    public interface IClipboard<T>
     {
-        bool SetText(string text);
+        bool Copy(T obj);
     }
 }
