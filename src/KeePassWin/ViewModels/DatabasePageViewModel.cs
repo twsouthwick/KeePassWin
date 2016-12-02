@@ -21,6 +21,7 @@ namespace KeePass.Win.ViewModels
         private readonly INavigator _navigator;
         private readonly IClipboard<string> _clipboard;
         private readonly ICredentialProvider _credentialProvider;
+        private readonly ILogger _log;
 
         private readonly DelegateCommand _saveCommand;
         private readonly DelegateCommand _addEntryCommand;
@@ -32,12 +33,13 @@ namespace KeePass.Win.ViewModels
         private bool _saving;
         private bool _activeSearch;
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard<string> clipboard, ICredentialProvider credentialProvider, IDeviceGestureService deviceGestureService)
+        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard<string> clipboard, ICredentialProvider credentialProvider, IDeviceGestureService deviceGestureService, ILogger log)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
             _navigator = navigator;
             _credentialProvider = credentialProvider;
+            _log = log;
 
             DeviceGestureService = deviceGestureService;
 

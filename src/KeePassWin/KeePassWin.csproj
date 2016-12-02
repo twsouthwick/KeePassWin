@@ -114,6 +114,7 @@
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Converters\NullObjectVisibilityConverter.cs" />
     <Compile Include="Converters\UriVisibilityConverter.cs" />
+    <Compile Include="Log\SerilogLogger.cs" />
     <Compile Include="Services\DataPackageClipboard.cs" />
     <Compile Include="Services\FileDatabaseTracker.cs" />
     <Compile Include="INavigator.cs" />
