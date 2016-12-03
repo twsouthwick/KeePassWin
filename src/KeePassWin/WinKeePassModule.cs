@@ -22,7 +22,8 @@ namespace KeePass.Win
                 .As<ICredentialProvider>()
                 .SingleInstance();
 
-            builder.RegisterDecorator<IDatabaseCache>((c, inner) => new SimpleDatabaseCache(inner), fromKey: nameof(DatabaseCache))
+            builder.RegisterDecorator<IDatabaseCache>((c, inner) => new SimpleDatabaseCache(inner, c.Resolve<INavigator>()), fromKey: nameof(DatabaseCache))
+                .RegisterAppModel()
                 .SingleInstance();
 
             builder.RegisterType<DataPackageClipboard>()

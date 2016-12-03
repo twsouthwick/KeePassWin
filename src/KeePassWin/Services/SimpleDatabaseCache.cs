@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using KeePass.Win.AppModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace KeePass.Win.Services
 {
-    internal class SimpleDatabaseCache : IDatabaseCache
+    internal class SimpleDatabaseCache : IDatabaseCache, IBackgroundEnteredAware
     {
         private readonly Dictionary<KeePassId, IKeePassDatabase> _idCache = new Dictionary<KeePassId, IKeePassDatabase>();
         private readonly IDatabaseCache _cache;
+        private readonly INavigator _navigator;
 
-        public SimpleDatabaseCache(IDatabaseCache cache)
+        public SimpleDatabaseCache(IDatabaseCache cache, INavigator navigator)
         {
             _cache = cache;
+            _navigator = navigator;
         }
 
         public Task<IFile> AddDatabaseAsync() => _cache.AddDatabaseAsync();
@@ -40,6 +44,16 @@ namespace KeePass.Win.Services
             }
 
             return unlocked;
+        }
+
+        public Task BackgroundEnteredAsync()
+        {
+            _idCache.Clear();
+
+            // Without this, on resume, the last page will still be cached
+            _navigator.GoToMain();
+
+            return Task.CompletedTask;
         }
     }
 }
