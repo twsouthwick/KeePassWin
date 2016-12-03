@@ -1,4 +1,5 @@
-﻿using Autofac.Builder;
+﻿using Autofac;
+using Autofac.Builder;
 using KeePass.Win.AppModel;
 using Windows.UI.Xaml;
 
@@ -18,14 +19,19 @@ namespace KeePass.Win
         {
             return builder.OnActivated(c =>
             {
+                var settings = c.Context.Resolve<KeePassSettings>();
+
                 var backgroundAware = c.Instance as IBackgroundEnteredAware;
                 if (backgroundAware != null)
                 {
                     Application.Current.EnteredBackground += async (s, e) =>
                     {
-                        var deferral = e.GetDeferral();
-                        await backgroundAware.BackgroundEnteredAsync();
-                        deferral.Complete();
+                        if (settings.ClearOnSuspend)
+                        {
+                            var deferral = e.GetDeferral();
+                            await backgroundAware.BackgroundEnteredAsync();
+                            deferral.Complete();
+                        }
                     };
                 }
             });

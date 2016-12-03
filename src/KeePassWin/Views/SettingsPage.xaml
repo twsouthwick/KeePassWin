@@ -38,6 +38,10 @@
                 </StackPanel>
             </PivotItem>
 
+            <PivotItem Header="Settings">
+                <CheckBox VerticalAlignment="Top" IsChecked="{x:Bind Path=Model.Settings.ClearOnSuspend, Mode=TwoWay}" Content="Clear passwords on suspend" />
+            </PivotItem>
+
             <PivotItem Header="Privacy">
                 <TextBlock Text="{x:Bind Path=Model.PrivacyStatement}" TextWrapping="Wrap"  />
             </PivotItem>
