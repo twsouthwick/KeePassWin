@@ -11,24 +11,28 @@ namespace KeePass.Win.Log
     {
         private readonly StringBuilder _sb;
         private readonly StringWriter _writer;
+        private readonly KeePassSettings _settings;
 
-        private bool _shouldLogEvents;
-
-        public StringBuilderSink()
+        public StringBuilderSink(KeePassSettings settings)
         {
+            _settings = settings;
             _sb = new StringBuilder();
             _writer = new StringWriter(_sb);
 
-#if DEBUG
-            _shouldLogEvents = true;
-#endif
+            _settings.PropertyChanged += (s, e) =>
+            {
+                if (string.Equals(nameof(ShouldLogEvents), e.PropertyName, StringComparison.Ordinal))
+                {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShouldLogEvents)));
+                }
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void Emit(LogEvent logEvent)
         {
-            if (!ShouldLogEvents)
+            if (!_settings.TrackTelemetry)
             {
                 return;
             }
@@ -52,17 +56,8 @@ namespace KeePass.Win.Log
 
         public bool ShouldLogEvents
         {
-            get { return _shouldLogEvents; }
-            set
-            {
-                if (_shouldLogEvents == value)
-                {
-                    return;
-                }
-
-                _shouldLogEvents = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShouldLogEvents)));
-            }
+            get { return _settings.TrackTelemetry; }
+            set { _settings.TrackTelemetry = value; }
         }
     }
 }

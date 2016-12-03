@@ -125,6 +125,7 @@
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />
     <Compile Include="KbdxKeePass.cs" />
+    <Compile Include="KeePassSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadWriteKeePassEntry.cs" />
   </ItemGroup>

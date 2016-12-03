@@ -131,6 +131,7 @@
     <Compile Include="Services\StorageItemExtensions.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
+    <Compile Include="Services\WinKeePassSettings.cs" />
     <Compile Include="ViewModels\LoggingPageViewModel.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />

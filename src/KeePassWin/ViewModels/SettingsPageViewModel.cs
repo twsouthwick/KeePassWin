@@ -4,13 +4,16 @@ namespace KeePass.Win.ViewModels
 {
     public class SettingsPageViewModel
     {
-        public SettingsPageViewModel(LoggingPageViewModel logViewModel)
+        public SettingsPageViewModel(LoggingPageViewModel logViewModel, KeePassSettings settings)
         {
             Logging = logViewModel;
+            Settings = settings;
 
             Version = File.ReadAllText("version.txt").Trim();
             PrivacyStatement = File.ReadAllText("PrivacyPolicy.txt");
         }
+
+        public KeePassSettings Settings { get; }
 
         public LoggingPageViewModel Logging { get; }
 

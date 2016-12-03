@@ -45,6 +45,11 @@ namespace KeePass.Win
                 .As<ILogView>()
                 .SingleInstance();
 
+            builder.RegisterType<WinKeePassSettings>()
+                .As<KeePassSettings>()
+                .OnActivated(s => s.Instance.Load())
+                .SingleInstance();
+
             builder.Register(CreateLogger)
                 .As<ILogger>()
                 .SingleInstance();
