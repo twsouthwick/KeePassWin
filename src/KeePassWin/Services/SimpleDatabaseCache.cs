@@ -17,7 +17,12 @@ namespace KeePass.Win.Services
 
         public Task<IEnumerable<IFile>> GetDatabaseFilesAsync() => _cache.GetDatabaseFilesAsync();
 
-        public Task RemoveDatabaseAsync(IFile dbFile) => _cache.RemoveDatabaseAsync(dbFile);
+        public async Task RemoveDatabaseAsync(IFile dbFile)
+        {
+            _idCache.Remove(dbFile.IdFromPath());
+
+            await _cache.RemoveDatabaseAsync(dbFile);
+        }
 
         public async Task<IKeePassDatabase> UnlockAsync(KeePassId id, ICredentialProvider provider)
         {
