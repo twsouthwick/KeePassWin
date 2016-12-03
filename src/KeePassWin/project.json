@@ -3,7 +3,9 @@
     "Autofac": "4.1.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Microsoft.Toolkit.Uwp.UI.Controls": "1.2.0",
-    "Prism.Autofac": "6.2.0"
+    "Prism.Autofac": "6.2.0",
+    "Serilog": "2.3.0",
+    "Serilog.Sinks.Trace": "2.1.0"
   },
   "frameworks": {
     "uap10.0": {}

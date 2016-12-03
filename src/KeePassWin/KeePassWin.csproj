@@ -114,6 +114,9 @@
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Converters\NullObjectVisibilityConverter.cs" />
     <Compile Include="Converters\UriVisibilityConverter.cs" />
+    <Compile Include="Log\ILogView.cs" />
+    <Compile Include="Log\SerilogLogger.cs" />
+    <Compile Include="Log\StringBuilderSink.cs" />
     <Compile Include="Services\DataPackageClipboard.cs" />
     <Compile Include="Services\FileDatabaseTracker.cs" />
     <Compile Include="INavigator.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Services\StorageItemExtensions.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
+    <Compile Include="ViewModels\LoggingPageViewModel.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Controls\EntryViewControl.xaml.cs">

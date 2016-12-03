@@ -1,4 +1,5 @@
 ﻿using KeePass;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ namespace KeePassLib
             var kdbx = TestAssets.GetFile(db);
             var fileAccess = new TestFileAccess(kdbx);
             var credentials = new TestCredentialProvider(TestAssets.GetFile(Path.GetFileNameWithoutExtension(db)), password);
-            var unlocker = new DatabaseCache(fileAccess, null);
+            var unlocker = new DatabaseCache(Substitute.For<ILogger>(), fileAccess, Substitute.For<IFilePicker>());
 
             var result = await unlocker.UnlockAsync(kdbx.IdFromPath(), credentials);
 

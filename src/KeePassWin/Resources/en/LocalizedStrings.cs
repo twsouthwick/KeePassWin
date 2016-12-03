@@ -17,7 +17,7 @@
 // 	This code contains a helper class exposing property representations
 // 	of the string resources defined in the specified .ResW file
 // 
-// 	Generated: 11/23/2016 22:48:45
+// 	Generated: 12/02/2016 11:51:11
 // </auto-generatedInfo>
 // --------------------------------------------------------------------------------------------------
 namespace KeePass.Win
@@ -49,6 +49,50 @@ namespace KeePass.Win
             else
             {
                 resourceLoader = ResourceLoader.GetForCurrentView(currentAssemblyName + "/LocalizedStrings");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "Attached is a usage log of KeePassWin"
+        /// </summary>
+        public static string EmailMessageBody
+        {
+            get
+            {
+                return resourceLoader.GetString("EmailMessageBody");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "KeePass [{0}] ({1})"
+        /// </summary>
+        public static string EmailMessageSubject
+        {
+            get
+            {
+                return resourceLoader.GetString("EmailMessageSubject");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "keepasswin@outlook.com"
+        /// </summary>
+        public static string EmailMessageTo
+        {
+            get
+            {
+                return resourceLoader.GetString("EmailMessageTo");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "KeePassWin"
+        /// </summary>
+        public static string EmailMessageToName
+        {
+            get
+            {
+                return resourceLoader.GetString("EmailMessageToName");
             }
         }
         
@@ -93,6 +137,17 @@ namespace KeePass.Win
             get
             {
                 return resourceLoader.GetString("MenuItemOpenSameFileTitle");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "Logging is a useful tool to help diagnose issues that you may encounter. By default, logging is turned off but may be turned on here. If you encounter a problem with the application, please enable logging, reproduce the error, and then send the log."
+        /// </summary>
+        public static string SettingsLogDescription
+        {
+            get
+            {
+                return resourceLoader.GetString("SettingsLogDescription");
             }
         }
     }

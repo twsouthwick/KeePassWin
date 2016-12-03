@@ -10,17 +10,21 @@ namespace KeePass
 {
     public class DatabaseCache : IDatabaseCache
     {
+        private readonly ILogger _log;
         private readonly IDatabaseFileAccess _fileAccess;
         private readonly IFilePicker _filePicker;
 
-        public DatabaseCache(IDatabaseFileAccess databaseTracker, IFilePicker filePicker)
+        public DatabaseCache(ILogger log, IDatabaseFileAccess databaseTracker, IFilePicker filePicker)
         {
+            _log = log;
             _fileAccess = databaseTracker;
             _filePicker = filePicker;
         }
 
         public async Task<IKeePassDatabase> UnlockAsync(KeePassId id, ICredentialProvider credentialProvider)
         {
+            _log.Info("Unlock {Database}", id);
+
             var dbFile = await _fileAccess.GetDatabaseAsync(id);
 
             Debug.Assert(dbFile != null);
@@ -29,14 +33,19 @@ namespace KeePass
 
             if (credentials.Equals(default(KeePassCredentials)))
             {
+                _log.Warning("Failed to unlocked {Database}", id);
                 return null;
             }
+
+            _log.Info("Successfully unlocked {Database}", id);
 
             return await UnlockAsync(dbFile, credentials);
         }
 
         public async Task<IKeePassDatabase> UnlockAsync(IFile dbFile, KeePassCredentials credentials)
         {
+            _log.Info("Unlock {Database}", dbFile);
+
             try
             {
                 var compositeKey = new CompositeKey();
@@ -74,7 +83,7 @@ namespace KeePass
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                _log.Error(e, "Unknown error");
 
                 throw new DatabaseUnlockException(e);
             }
@@ -82,6 +91,7 @@ namespace KeePass
 
         public async Task<IFile> AddDatabaseAsync()
         {
+            _log.Info("Adding a database");
             var result = await _filePicker.GetDatabaseAsync();
 
             if (result == null)
@@ -116,11 +126,13 @@ namespace KeePass
 
         public Task<IEnumerable<IFile>> GetDatabaseFilesAsync()
         {
+            _log.Info("Getting available databases");
             return _fileAccess.GetDatabasesAsync();
         }
 
         public Task RemoveDatabaseAsync(IFile dbFile)
         {
+            _log.Info("Removing {Database}", dbFile);
             return _fileAccess.RemoveDatabaseAsync(dbFile);
         }
     }

@@ -30,7 +30,11 @@ namespace KeePass.Win.ViewModels
                 try
                 {
                     var db = await _cache.AddDatabaseAsync();
-                    await AddDatabaseEntry(db);
+
+                    if (db != null)
+                    {
+                        await AddDatabaseEntry(db);
+                    }
                 }
                 catch (DatabaseAlreadyExistsException)
                 {
