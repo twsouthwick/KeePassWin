@@ -108,7 +108,9 @@ namespace KeePass.Win.ViewModels
                     _saving = false;
                     NotifyAllCommands();
                 }
-            }, () => Database?.Modified == true && !_saving);
+            // This is disabled currently due to twsouthwick/KeePassWin 15
+            //}, () => Database?.Modified == true && !_saving);
+            });
         }
 
         private void NotifyAllCommands()
