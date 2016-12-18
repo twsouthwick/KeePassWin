@@ -84,25 +84,20 @@ namespace KeePass
             }
         }
 
-        public static IEnumerable<KeePassEntryWithParent> EnumerateAllEntriesWithParent(this IKeePassGroup group)
+        public static IEnumerable<IKeePassEntry> EnumerateAllEntries(this IKeePassGroup group)
         {
             foreach (var entry in group.Entries)
             {
-                yield return new KeePassEntryWithParent(entry, group);
+                yield return entry;
             }
 
             foreach (var subgroup in group.Groups)
             {
-                foreach (var item in subgroup.EnumerateAllEntriesWithParent())
+                foreach (var item in subgroup.EnumerateAllEntries())
                 {
                     yield return item;
                 }
             }
-        }
-
-        public static IEnumerable<IKeePassEntry> EnumerateAllEntries(this IKeePassGroup group)
-        {
-            return group.EnumerateAllEntriesWithParent().Select(p => p.Entry);
         }
 
         public static IEnumerable<IKeePassGroup> EnumerateParents(this IKeePassGroup group, bool includeSelf = false)

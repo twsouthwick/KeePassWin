@@ -120,7 +120,6 @@
     <Compile Include="ILogger.cs" />
     <Compile Include="IMailClient.cs" />
     <Compile Include="KeePassCredentials.cs" />
-    <Compile Include="KeePassEntryWithParent.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
     <Compile Include="KeePassInterfaces.cs" />

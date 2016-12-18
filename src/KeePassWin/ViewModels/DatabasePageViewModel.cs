@@ -127,9 +127,8 @@ namespace KeePass.Win.ViewModels
         public void Search(string query)
         {
             _activeSearch = true;
-            var items = _database.Root.EnumerateAllEntriesWithParent()
+            var items = _database.Root.EnumerateAllEntries()
                 .Where(item => FilterEntry(item, query))
-                .Select(item => item.Entry)
                 .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase);
 
             Items.Clear();
@@ -153,9 +152,9 @@ namespace KeePass.Win.ViewModels
             return true;
         }
 
-        private bool FilterEntry(KeePassEntryWithParent item, string text)
+        private bool FilterEntry(IKeePassEntry entry, string text)
         {
-            return Contains(item.Entry.Title, text) || Contains(item.Entry.Notes, text) || Contains(item.Parent.Name, text);
+            return Contains(entry.Title, text) || Contains(entry.Notes, text) || Contains(entry.Group.Name, text);
         }
 
         private bool Contains(string source, string searchText)
