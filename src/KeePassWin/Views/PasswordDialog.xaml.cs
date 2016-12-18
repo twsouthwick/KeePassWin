@@ -1,15 +1,15 @@
-﻿using KeePass;
-using KeePass.Win.ViewModels;
+﻿using KeePass.Win.ViewModels;
 using System;
-using Windows.System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
 
 namespace KeePass.Win.Views
 {
-    public sealed partial class PasswordDialog : ContentDialog
+    public sealed partial class PasswordDialog : ContentDialog, IContentDialogResult
     {
-        public enum ResultState { None, Open, Cancel };
+        private ResultState _result = ResultState.None;
+
+        private enum ResultState { None, Open, Cancel };
 
         public PasswordDialog(IFile db, Func<IFile, PasswordDialogViewModel> modelCreator)
         {
@@ -18,35 +18,29 @@ namespace KeePass.Win.Views
             Model = modelCreator(db);
         }
 
-        public ResultState Result { get; private set; } = ResultState.None;
-
-        protected override void OnKeyDown(KeyRoutedEventArgs e)
+        public async Task<PasswordDialogViewModel> GetModelAsync()
         {
-            if (e.Key == VirtualKey.Enter)
+            await ShowAsync();
+
+            if (_result == ResultState.Cancel || _result == ResultState.None)
             {
-                e.Handled = true;
-                Result = ResultState.Open;
-                Hide();
+                return null;
             }
-            else if (e.Key == VirtualKey.Escape)
+            else
             {
-                e.Handled = true;
-                Result = ResultState.Cancel;
-                Hide();
+                return Model;
             }
         }
 
-        private void CancelClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            Result = ResultState.Cancel;
-        }
+        public void Enter() => _result = ResultState.Open;
 
-        private void UnlockDatabaseClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            Result = ResultState.Open;
-        }
+        public void Escape() => _result = ResultState.Cancel;
 
-        public PasswordDialogViewModel Model { get; }
+        private void CancelClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) => Escape();
+
+        private void UnlockDatabaseClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) => Enter();
+
+        private PasswordDialogViewModel Model { get; }
     }
 }
 

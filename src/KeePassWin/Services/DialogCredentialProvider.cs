@@ -18,15 +18,14 @@ namespace KeePass.Win.Services
         public async Task<KeePassCredentials> GetCredentialsAsync(IFile file)
         {
             var dialog = _dialogFactory(file);
+            var model = await dialog.GetModelAsync();
 
-            await dialog.ShowAsync();
-
-            if (dialog.Result == PasswordDialog.ResultState.Cancel || dialog.Result == PasswordDialog.ResultState.None)
+            if (model == null)
             {
                 return default(KeePassCredentials);
             }
 
-            return new KeePassCredentials(dialog.Model.KeyFile, dialog.Model.Password);
+            return new KeePassCredentials(model.KeyFile, model.Password);
         }
     }
 }
