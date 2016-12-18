@@ -33,7 +33,7 @@ namespace KeePass.Win.ViewModels
 
                     if (db != null)
                     {
-                        await AddDatabaseEntry(db);
+                        await AddDatabaseEntryAsync(db);
                     }
                 }
                 catch (DatabaseAlreadyExistsException)
@@ -53,12 +53,12 @@ namespace KeePass.Win.ViewModels
 
                 foreach (var item in r.Result)
                 {
-                    await AddDatabaseEntry(item);
+                    await AddDatabaseEntryAsync(item);
                 }
             });
         }
 
-        private async Task AddDatabaseEntry(IFile dbFile)
+        private async Task AddDatabaseEntryAsync(IFile dbFile)
         {
             var id = dbFile.IdFromPath();
 
@@ -68,11 +68,23 @@ namespace KeePass.Win.ViewModels
                 FontIcon = Symbol.ProtectedDocument,
                 Command = new DelegateCommand(async () =>
                 {
-                    var db = await _cache.UnlockAsync(id, _credentialProvider);
-
-                    if (db != null)
+                    try
                     {
+                        var db = await _cache.UnlockAsync(id, _credentialProvider);
+
                         _navigator.GoToDatabaseView(db, db.Root);
+                    }
+                    catch (InvalidCredentialsException)
+                    {
+                        var dialog = new MessageDialog(LocalizedStrings.InvalidCredentials, LocalizedStrings.MenuItemOpenError);
+
+                        await dialog.ShowAsync();
+                    }
+                    catch (DatabaseUnlockException e)
+                    {
+                        var dialog = new MessageDialog(e.Message, LocalizedStrings.MenuItemOpenError);
+
+                        await dialog.ShowAsync();
                     }
                 })
             };

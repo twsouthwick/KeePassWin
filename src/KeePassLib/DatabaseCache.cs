@@ -81,11 +81,9 @@ namespace KeePass
             {
                 throw;
             }
-            catch (Exception e)
+            catch (InvalidCompositeKeyException e)
             {
-                _log.Error(e, "Unknown error");
-
-                throw new DatabaseUnlockException(e);
+                throw new InvalidCredentialsException(e);
             }
         }
 

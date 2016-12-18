@@ -95,7 +95,18 @@ namespace KeePass.Win
                 return resourceLoader.GetString("EmailMessageToName");
             }
         }
-        
+ 
+        /// <summary>
+        /// Localized resource similar to "Invalid credentials"
+        /// </summary>
+        public static string InvalidCredentials
+        {
+            get
+            {
+                return resourceLoader.GetString("InvalidCredentials");
+            }
+        }
+               
         /// <summary>
         /// Localized resource similar to "Main page"
         /// </summary>
@@ -115,6 +126,17 @@ namespace KeePass.Win
             get
             {
                 return resourceLoader.GetString("MenuItemOpenCommandTitle");
+            }
+        }
+
+        /// <summary>
+        /// Localized resource similar to "Could not open file"
+        /// </summary>
+        public static string MenuItemOpenError
+        {
+            get
+            {
+                return resourceLoader.GetString("MenuItemOpenError");
             }
         }
         
