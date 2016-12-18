@@ -16,7 +16,7 @@
         <converters:UriVisibilityConverter x:Key="UriVisibilityConverter"/>
 
         <DataTemplate x:Name="KeePassEntryDetailsTemplate" x:DataType="keepass:IKeePassEntry">
-            <controls:EntryViewControl Entry="{x:Bind}" Margin="20,0,0,0" />
+            <controls:EntryViewControl Entry="{x:Bind}" />
         </DataTemplate>
 
         <DataTemplate x:Name="KeePassGroupDetailsTemplate" x:DataType="keepass:IKeePassGroup">
@@ -106,7 +106,8 @@
                 </controls:MasterDetailsView.ItemTemplateSelector>
                 <controls:MasterDetailsView.DetailsTemplate>
                     <DataTemplate>
-                        <ContentControl Content="{Binding}" HorizontalContentAlignment="Stretch">
+                        <ContentControl Content="{Binding}" HorizontalContentAlignment="Stretch"
+                                        VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" >
                             <ContentControl.ContentTemplateSelector>
                                 <mvvm:TypeTemplateSelector>
                                     <mvvm:EntryTemplateMatch TemplateContent="{StaticResource KeePassEntryDetailsTemplate}" />
