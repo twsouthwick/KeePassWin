@@ -1,4 +1,5 @@
 ﻿using KeePass.Models;
+using KeePass.Win.Controls;
 using Prism.Commands;
 using Prism.Windows.AppModel;
 using Prism.Windows.Mvvm;
@@ -21,6 +22,7 @@ namespace KeePass.Win.ViewModels
         private readonly INavigator _navigator;
         private readonly IClipboard<string> _clipboard;
         private readonly ICredentialProvider _credentialProvider;
+        private readonly Func<INameProvider> _nameProvider;
         private readonly ILogger _log;
 
         private readonly DelegateCommand _saveCommand;
@@ -30,15 +32,25 @@ namespace KeePass.Win.ViewModels
         private IKeePassGroup _group;
         private IList<IKeePassGroup> _parents;
 
+#if FEATURE_SAVE
         private bool _saving;
+#endif
         private bool _activeSearch;
 
-        public DatabasePageViewModel(INavigator navigator, IDatabaseCache unlocker, IClipboard<string> clipboard, ICredentialProvider credentialProvider, IDeviceGestureService deviceGestureService, ILogger log)
+        public DatabasePageViewModel(
+            INavigator navigator,
+            IDatabaseCache unlocker,
+            IClipboard<string> clipboard,
+            ICredentialProvider credentialProvider,
+            IDeviceGestureService deviceGestureService,
+            Func<INameProvider> nameProvider,
+            ILogger log)
         {
             _clipboard = clipboard;
             _unlocker = unlocker;
             _navigator = navigator;
             _credentialProvider = credentialProvider;
+            _nameProvider = nameProvider;
             _log = log;
 
             DeviceGestureService = deviceGestureService;
@@ -68,13 +80,23 @@ namespace KeePass.Win.ViewModels
                 }
             });
 
-            _addEntryCommand = new DelegateCommand(() =>
+            _addEntryCommand = new DelegateCommand(async () =>
             {
-                var kdbxEntry = _group.CreateEntry();
-                Items.Add(kdbxEntry);
+                var name = await _nameProvider().GetNameAsync();
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    Items.Add(_group.CreateEntry(name));
+                }
 
                 NotifyAllCommands();
+
+#if FEATURE_SAVE
+                // This is disabled currently due to twsouthwick/KeePassWin 15
             }, () => !_saving);
+#else
+            });
+#endif
 
             RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(entry =>
             {
@@ -84,13 +106,29 @@ namespace KeePass.Win.ViewModels
                 NotifyAllCommands();
             });
 
-            AddGroupCommand = new DelegateCommand(() =>
+            AddGroupCommand = new DelegateCommand(async () =>
             {
-            }, () => false);
+                var name = await _nameProvider().GetNameAsync();
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    Items.Insert(GetGroupIndex(), _group.CreateGroup(name));
+                }
+
+                NotifyAllCommands();
+
+#if FEATURE_SAVE
+                // This is disabled currently due to twsouthwick/KeePassWin 15
+            }, () => !_saving);
+#else
+            });
+#endif
 
             _saveCommand = new DelegateCommand(async () =>
             {
+#if FEATURE_SAVE
                 _saving = true;
+#endif
                 NotifyAllCommands();
 
                 try
@@ -105,12 +143,35 @@ namespace KeePass.Win.ViewModels
                 }
                 finally
                 {
+#if FEATURE_SAVE
                     _saving = false;
+#endif
                     NotifyAllCommands();
                 }
-            // This is disabled currently due to twsouthwick/KeePassWin 15
-            //}, () => Database?.Modified == true && !_saving);
+
+#if FEATURE_SAVE
+                // This is disabled currently due to twsouthwick/KeePassWin 15
+            }, () => Database?.Modified == true && !_saving);
+#else
             });
+#endif
+        }
+
+        /// <summary>
+        /// Get the index of the last group item in Items. This is used to add groups into the right location of the collection
+        /// </summary>
+        /// <returns></returns>
+        private int GetGroupIndex()
+        {
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (!(Items[i] is IKeePassGroup))
+                {
+                    return i;
+                }
+            }
+
+            return Items.Count;
         }
 
         private void NotifyAllCommands()

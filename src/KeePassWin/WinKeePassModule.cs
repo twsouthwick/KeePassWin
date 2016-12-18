@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using KeePass.Win.Controls;
 using KeePass.Win.Log;
 using KeePass.Win.Mvvm;
 using KeePass.Win.Services;
@@ -57,6 +58,9 @@ namespace KeePass.Win
             builder.RegisterType<WindowsKeyboardShortcuts>()
                 .As<KeyboardShortcuts>()
                 .SingleInstance();
+
+            builder.RegisterType<NameBoxDialog>()
+                .As<INameProvider>();
         }
 
         private ILogger CreateLogger(IComponentContext arg)

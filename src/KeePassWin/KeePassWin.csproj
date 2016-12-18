@@ -96,6 +96,9 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="KeePassWin_StoreKey.pfx" />
     <None Include="KeePassWin_TemporaryKey.pfx" />
+    <Compile Include="Controls\NameBoxDialog.xaml.cs">
+      <DependentUpon>NameBoxDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IContentDialogResult.cs" />
     <Compile Include="Mvvm\Keyboard.Focus.cs" />
     <None Include="project.json" />
@@ -201,6 +204,10 @@
     <Page Include="AppShell.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\NameBoxDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\KeePassItems.xaml">
       <Generator>MSBuild:Compile</Generator>

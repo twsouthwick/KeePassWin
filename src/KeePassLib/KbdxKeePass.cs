@@ -80,13 +80,16 @@ namespace KeePass
 
             public IKeePassGroup Parent { get; }
 
-            public IKeePassEntry CreateEntry()
+            public IKeePassEntry CreateEntry(string title)
             {
                 var pwEntry = new PwEntry(true, true);
                 _group.AddEntry(pwEntry, true);
                 Database.Modified = true;
 
-                var wrapped = new KbdxEntry(pwEntry, Database, this);
+                var wrapped = new KbdxEntry(pwEntry, Database, this)
+                {
+                    Title = title
+                };
 
                 Entries.Add(wrapped);
 
@@ -132,11 +135,11 @@ namespace KeePass
                 return wrapped;
             }
 
-            public IKeePassGroup AddGroup(IKeePassGroup group)
+            public IKeePassGroup CreateGroup(string name)
             {
                 var pwGroup = new PwGroup(true, true)
                 {
-                    Name = group.Name
+                    Name = name
                 };
 
                 _group.AddGroup(pwGroup, true, true);
