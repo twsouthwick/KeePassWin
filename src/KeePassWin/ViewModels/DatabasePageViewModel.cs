@@ -1,5 +1,4 @@
 ﻿using KeePass.Models;
-using KeePass.Win.Controls;
 using Prism.Commands;
 using Prism.Windows.AppModel;
 using Prism.Windows.Mvvm;
@@ -22,7 +21,7 @@ namespace KeePass.Win.ViewModels
         private readonly INavigator _navigator;
         private readonly IClipboard<string> _clipboard;
         private readonly ICredentialProvider _credentialProvider;
-        private readonly Func<INameProvider> _nameProvider;
+        private readonly INameProvider _nameProvider;
         private readonly ILogger _log;
 
         private readonly DelegateCommand _saveCommand;
@@ -43,7 +42,7 @@ namespace KeePass.Win.ViewModels
             IClipboard<string> clipboard,
             ICredentialProvider credentialProvider,
             IDeviceGestureService deviceGestureService,
-            Func<INameProvider> nameProvider,
+            INameProvider nameProvider,
             ILogger log)
         {
             _clipboard = clipboard;
@@ -82,7 +81,7 @@ namespace KeePass.Win.ViewModels
 
             _addEntryCommand = new DelegateCommand(async () =>
             {
-                var name = await _nameProvider().GetNameAsync();
+                var name = await _nameProvider.GetNameAsync();
 
                 if (!string.IsNullOrEmpty(name))
                 {
@@ -108,7 +107,7 @@ namespace KeePass.Win.ViewModels
 
             AddGroupCommand = new DelegateCommand(async () =>
             {
-                var name = await _nameProvider().GetNameAsync();
+                var name = await _nameProvider.GetNameAsync();
 
                 if (!string.IsNullOrEmpty(name))
                 {

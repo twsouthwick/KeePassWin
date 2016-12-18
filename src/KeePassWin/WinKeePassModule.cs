@@ -4,6 +4,7 @@ using KeePass.Win.Log;
 using KeePass.Win.Mvvm;
 using KeePass.Win.Services;
 using Serilog;
+using System.Threading.Tasks;
 
 namespace KeePass.Win
 {
@@ -59,8 +60,9 @@ namespace KeePass.Win
                 .As<KeyboardShortcuts>()
                 .SingleInstance();
 
-            builder.RegisterType<NameBoxDialog>()
-                .As<INameProvider>();
+            builder.RegisterType<DialogNameProvider>()
+                .As<INameProvider>()
+                .SingleInstance();
         }
 
         private ILogger CreateLogger(IComponentContext arg)
@@ -73,6 +75,16 @@ namespace KeePass.Win
                 .CreateLogger();
 
             return new SerilogLogger(log);
+        }
+
+        private class DialogNameProvider : INameProvider
+        {
+            public Task<string> GetNameAsync()
+            {
+                var dialog = new NameBoxDialog();
+
+                return dialog.GetNameAsync();
+            }
         }
     }
 }
