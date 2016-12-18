@@ -1,33 +1,47 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace KeePass.Win.Controls
 {
     public sealed partial class NameBoxDialog : ContentDialog, INameProvider, IContentDialogResult
     {
-        private string _text;
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(NameBoxDialog), new PropertyMetadata(null));
+
+        public string Text
+        {
+            get { return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
 
         public NameBoxDialog()
         {
             this.InitializeComponent();
         }
 
-        public async Task<string> GetNameAsync()
+        public async Task<string> GetNameAsync(string initial = null)
         {
+            Text = initial;
+
+            if (initial != null)
+            {
+                SecondaryButtonText = "Rename";
+            }
+
             await ShowAsync();
 
-            return _text;
+            return Text;
         }
 
         public void Enter()
         {
-            _text = TextInputBox.Text;
+            Text = TextInputBox.Text;
         }
 
         public void Escape()
         {
-            _text = null;
+            Text = null;
         }
 
         private void CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) => Escape();

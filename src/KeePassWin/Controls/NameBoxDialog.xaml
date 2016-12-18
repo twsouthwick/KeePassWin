@@ -16,6 +16,7 @@
 
     <Grid>
         <TextBox x:Name="TextInputBox"
+            Text="{x:Bind Path=Text, Mode=OneWay}"
             HorizontalAlignment="Stretch" VerticalAlignment="Center" />
     </Grid>
 </ContentDialog>

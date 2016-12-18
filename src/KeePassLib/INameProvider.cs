@@ -4,6 +4,6 @@ namespace KeePass
 {
     public interface INameProvider
     {
-        Task<string> GetNameAsync();
+        Task<string> GetNameAsync(string initial = null);
     }
 }

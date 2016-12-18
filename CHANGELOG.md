@@ -2,7 +2,7 @@
 
 ## 2.4.0 - [Unreleased]
 # Added
-- Enable creation of groups
+- Enable creation and renaming of groups
 - Enable global search key of `CTRL+e`
 
 # Fixed

@@ -29,8 +29,15 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+
+                <Grid.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Rename" Command="{Binding Path=DataContext.RenameGroupCommand, ElementName=Root}" CommandParameter="{Binding}" />
+                    </MenuFlyout>
+                </Grid.ContextFlyout>
+
                 <SymbolIcon Grid.Column="0" Symbol="Folder" />
-                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{x:Bind Name}" TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{Binding Name}" TextTrimming="WordEllipsis" />
             </Grid>
         </DataTemplate>
 

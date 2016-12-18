@@ -123,6 +123,16 @@ namespace KeePass.Win.ViewModels
             });
 #endif
 
+            RenameGroupCommand = new DelegateCommand<IKeePassGroup>(async group =>
+            {
+                var name = await _nameProvider.GetNameAsync(group.Name);
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    group.Name = name;
+                }
+            });
+
             _saveCommand = new DelegateCommand(async () =>
             {
 #if FEATURE_SAVE
@@ -263,7 +273,7 @@ namespace KeePass.Win.ViewModels
             Parents = Group.EnumerateParents(includeSelf: true).Reverse().ToList();
         }
 
-
+        public ICommand RenameGroupCommand { get; }
 
         public ICommand GoToParentCommand { get; }
 

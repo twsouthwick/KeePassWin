@@ -79,11 +79,11 @@ namespace KeePass.Win
 
         private class DialogNameProvider : INameProvider
         {
-            public Task<string> GetNameAsync()
+            public Task<string> GetNameAsync(string initial = null)
             {
                 var dialog = new NameBoxDialog();
 
-                return dialog.GetNameAsync();
+                return dialog.GetNameAsync(initial);
             }
         }
     }

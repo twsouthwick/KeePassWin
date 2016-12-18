@@ -74,7 +74,18 @@ namespace KeePass
 
             public IList<IKeePassGroup> Groups => _groups.Value;
 
-            public string Name => _group.Name;
+            public string Name
+            {
+                get { return _group.Name; }
+                set
+                {
+                    if (!string.Equals(Name, value, StringComparison.CurrentCulture))
+                    {
+                        _group.Name = value;
+                        NotifyPropertyChanged();
+                    }
+                }
+            }
 
             public string Notes => _group.Notes;
 

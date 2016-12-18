@@ -19,7 +19,7 @@ namespace KeePass
 
     public interface IKeePassGroup : IKeePassId
     {
-        string Name { get; }
+        string Name { get; set; }
         string Notes { get; }
         IKeePassGroup Parent { get; }
         IList<IKeePassEntry> Entries { get; }
