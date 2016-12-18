@@ -13,7 +13,7 @@
                                  mc:Ignorable="d">
 
     <prismMvvm:SessionStateAwarePage.Resources>
-        <converters:UriVisibilityConverter x:Key="uriVisibilityConverter"/>
+        <converters:UriVisibilityConverter x:Key="UriVisibilityConverter"/>
 
         <DataTemplate x:Name="KeePassEntryDetailsTemplate" x:DataType="keepass:IKeePassEntry">
             <controls:EntryViewControl Entry="{x:Bind}" Margin="20,0,0,0" />
@@ -40,7 +40,7 @@
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Copy user name" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding UserName}" />
                         <MenuFlyoutItem Text="Copy password" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding Password}" />
-                        <MenuFlyoutItem Text="Go to website" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" />
+                        <MenuFlyoutItem Text="Go to website" Visibility="{Binding Url, Converter={StaticResource UriVisibilityConverter}}" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem Text="Delete" Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root}" CommandParameter="{Binding}"  />
                     </MenuFlyout>
@@ -59,7 +59,7 @@
                 <controls:ByteImage Grid.RowSpan="2" Image="{Binding Icon}" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
                 <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Text="{Binding UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
-                <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Website" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" Visibility="{Binding Converter={StaticResource uriVisibilityConverter}}">
+                <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Website" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" Visibility="{Binding Url, Converter={StaticResource UriVisibilityConverter}}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Globe" />
                     </AppBarButton.Icon>

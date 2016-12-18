@@ -8,15 +8,14 @@ namespace KeePass.Win.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var entry = value as IKeePassEntry;
+            var url = value as string;
 
-            if (string.IsNullOrWhiteSpace(entry?.Url))
+            if (string.IsNullOrWhiteSpace(url))
             {
                 return Visibility.Collapsed;
             }
 
-            Uri uri;
-            return Uri.TryCreate(entry.Url, UriKind.Absolute, out uri) ? Visibility.Visible : Visibility.Collapsed;
+            return Uri.IsWellFormedUriString(url, UriKind.Absolute) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
