@@ -53,6 +53,10 @@ namespace KeePass.Win
             builder.Register(CreateLogger)
                 .As<ILogger>()
                 .SingleInstance();
+
+            builder.RegisterType<WindowsKeyboardShortcuts>()
+                .As<KeyboardShortcuts>()
+                .SingleInstance();
         }
 
         private ILogger CreateLogger(IComponentContext arg)

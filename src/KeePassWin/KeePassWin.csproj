@@ -96,6 +96,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="KeePassWin_StoreKey.pfx" />
     <None Include="KeePassWin_TemporaryKey.pfx" />
+    <Compile Include="Mvvm\Keyboard.Focus.cs" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +130,7 @@
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
     <Compile Include="Services\StorageItemExtensions.cs" />
+    <Compile Include="Services\WindowsKeyboardShortcuts.cs" />
     <Compile Include="Services\StorageItemFile.cs" />
     <Compile Include="Services\WindowsFilePicker.cs" />
     <Compile Include="Services\WinKeePassSettings.cs" />
