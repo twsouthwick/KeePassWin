@@ -1,7 +1,6 @@
 ﻿using KeePassLib;
 using KeePassLib.Keys;
 using KeePassLib.Serialization;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -33,18 +32,18 @@ namespace KeePass
 
             if (credentials.Equals(default(KeePassCredentials)))
             {
-                _log.Warning("Failed to unlocked {Database}", id);
+                _log.Warning("Failed to retrieve credentials for {Database}", id);
                 return null;
             }
 
-            _log.Info("Successfully unlocked {Database}", id);
+            _log.Info("Successfully retrieved credentials for {Database}", id);
 
             return await UnlockAsync(dbFile, credentials);
         }
 
         public async Task<IKeePassDatabase> UnlockAsync(IFile dbFile, KeePassCredentials credentials)
         {
-            _log.Info("Unlock {Database}", dbFile);
+            _log.Info("Unlocking {Database}", dbFile);
 
             try
             {
