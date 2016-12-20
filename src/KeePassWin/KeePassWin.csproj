@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="IContentDialogResult.cs" />
     <Compile Include="Mvvm\Keyboard.Focus.cs" />
+    <Compile Include="Mvvm\Keyboard.Shortcut.cs" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>

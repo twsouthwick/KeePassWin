@@ -16,7 +16,7 @@ namespace KeePass.Win.Mvvm
             return container.Resolve<KeyboardShortcuts>();
         }, true);
 
-        public static readonly DependencyProperty FocusProperty = DependencyProperty.RegisterAttached("Focus", typeof(ShortcutName), typeof(MvvmExtensions), new PropertyMetadata(default(ShortcutName), FocusPropertyChanged));
+        public static readonly DependencyProperty FocusProperty = DependencyProperty.RegisterAttached("Focus", typeof(ShortcutName), typeof(Keyboard), new PropertyMetadata(default(ShortcutName), FocusPropertyChanged));
 
         public static void SetFocus(Control attached, ShortcutName value)
         {

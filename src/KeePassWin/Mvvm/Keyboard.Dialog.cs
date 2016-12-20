@@ -8,7 +8,7 @@ namespace KeePass.Win.Mvvm
 {
     public partial class Keyboard
     {
-        public static readonly DependencyProperty DialogProperty = DependencyProperty.RegisterAttached("Dialog", typeof(bool), typeof(MvvmExtensions), new PropertyMetadata(default(bool), DialogPropertyChanged));
+        public static readonly DependencyProperty DialogProperty = DependencyProperty.RegisterAttached("Dialog", typeof(bool), typeof(Keyboard), new PropertyMetadata(default(bool), DialogPropertyChanged));
 
         public static void SetDialog(ContentDialog attached, bool value)
         {
@@ -48,6 +48,5 @@ namespace KeePass.Win.Mvvm
             Window.Current.CoreWindow.KeyDown += handler;
             dialog.Unloaded += (_, __) => Window.Current.CoreWindow.KeyDown -= handler;
         }
-
     }
 }
