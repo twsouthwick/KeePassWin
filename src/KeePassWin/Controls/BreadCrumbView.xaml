@@ -14,8 +14,9 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <ItemsControl x:Name="BreadCrumbList"
-                                          ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
-                                          ItemsSource="{TemplateBinding ItemsSource}" >
+                                      IsTabStop="False"
+                                      ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                      ItemsSource="{TemplateBinding ItemsSource}" >
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />

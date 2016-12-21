@@ -125,6 +125,11 @@ namespace KeePass.Win.ViewModels
 
             RenameGroupCommand = new DelegateCommand<IKeePassGroup>(async group =>
             {
+                if (group == null)
+                {
+                    return;
+                }
+
                 var name = await _nameProvider.GetNameAsync(group.Name);
 
                 if (!string.IsNullOrEmpty(name))

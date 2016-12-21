@@ -1,4 +1,5 @@
-﻿using KeePass.Win.ViewModels;
+﻿using KeePass.Win.Controls;
+using KeePass.Win.ViewModels;
 using Prism.Windows.Mvvm;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -10,13 +11,15 @@ namespace KeePass.Win.Views
         public DatabasePage()
         {
             InitializeComponent();
+
+            Loaded += (_, __) => ItemsList.Focus();
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             if (!e.Cancel && e.NavigationMode == NavigationMode.Back)
             {
-                if (ItemsList.IsDetailsOpen)
+                if (ItemsList.ViewState == MasterDetailsViewState.Both)
                 {
                     e.Cancel = true;
                 }
@@ -25,6 +28,8 @@ namespace KeePass.Win.Views
                     e.Cancel = true;
                     ClearSearch();
                 }
+
+                ItemsList.Focus();
             }
 
             base.OnNavigatingFrom(e);

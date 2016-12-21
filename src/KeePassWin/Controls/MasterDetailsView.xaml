@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mvvm="using:KeePass.Win.Mvvm"
                     xmlns:controls="using:KeePass.Win.Controls">
 
     <Style TargetType="controls:MasterDetailsView">
@@ -36,7 +37,8 @@
                                                   ContentTemplate="{TemplateBinding MasterHeaderTemplate}"
                                                   Visibility="Collapsed" />
                                 <ListView x:Name="MasterList"
-                                          Grid.Row="1" TabIndex="-1000"
+                                          mvvm:Keyboard.AutoWire="True"
+                                          Grid.Row="1"
                                           ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                                           ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                           ItemTemplate="{TemplateBinding ItemTemplate}"

@@ -13,6 +13,7 @@ namespace KeePass.Win.Controls
         {
             DefaultStyleKey = typeof(BreadCrumbView);
             DataContext = this;
+            IsTabStop = false;
         }
 
         public ICommand Command

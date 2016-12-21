@@ -2,17 +2,20 @@
 {
     public enum ShortcutName
     {
-        None,
-        Search,
+        None = 0,
+        Close,
         CopyUserName,
         CopyPassword,
-        OpenUrl,
         CopyUrl,
-        InsertItem,
-        ViewItem,
-        DuplicateItem,
         DeleteItem,
-        Close,
-        ShowMenu
+        DuplicateItem,
+        NewGroup,
+        NewEntry,
+        OpenUrl,
+        Rename,
+        Save,
+        Search,
+        ShowMenu,
+        ViewItem
     }
 }

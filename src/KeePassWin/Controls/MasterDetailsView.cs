@@ -9,8 +9,29 @@ using Windows.UI.Xaml.Media;
 
 namespace KeePass.Win.Controls
 {
+    public enum MasterDetailsViewState
+    {
+        /// <summary>
+        /// Only the Master view is shown
+        /// </summary>
+        Master,
+
+        /// <summary>
+        /// Only the Details view is shown
+        /// </summary>
+        Details,
+
+        /// <summary>
+        /// Both the Master and Details views are shown
+        /// </summary>
+        Both
+    }
+
     public class MasterDetailsView : Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView
     {
+        private ContentPresenter _detailsPresenter;
+        private ListView _list;
+
         public static readonly DependencyProperty FooterTemplateProperty =
             DependencyProperty.Register(nameof(FooterTemplate), typeof(DataTemplate), typeof(MasterDetailsView), new PropertyMetadata(null));
 
@@ -56,13 +77,29 @@ namespace KeePass.Win.Controls
             set { SetValue(ItemClickCommandProperty, value); }
         }
 
-        public bool IsDetailsOpen
+        public MasterDetailsViewState ViewState
         {
             get
             {
                 var groups = VisualStateManager.GetVisualStateGroups(VisualTreeHelper.GetChild(this, 0) as FrameworkElement);
+                var currentState = groups.First(g => string.Equals(g.Name, "WidthStates", StringComparison.Ordinal)).CurrentState;
 
-                return IsInState(groups, "WidthStates", "NarrowState") && IsInState(groups, "SelectionStates", "HasSelection");
+                if (string.Equals(currentState?.Name, "NarrowState", StringComparison.Ordinal))
+                {
+                    return SelectedItem == null ? MasterDetailsViewState.Master : MasterDetailsViewState.Details;
+                }
+                else
+                {
+                    return MasterDetailsViewState.Both;
+                }
+            }
+        }
+
+        public void Focus()
+        {
+            if (ViewState != MasterDetailsViewState.Details)
+            {
+                _list.Focus(FocusState.Keyboard);
             }
         }
 
@@ -70,16 +107,10 @@ namespace KeePass.Win.Controls
         {
             base.OnApplyTemplate();
 
-            var list = (ListView)GetTemplateChild("MasterList");
-            list.ItemClick -= ListItemClick;
-            list.ItemClick += ListItemClick;
-        }
-
-        private bool IsInState(IEnumerable<VisualStateGroup> groups, string groupName, string stateName)
-        {
-            var currentState = groups.First(g => string.Equals(g.Name, groupName, StringComparison.Ordinal)).CurrentState;
-
-            return string.Equals(currentState?.Name, stateName, StringComparison.Ordinal);
+            _list = (ListView)GetTemplateChild("MasterList");
+            _detailsPresenter = (ContentPresenter)GetTemplateChild("DetailsPresenter");
+            _list.ItemClick -= ListItemClick;
+            _list.ItemClick += ListItemClick;
         }
 
         private static void DeviceGestureServicePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -107,7 +138,7 @@ namespace KeePass.Win.Controls
                 e.Handled = true;
                 e.Cancel = true;
 
-                SelectedItem = null;
+                ClearSelection();
             }
         }
 
@@ -115,14 +146,21 @@ namespace KeePass.Win.Controls
         {
             var view = (MasterDetailsView)d;
 
-            if (view.ItemClickCommand?.CanExecute(e.NewValue) == false)
+            if (view.ViewState == MasterDetailsViewState.Both && view.ItemClickCommand?.CanExecute(e.NewValue) == false)
             {
                 view.SelectedItem = e.NewValue;
+                view.FocusSelection();
             }
             else
             {
-                view.SelectedItem = null;
+                view.ClearSelection();
             }
+        }
+
+        private void ClearSelection()
+        {
+            SelectedItem = null;
+            Focus();
         }
 
         private void ListItemClick(object sender, ItemClickEventArgs e)
@@ -137,7 +175,19 @@ namespace KeePass.Win.Controls
             else
             {
                 SelectedItem = newItem;
+                FocusSelection();
             }
+        }
+
+        private void FocusSelection()
+        {
+            var control = VisualTreeHelper.GetChild(_detailsPresenter, 0) as ContentControl;
+
+            control.Loaded += (s, _) =>
+            {
+                var root = (s as ContentControl).ContentTemplateRoot;
+                (root as Control)?.Focus(FocusState.Keyboard);
+            };
         }
     }
 }

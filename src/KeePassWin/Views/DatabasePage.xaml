@@ -32,12 +32,20 @@
 
                 <Grid.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="Rename" Command="{Binding Path=DataContext.RenameGroupCommand, ElementName=Root}" CommandParameter="{Binding}" />
+                        <MenuFlyoutItem
+                            AllowFocusOnInteraction="True"
+                            AllowFocusWhenDisabled="True"
+                            Text="Rename"
+                            CommandParameter="{x:Bind}"
+                            Command="{Binding Path=DataContext.RenameGroupCommand, ElementName=Root, Mode=OneTime}"
+                            mvvm:Keyboard.Shortcut="Rename" />
                     </MenuFlyout>
                 </Grid.ContextFlyout>
 
                 <SymbolIcon Grid.Column="0" Symbol="Folder" />
-                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{Binding Name}" TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Column="1" Margin="10,0,0,0" 
+                           Text="{x:Bind Name, Mode=TwoWay}" 
+                           TextTrimming="WordEllipsis" />
             </Grid>
         </DataTemplate>
 
@@ -45,11 +53,34 @@
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="Copy user name" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding UserName}" />
-                        <MenuFlyoutItem Text="Copy password" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding Password}" />
-                        <MenuFlyoutItem Text="Go to website" Visibility="{Binding Url, Converter={StaticResource UriVisibilityConverter}}" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" />
+                        <MenuFlyoutItem 
+                            mvvm:Keyboard.Shortcut="CopyUserName"
+                            Text="Copy user name" 
+                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}" 
+                            CommandParameter="{x:Bind UserName, Mode=TwoWay}" />
+                        <MenuFlyoutItem 
+                            mvvm:Keyboard.Shortcut="CopyPassword"
+                            Text="Copy password"
+                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                            CommandParameter="{x:Bind Password, Mode=TwoWay}" />
+                        <MenuFlyoutItem 
+                            mvvm:Keyboard.Shortcut="CopyUrl"
+                            Text="Copy website"
+                            Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}"
+                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                            CommandParameter="{x:Bind}" />
+                        <MenuFlyoutItem 
+                            mvvm:Keyboard.Shortcut="OpenUrl"
+                            Text="Go to website"
+                            Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}"
+                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}" 
+                            CommandParameter="{x:Bind}" />
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Delete" Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root}" CommandParameter="{Binding}"  />
+                        <MenuFlyoutItem 
+                            mvvm:Keyboard.Shortcut="DeleteItem"
+                            Text="Delete"
+                            Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root, Mode=OneTime}" 
+                            CommandParameter="{x:Bind}"  />
                     </MenuFlyout>
                 </Grid.ContextFlyout>
                 <Grid.RowDefinitions>
@@ -63,20 +94,41 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <controls:ByteImage Grid.RowSpan="2" Image="{Binding Icon}" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Title}" Style="{ThemeResource EntryItemTitleStyle}" TextTrimming="WordEllipsis" />
-                <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Text="{Binding UserName}" Style="{ThemeResource EntryItemUserNameStyle}" TextTrimming="WordEllipsis" />
-                <AppBarButton Grid.Column="2" Grid.RowSpan="2" Label="Website" Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root}" CommandParameter="{Binding}" Visibility="{Binding Url, Converter={StaticResource UriVisibilityConverter}}">
+
+                <controls:ByteImage Grid.RowSpan="2"
+                    Image="{x:Bind Icon, Mode=TwoWay}" VerticalAlignment="Center" />
+
+                <TextBlock Grid.Column="1" Grid.Row="0"
+                           Margin="10,0,0,0"
+                           Text="{x:Bind Title, Mode=TwoWay}"
+                           Style="{ThemeResource EntryItemTitleStyle}"
+                           TextTrimming="WordEllipsis" />
+                <TextBlock Grid.Column="1" Grid.Row="1"
+                           Margin="10,0,0,0"
+                           Text="{x:Bind UserName, Mode=TwoWay}"
+                           Style="{ThemeResource EntryItemUserNameStyle}"
+                           TextTrimming="WordEllipsis" />
+                <AppBarButton Grid.Column="2" Grid.RowSpan="2"
+                              Label="Website"
+                              Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                              CommandParameter="{x:Bind}"
+                              Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Globe" />
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton Grid.Column="3" Grid.RowSpan="2" Label="Username" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding UserName}">
+                <AppBarButton Grid.Column="3" Grid.RowSpan="2"
+                              Label="Username"
+                              Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                              CommandParameter="{x:Bind UserName, Mode=TwoWay}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Contact" />
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton Grid.Column="4" Grid.RowSpan="2" Label="Password" Command="{Binding Path=DataContext.CopyCommand, ElementName=Root}" CommandParameter="{Binding Password}">
+                <AppBarButton Grid.Column="4" Grid.RowSpan="2"
+                              Label="Password"
+                              Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                              CommandParameter="{x:Bind Password, Mode=TwoWay}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Permissions" />
                     </AppBarButton.Icon>
@@ -94,6 +146,7 @@
         <Grid Grid.Row="1">
             <controls:MasterDetailsView x:Name="ItemsList"
                   MasterPaneWidth="520"
+                  IsTabStop="False"
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
                   FooterContent="{x:Bind Model}"
                   MasterHeader="{x:Bind Model}"
@@ -113,7 +166,9 @@
                 </controls:MasterDetailsView.ItemTemplateSelector>
                 <controls:MasterDetailsView.DetailsTemplate>
                     <DataTemplate>
-                        <ContentControl Content="{Binding}" HorizontalContentAlignment="Stretch"
+                        <ContentControl Content="{Binding}" 
+                                        IsTabStop="False"
+                                        HorizontalContentAlignment="Stretch"
                                         VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" >
                             <ContentControl.ContentTemplateSelector>
                                 <mvvm:TypeTemplateSelector>
@@ -146,9 +201,24 @@
                     <DataTemplate x:DataType="vm:DatabasePageViewModel">
                         <CommandBar>
                             <CommandBar.PrimaryCommands>
-                                <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=AddGroupCommand}" />
-                                <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=AddEntryCommand}" />
-                                <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=SaveCommand}" />
+                                <AppBarButton 
+                                    Name="group" 
+                                    Icon="NewFolder" 
+                                    Label="Add group" 
+                                    mvvm:Keyboard.Click="NewGroup"
+                                    Command="{x:Bind Path=AddGroupCommand}" />
+                                <AppBarButton 
+                                    Name="entry"
+                                    Icon="Add" 
+                                    Label="Add Entry" 
+                                    mvvm:Keyboard.Click="NewEntry"
+                                    Command="{x:Bind Path=AddEntryCommand}" />
+                                <AppBarButton 
+                                    Name="save" 
+                                    Icon="Save" 
+                                    Label="Save"
+                                    mvvm:Keyboard.Click="Save"
+                                    Command="{x:Bind Path=SaveCommand}" />
                             </CommandBar.PrimaryCommands>
                         </CommandBar>
                     </DataTemplate>
