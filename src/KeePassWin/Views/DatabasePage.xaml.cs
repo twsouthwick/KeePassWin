@@ -1,4 +1,5 @@
-﻿using KeePass.Win.ViewModels;
+﻿using KeePass.Win.Controls;
+using KeePass.Win.ViewModels;
 using Prism.Windows.Mvvm;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -16,7 +17,7 @@ namespace KeePass.Win.Views
         {
             if (!e.Cancel && e.NavigationMode == NavigationMode.Back)
             {
-                if (ItemsList.IsDetailsOpen)
+                if (ItemsList.ViewState == MasterDetailsViewState.Both)
                 {
                     e.Cancel = true;
                 }

@@ -9,6 +9,24 @@ using Windows.UI.Xaml.Media;
 
 namespace KeePass.Win.Controls
 {
+    public enum MasterDetailsViewState
+    {
+        /// <summary>
+        /// Only the Master view is shown
+        /// </summary>
+        Master,
+
+        /// <summary>
+        /// Only the Details view is shown
+        /// </summary>
+        Details,
+
+        /// <summary>
+        /// Both the Master and Details views are shown
+        /// </summary>
+        Both
+    }
+
     public class MasterDetailsView : Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView
     {
         public static readonly DependencyProperty FooterTemplateProperty =
@@ -56,13 +74,21 @@ namespace KeePass.Win.Controls
             set { SetValue(ItemClickCommandProperty, value); }
         }
 
-        public bool IsDetailsOpen
+        public MasterDetailsViewState ViewState
         {
             get
             {
                 var groups = VisualStateManager.GetVisualStateGroups(VisualTreeHelper.GetChild(this, 0) as FrameworkElement);
+                var currentState = groups.First(g => string.Equals(g.Name, "WidthStates", StringComparison.Ordinal)).CurrentState;
 
-                return IsInState(groups, "WidthStates", "NarrowState") && IsInState(groups, "SelectionStates", "HasSelection");
+                if (string.Equals(currentState?.Name, "NarrowState", StringComparison.Ordinal))
+                {
+                    return SelectedItem == null ? MasterDetailsViewState.Master : MasterDetailsViewState.Details;
+                }
+                else
+                {
+                    return MasterDetailsViewState.Both;
+                }
             }
         }
 
@@ -115,7 +141,7 @@ namespace KeePass.Win.Controls
         {
             var view = (MasterDetailsView)d;
 
-            if (view.ItemClickCommand?.CanExecute(e.NewValue) == false)
+            if (view.ViewState == MasterDetailsViewState.Both && view.ItemClickCommand?.CanExecute(e.NewValue) == false)
             {
                 view.SelectedItem = e.NewValue;
             }
