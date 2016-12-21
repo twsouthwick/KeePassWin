@@ -163,6 +163,9 @@ namespace KeePass.Win.ViewModels
                 try
                 {
                     await Database.SaveAsync();
+
+                    var dialog = new MessageDialog("Database saved");
+                    await dialog.ShowAsync();
                 }
                 catch (Exception e)
                 {
