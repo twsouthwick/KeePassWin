@@ -89,7 +89,7 @@ namespace KeePass
 
             public string Notes => _group.Notes;
 
-            public IKeePassGroup Parent { get; }
+            public IKeePassGroup Parent { get; set; }
 
             public IKeePassEntry CreateEntry(string title)
             {
@@ -161,6 +161,20 @@ namespace KeePass
                 Database.Modified = true;
 
                 return wrapped;
+            }
+
+            public void Remove()
+            {
+                _group.ParentGroup.Groups.Remove(_group);
+
+                // TODO: Use recycle bin?
+                Database.DeletedObjects.Add(new PwDeletedObject(_group.Uuid, DateTime.Now));
+
+                // Remove entry from parent group
+                Parent.Groups.Remove(this);
+                Parent = null;
+
+                Database.Modified = true;
             }
         }
 

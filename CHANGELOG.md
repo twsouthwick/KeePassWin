@@ -1,15 +1,16 @@
 # Changelog
 
-## 2.4.0 - [Unreleased]
+## 2.4.0 - 12/21/2016
 # Added
 - Enable creation and renaming of groups
-- Enable global search key of `CTRL+e`
+- Add keyboard shortcuts (see [List](KeyboardShortcuts.md) for more detail)
 
 # Fixed
 - Save button would sometimes not show. It is now available at all times (even when no changes are present)
 - Added scrolling to entry details page for small screens.
 - Fixed URL button failure to update when changed
 - Fixed crash when supplied key is incorrect
+- Fixed tab navigation to be more intuitive
 
 ## 2.3.0 - December 3, 2016
 # Added

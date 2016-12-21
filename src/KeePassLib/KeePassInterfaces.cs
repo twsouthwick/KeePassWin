@@ -26,6 +26,7 @@ namespace KeePass
         IList<IKeePassGroup> Groups { get; }
         IKeePassEntry CreateEntry(string title);
         IKeePassGroup CreateGroup(string name);
+        void Remove();
     }
 
     public interface IKeePassEntry : IKeePassId

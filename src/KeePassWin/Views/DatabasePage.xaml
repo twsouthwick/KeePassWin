@@ -39,6 +39,13 @@
                             CommandParameter="{x:Bind}"
                             Command="{Binding Path=DataContext.RenameGroupCommand, ElementName=Root, Mode=OneTime}"
                             mvvm:Keyboard.Shortcut="Rename" />
+                        <MenuFlyoutItem
+                            AllowFocusOnInteraction="True"
+                            AllowFocusWhenDisabled="True"
+                            Text="Remove"
+                            CommandParameter="{x:Bind}"
+                            Command="{Binding Path=DataContext.RemoveGroupCommand, ElementName=Root, Mode=OneTime}"
+                            mvvm:Keyboard.Shortcut="DeleteItem" />
                     </MenuFlyout>
                 </Grid.ContextFlyout>
 
