@@ -9,9 +9,11 @@
         CopyUrl,
         DeleteItem,
         DuplicateItem,
-        InsertItem,
+        NewGroup,
+        NewEntry,
         OpenUrl,
         Rename,
+        Save,
         Search,
         ShowMenu,
         ViewItem

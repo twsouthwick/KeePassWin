@@ -13,10 +13,12 @@ namespace KeePass.Win.Services
             { ShortcutName.CopyPassword, new KeyInfo(Modifier.Control, (int)VirtualKey.B) },
             { ShortcutName.OpenUrl, new KeyInfo(Modifier.Control | Modifier.Shift, (int)VirtualKey.U) },
             { ShortcutName.CopyUrl, new KeyInfo(Modifier.Control, (int)VirtualKey.U) },
-            { ShortcutName.InsertItem, new KeyInfo(Modifier.Control, (int)VirtualKey.I) },
+            { ShortcutName.NewEntry, new KeyInfo(Modifier.Control, (int)VirtualKey.I) },
+            { ShortcutName.NewGroup, new KeyInfo(Modifier.Control | Modifier.Shift, (int)VirtualKey.I) },
             { ShortcutName.ViewItem, new KeyInfo(Modifier.None, (int)VirtualKey.Enter) },
             { ShortcutName.DuplicateItem, new KeyInfo(Modifier.Control, (int)VirtualKey.K) },
             { ShortcutName.DeleteItem, new KeyInfo(Modifier.None, (int)VirtualKey.Delete) },
+            { ShortcutName.Save, new KeyInfo(Modifier.Control, (int)VirtualKey.S) },
             { ShortcutName.ShowMenu, new KeyInfo(Modifier.None, (int)VirtualKey.Application) },
             { ShortcutName.Rename, new KeyInfo(Modifier.None, (int)VirtualKey.F2) }
         };

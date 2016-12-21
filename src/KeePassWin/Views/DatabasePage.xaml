@@ -198,9 +198,24 @@
                     <DataTemplate x:DataType="vm:DatabasePageViewModel">
                         <CommandBar>
                             <CommandBar.PrimaryCommands>
-                                <AppBarButton Name="group" Icon="NewFolder" Label="Add group" Command="{x:Bind Path=AddGroupCommand}" />
-                                <AppBarButton Name="entry" Icon="Add" Label="Add Entry" Command="{x:Bind Path=AddEntryCommand}" />
-                                <AppBarButton Name="save" Icon="Save" Label="Save" Command="{x:Bind Path=SaveCommand}" />
+                                <AppBarButton 
+                                    Name="group" 
+                                    Icon="NewFolder" 
+                                    Label="Add group" 
+                                    mvvm:Keyboard.Click="NewGroup"
+                                    Command="{x:Bind Path=AddGroupCommand}" />
+                                <AppBarButton 
+                                    Name="entry"
+                                    Icon="Add" 
+                                    Label="Add Entry" 
+                                    mvvm:Keyboard.Click="NewEntry"
+                                    Command="{x:Bind Path=AddEntryCommand}" />
+                                <AppBarButton 
+                                    Name="save" 
+                                    Icon="Save" 
+                                    Label="Save"
+                                    mvvm:Keyboard.Click="Save"
+                                    Command="{x:Bind Path=SaveCommand}" />
                             </CommandBar.PrimaryCommands>
                         </CommandBar>
                     </DataTemplate>
