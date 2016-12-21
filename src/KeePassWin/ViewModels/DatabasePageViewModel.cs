@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.System;
 using Windows.UI.Popups;
@@ -97,12 +98,26 @@ namespace KeePass.Win.ViewModels
             });
 #endif
 
-            RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(entry =>
+            RemoveGroupCommand = new DelegateCommand<IKeePassGroup>(async group =>
             {
-                entry.Remove();
-                Items.Remove(entry);
+                if (await CheckToDeleteAsync("group", group.Name))
+                {
+                    group.Remove();
+                    Items.Remove(group);
 
-                NotifyAllCommands();
+                    NotifyAllCommands();
+                }
+            });
+
+            RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(async entry =>
+            {
+                if (await CheckToDeleteAsync("entry", entry.Title))
+                {
+                    entry.Remove();
+                    Items.Remove(entry);
+
+                    NotifyAllCommands();
+                }
             });
 
             AddGroupCommand = new DelegateCommand(async () =>
@@ -169,6 +184,17 @@ namespace KeePass.Win.ViewModels
 #else
             });
 #endif
+        }
+
+        private async Task<bool> CheckToDeleteAsync(string type, string name)
+        {
+            var dialog = new MessageDialog($"Are you sure you want to remove the {type} '{name}'", $"Remove {type}?");
+            dialog.Commands.Add(new UICommand { Label = "No", Id = 0 });
+            dialog.Commands.Add(new UICommand { Label = "Yes", Id = 1 });
+
+            var result = await dialog.ShowAsync();
+
+            return (int)result.Id == 1;
         }
 
         /// <summary>
@@ -287,6 +313,8 @@ namespace KeePass.Win.ViewModels
         public ICommand CopyCommand { get; }
 
         public ICommand ItemClickCommand { get; }
+
+        public ICommand RemoveGroupCommand { get; }
 
         public ICommand RemoveEntryCommand { get; }
 
