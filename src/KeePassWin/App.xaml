@@ -2,7 +2,6 @@
     x:Class="KeePass.Win.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:KeePass.Win"
     xmlns:prism="using:Prism.Autofac.Windows">
 
     <prism:PrismAutofacApplication.Resources>
@@ -12,6 +11,7 @@
                 <ResourceDictionary Source="Resources/KeePassItems.xaml" />
                 <ResourceDictionary Source="Controls/MasterDetailsView.xaml" />
                 <ResourceDictionary Source="Controls/BreadCrumbView.xaml" />
+                <ResourceDictionary Source="Controls/HamburgerMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </prism:PrismAutofacApplication.Resources>
