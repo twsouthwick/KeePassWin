@@ -146,6 +146,7 @@
         <Grid Grid.Row="1">
             <controls:MasterDetailsView x:Name="ItemsList"
                   MasterPaneWidth="520"
+                  IsTabStop="False"
                   ItemsSource="{x:Bind Path=Model.Items, Mode=OneWay}"
                   FooterContent="{x:Bind Model}"
                   MasterHeader="{x:Bind Model}"
@@ -165,7 +166,9 @@
                 </controls:MasterDetailsView.ItemTemplateSelector>
                 <controls:MasterDetailsView.DetailsTemplate>
                     <DataTemplate>
-                        <ContentControl Content="{Binding}" HorizontalContentAlignment="Stretch"
+                        <ContentControl Content="{Binding}" 
+                                        IsTabStop="False"
+                                        HorizontalContentAlignment="Stretch"
                                         VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" >
                             <ContentControl.ContentTemplateSelector>
                                 <mvvm:TypeTemplateSelector>

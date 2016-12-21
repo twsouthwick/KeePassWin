@@ -11,6 +11,8 @@ namespace KeePass.Win.Views
         public DatabasePage()
         {
             InitializeComponent();
+
+            Loaded += (_, __) => ItemsList.Focus();
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -26,6 +28,8 @@ namespace KeePass.Win.Views
                     e.Cancel = true;
                     ClearSearch();
                 }
+
+                ItemsList.Focus();
             }
 
             base.OnNavigatingFrom(e);

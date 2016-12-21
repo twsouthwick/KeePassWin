@@ -38,7 +38,7 @@
                                                   Visibility="Collapsed" />
                                 <ListView x:Name="MasterList"
                                           mvvm:Keyboard.AutoWire="True"
-                                          Grid.Row="1" TabIndex="-1000"
+                                          Grid.Row="1"
                                           ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                                           ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                           ItemTemplate="{TemplateBinding ItemTemplate}"

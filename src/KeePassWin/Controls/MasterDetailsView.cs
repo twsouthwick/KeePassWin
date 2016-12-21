@@ -29,6 +29,9 @@ namespace KeePass.Win.Controls
 
     public class MasterDetailsView : Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView
     {
+        private ContentPresenter _detailsPresenter;
+        private ListView _list;
+
         public static readonly DependencyProperty FooterTemplateProperty =
             DependencyProperty.Register(nameof(FooterTemplate), typeof(DataTemplate), typeof(MasterDetailsView), new PropertyMetadata(null));
 
@@ -92,20 +95,22 @@ namespace KeePass.Win.Controls
             }
         }
 
+        public void Focus()
+        {
+            if (ViewState != MasterDetailsViewState.Details)
+            {
+                _list.Focus(FocusState.Keyboard);
+            }
+        }
+
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            var list = (ListView)GetTemplateChild("MasterList");
-            list.ItemClick -= ListItemClick;
-            list.ItemClick += ListItemClick;
-        }
-
-        private bool IsInState(IEnumerable<VisualStateGroup> groups, string groupName, string stateName)
-        {
-            var currentState = groups.First(g => string.Equals(g.Name, groupName, StringComparison.Ordinal)).CurrentState;
-
-            return string.Equals(currentState?.Name, stateName, StringComparison.Ordinal);
+            _list = (ListView)GetTemplateChild("MasterList");
+            _detailsPresenter = (ContentPresenter)GetTemplateChild("DetailsPresenter");
+            _list.ItemClick -= ListItemClick;
+            _list.ItemClick += ListItemClick;
         }
 
         private static void DeviceGestureServicePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -133,7 +138,7 @@ namespace KeePass.Win.Controls
                 e.Handled = true;
                 e.Cancel = true;
 
-                SelectedItem = null;
+                ClearSelection();
             }
         }
 
@@ -144,11 +149,18 @@ namespace KeePass.Win.Controls
             if (view.ViewState == MasterDetailsViewState.Both && view.ItemClickCommand?.CanExecute(e.NewValue) == false)
             {
                 view.SelectedItem = e.NewValue;
+                view.FocusSelection();
             }
             else
             {
-                view.SelectedItem = null;
+                view.ClearSelection();
             }
+        }
+
+        private void ClearSelection()
+        {
+            SelectedItem = null;
+            Focus();
         }
 
         private void ListItemClick(object sender, ItemClickEventArgs e)
@@ -163,7 +175,19 @@ namespace KeePass.Win.Controls
             else
             {
                 SelectedItem = newItem;
+                FocusSelection();
             }
+        }
+
+        private void FocusSelection()
+        {
+            var control = VisualTreeHelper.GetChild(_detailsPresenter, 0) as ContentControl;
+
+            control.Loaded += (s, _) =>
+            {
+                var root = (s as ContentControl).ContentTemplateRoot;
+                (root as Control)?.Focus(FocusState.Keyboard);
+            };
         }
     }
 }
