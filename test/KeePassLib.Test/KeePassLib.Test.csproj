@@ -7,7 +7,7 @@
     <ProjectGuid>{CE5809FD-F178-46A5-BE6F-36EC0A13D2CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KeePassLib</RootNamespace>
+    <RootNamespace>KeePass.Tests</RootNamespace>
     <AssemblyName>KeePassLib.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DecryptorTests.cs" />
+    <Compile Include="FileExtensionsTests.cs" />
     <Compile Include="Utils\TestAssets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
