@@ -39,7 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DecryptorTests.cs" />
+    <Compile Include="DatabaseCacheTests.cs" />
+    <Compile Include="KdbxDatabaseCacheTests.cs" />
     <Compile Include="FileExtensionsTests.cs" />
     <Compile Include="Utils\TestAssets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

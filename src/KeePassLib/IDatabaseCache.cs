@@ -9,6 +9,8 @@ namespace KeePass
 
         Task<IFile> AddDatabaseAsync();
 
+        Task<IFile> AddKeyFileAsync(IFile db);
+
         Task<IEnumerable<IFile>> GetDatabaseFilesAsync();
 
         Task RemoveDatabaseAsync(IFile dbFile);

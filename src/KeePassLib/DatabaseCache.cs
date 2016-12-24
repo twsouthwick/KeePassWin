@@ -1,15 +1,13 @@
-﻿using KeePassLib;
-using KeePassLib.Keys;
-using KeePassLib.Serialization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace KeePass
 {
-    public class DatabaseCache : IDatabaseCache
+    public abstract class DatabaseCache : IDatabaseCache
     {
-        private readonly ILogger _log;
+        protected readonly ILogger _log;
+
         private readonly IDatabaseFileAccess _fileAccess;
         private readonly IFilePicker _filePicker;
 
@@ -41,50 +39,7 @@ namespace KeePass
             return await UnlockAsync(dbFile, credentials);
         }
 
-        public async Task<IKeePassDatabase> UnlockAsync(IFile dbFile, KeePassCredentials credentials)
-        {
-            _log.Info("Unlocking {Database}", dbFile);
-
-            try
-            {
-                var compositeKey = new CompositeKey();
-
-                if (credentials.Password != null)
-                {
-                    compositeKey.AddUserKey(new KcpPassword(credentials.Password));
-                }
-
-                if (credentials.KeyFile != null)
-                {
-                    compositeKey.AddUserKey(new KcpKeyFile(await credentials.KeyFile.ReadFileBytesAsync()));
-                }
-
-                var db = new PwDatabase
-                {
-                    MasterKey = compositeKey
-                };
-
-                var kdbx = new KdbxFile(db);
-
-                using (var fs = await dbFile.OpenReadAsync())
-                {
-                    await Task.Run(() =>
-                    {
-                        kdbx.Load(fs, KdbxFormat.Default, null);
-                    });
-
-                    return new KdbxDatabase(dbFile, db, dbFile.IdFromPath());
-                }
-            }
-            catch (DatabaseUnlockException)
-            {
-                throw;
-            }
-            catch (InvalidCompositeKeyException e)
-            {
-                throw new InvalidCredentialsException(e);
-            }
-        }
+        public abstract Task<IKeePassDatabase> UnlockAsync(IFile dbFile, KeePassCredentials credentials);
 
         public async Task<IFile> AddDatabaseAsync()
         {

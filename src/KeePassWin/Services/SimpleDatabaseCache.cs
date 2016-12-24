@@ -21,6 +21,8 @@ namespace KeePass.Win.Services
 
         public Task<IEnumerable<IFile>> GetDatabaseFilesAsync() => _cache.GetDatabaseFilesAsync();
 
+        public Task<IFile> AddKeyFileAsync(IFile db) => _cache.AddKeyFileAsync(db);
+
         public async Task RemoveDatabaseAsync(IFile dbFile)
         {
             _idCache.Remove(dbFile.IdFromPath());

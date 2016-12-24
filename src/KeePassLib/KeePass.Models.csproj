@@ -121,6 +121,7 @@
     <Compile Include="IMailClient.cs" />
     <Compile Include="INameProvider.cs" />
     <Compile Include="InvalidCredentialsException.cs" />
+    <Compile Include="KdbxDatabaseCache.cs" />
     <Compile Include="KeePassCredentials.cs" />
     <Compile Include="KeePassExtensions.cs" />
     <Compile Include="KeePassId.cs" />
