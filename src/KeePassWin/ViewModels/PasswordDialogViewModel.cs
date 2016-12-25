@@ -1,5 +1,4 @@
-﻿using KeePass;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Windows.Mvvm;
 using System;
 using System.Windows.Input;
@@ -12,7 +11,7 @@ namespace KeePass.Win.ViewModels
     {
         private IFile _keyFile;
 
-        public PasswordDialogViewModel(IFile db, DatabaseCache cache, IDatabaseFileAccess tracker)
+        public PasswordDialogViewModel(IFile db, IDatabaseCache cache, IDatabaseFileAccess tracker)
         {
             Name = db.Name;
 

@@ -7,36 +7,6 @@ namespace KeePass
 {
     public static class KeePassExtensions
     {
-        public static IKeePassEntry Copy(this IKeePassEntry entry)
-        {
-            var result = new ReadWriteKeePassEntry();
-
-            Copy(entry, result);
-
-            return result;
-        }
-
-        public static void Copy(this IKeePassEntry source, IKeePassEntry dest)
-        {
-            dest.Icon = source.Icon;
-            dest.Id = source.Id;
-            dest.Notes = source.Notes;
-            dest.Password = source.Password;
-            dest.Title = source.Title;
-            dest.Url = source.Url;
-            dest.UserName = source.UserName;
-            dest.Group = source.Group;
-
-#if DEBUG 
-            Debug.Assert(dest.Id.Equals(source.Id));
-
-            foreach (var property in typeof(IKeePassEntry).GetTypeInfo().DeclaredProperties)
-            {
-                Debug.Assert(Equals(property.GetValue(dest), property.GetValue(source)));
-            }
-#endif
-        }
-
         public static IKeePassGroup GetGroup(this IKeePassDatabase db, KeePassId id)
         {
             if (id.IsEmpty)
@@ -55,11 +25,6 @@ namespace KeePass
             Debug.Assert(false, "Must find a group in the database");
 
             return null;
-        }
-
-        public static IEnumerable<IKeePassEntry> EnumerateAllEntries(this IKeePassDatabase db)
-        {
-            return db.Root.EnumerateAllEntries();
         }
 
         public static IEnumerable<IKeePassGroup> EnumerateAllGroups(this IKeePassDatabase db)

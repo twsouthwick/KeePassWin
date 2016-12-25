@@ -12,7 +12,7 @@ namespace KeePass.Win
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DatabaseCache>()
+            builder.RegisterType<KdbxDatabaseCache>()
                 .Named<IDatabaseCache>(nameof(DatabaseCache))
                 .SingleInstance();
 
