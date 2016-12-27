@@ -7,6 +7,7 @@ namespace KeePass
     {
         private bool _trackTelemetry = false;
         private bool _clearOnSuspend = true;
+        private int _clipboardTimeout = 15;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,6 +21,12 @@ namespace KeePass
         {
             get { return _clearOnSuspend; }
             set { SetProperty(ref _clearOnSuspend, value); }
+        }
+
+        public int ClipboardTimeout
+        {
+            get { return _clipboardTimeout; }
+            set { SetProperty(ref _clipboardTimeout, value); }
         }
 
         protected void SetProperty<T>(ref T field, T value, [CallerMemberName]string name = null)
@@ -39,15 +46,16 @@ namespace KeePass
         {
         }
 
-        public virtual T Load<T>(string field)
+        public virtual T Load<T>(string field, T @default = default(T))
         {
-            return default(T);
+            return @default;
         }
 
         public void Load()
         {
-            TrackTelemetry = Load<bool>(nameof(TrackTelemetry));
-            ClearOnSuspend = Load<bool>(nameof(ClearOnSuspend));
+            TrackTelemetry = Load<bool>(nameof(TrackTelemetry), false);
+            ClearOnSuspend = Load<bool>(nameof(ClearOnSuspend), true);
+            ClipboardTimeout = Load(nameof(ClipboardTimeout), 15);
         }
     }
 }

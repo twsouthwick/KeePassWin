@@ -12,13 +12,13 @@ namespace KeePass.Win.Services
             _settings = ApplicationData.Current.LocalSettings;
         }
 
-        public override T Load<T>(string field)
+        public override T Load<T>(string field, T @default = default(T))
         {
             var value = _settings.Values[field];
 
             if (value == null)
             {
-                return default(T);
+                return @default;
             }
 
             return (T)Convert.ChangeType(value, typeof(T));
