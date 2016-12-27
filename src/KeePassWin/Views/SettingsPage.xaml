@@ -39,7 +39,13 @@
             </PivotItem>
 
             <PivotItem Header="Settings">
-                <CheckBox VerticalAlignment="Top" IsChecked="{x:Bind Path=Model.Settings.ClearOnSuspend, Mode=TwoWay}" Content="Clear passwords on suspend" />
+                <StackPanel>
+                    <CheckBox VerticalAlignment="Top" IsChecked="{x:Bind Path=Model.Settings.ClearOnSuspend, Mode=TwoWay}" Content="Clear passwords on suspend" />
+                    <ComboBox Header="Clipboard timeout (seconds)" 
+                              mvvm:ComboBox.ValueType="True"
+                              SelectedValue="{x:Bind Path=Model.Settings.ClipboardTimeout, Mode=TwoWay}"
+                              ItemsSource="{x:Bind Path=Model.TimeoutValues}" />
+                </StackPanel>
             </PivotItem>
 
             <PivotItem Header="Privacy">

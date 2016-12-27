@@ -7,12 +7,10 @@ namespace KeePass.Win.Services
     public class DialogCredentialProvider : ICredentialProvider
     {
         private readonly Func<IFile, PasswordDialog> _dialogFactory;
-        private readonly IDatabaseFileAccess _tracker;
 
-        public DialogCredentialProvider(Func<IFile, PasswordDialog> dialogFactory, IDatabaseFileAccess tracker)
+        public DialogCredentialProvider(Func<IFile, PasswordDialog> dialogFactory)
         {
             _dialogFactory = dialogFactory;
-            _tracker = tracker;
         }
 
         public async Task<KeePassCredentials> GetCredentialsAsync(IFile file)

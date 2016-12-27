@@ -1,16 +1,28 @@
 ﻿using KeePass.Win.Log;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Email;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Notifications;
 
 namespace KeePass.Win.Services
 {
     public class DataPackageClipboard : IClipboard<string>, IClipboard<ILogView>, IMailClient<ILogView>
     {
+        private readonly KeePassSettings _settings;
+
+        private CancellationTokenSource _cts;
+
+        public DataPackageClipboard(KeePassSettings settings)
+        {
+            _settings = settings;
+        }
+
         public virtual bool Copy(string text)
         {
             if (text == null)
@@ -22,9 +34,55 @@ namespace KeePass.Win.Services
 
             dp.SetText(text);
 
-            Clipboard.SetContent(dp);
+            AddToClipboardAsync(dp, autoClear: true);
 
             return true;
+        }
+
+        private async void AddToClipboardAsync(DataPackage package, bool autoClear = false)
+        {
+            _cts?.Cancel();
+            Clipboard.SetContent(package);
+
+            if (!autoClear)
+            {
+                return;
+            }
+
+            _cts = new CancellationTokenSource();
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(15), _cts.Token);
+
+                ClearClipboard();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
+
+        private void ClearClipboard()
+        {
+            var toast = new ToastContent
+            {
+                Launch = "action=view&eventId=1983",
+                Scenario = ToastScenario.Default,
+                Visual = new ToastVisual
+                {
+                    BindingGeneric = new ToastBindingGeneric
+                    {
+                        Attribution = new ToastGenericAttributionText { Text = "KeePassWin" },
+                        Children =
+                        {
+                            new AdaptiveText { Text = "Clipboard has been cleared" }
+                        }
+                    }
+                }
+            };
+
+            Clipboard.Clear();
+            ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(toast.GetXml()));
         }
 
         public virtual bool Copy(ILogView log)
@@ -40,12 +98,12 @@ namespace KeePass.Win.Services
             {
                 var deferral = request.GetDeferral();
 
-                request.SetData(new IStorageItem[] { await CreateFile(log) });
+                request.SetData(new IStorageItem[] { await CreateFileAsync(log) });
 
                 deferral.Complete();
             });
 
-            Clipboard.SetContent(datapackage);
+            AddToClipboardAsync(datapackage, autoClear: false);
 
             return true;
         }
@@ -82,7 +140,7 @@ namespace KeePass.Win.Services
             }
         }
 
-        private async Task<IStorageItem> CreateFile(ILogView view)
+        private async Task<IStorageItem> CreateFileAsync(ILogView view)
         {
             var file = await ApplicationData.Current.TemporaryFolder.CreateFileAsync($"{view.Id}.log", CreationCollisionOption.GenerateUniqueName);
 
