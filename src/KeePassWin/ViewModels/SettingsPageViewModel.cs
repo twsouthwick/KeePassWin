@@ -27,6 +27,8 @@ namespace KeePass.Win.ViewModels
             new Library { Name = "Prism", Url = "https://github.com/PrismLibrary/Prism" },
             new Library { Name = "UWP Community Toolkit", Url = "http://www.uwpcommunitytoolkit.com" }
         };
+
+        public int[] TimeoutValues { get; } = new[] { 15, 30, 45, 90, 120 };
     }
 
     public class Library
