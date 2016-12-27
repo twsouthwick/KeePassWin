@@ -14,13 +14,13 @@ namespace KeePass.Win.Services
 {
     public class DataPackageClipboard : IClipboard<string>, IClipboard<ILogView>, IMailClient<ILogView>
     {
+        private readonly KeePassSettings _settings;
+
         private CancellationTokenSource _cts;
 
-        private readonly INotification _notifier;
-
-        public DataPackageClipboard(INotification notifier)
+        public DataPackageClipboard(KeePassSettings settings)
         {
-            _notifier = notifier;
+            _settings = settings;
         }
 
         public virtual bool Copy(string text)
