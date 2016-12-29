@@ -13,13 +13,9 @@ namespace KeePass.Win.ViewModels
 
             SendCommand = new DelegateCommand(() => mailClient.SendAsync(LogView));
             CopyCommand = new DelegateCommand(() => clipboard.Copy(LogView));
-
-            Statement = LocalizedStrings.SettingsLogDescription;
         }
 
         public ILogView LogView { get; }
-
-        public string Statement { get; }
 
         public ICommand SendCommand { get; }
 

@@ -106,28 +106,6 @@ namespace KeePass.Win
                 return resourceLoader.GetString("InvalidCredentials");
             }
         }
-               
-        /// <summary>
-        /// Localized resource similar to "Main page"
-        /// </summary>
-        public static string MainPageMenuItemDisplayName
-        {
-            get
-            {
-                return resourceLoader.GetString("MainPageMenuItemDisplayName");
-            }
-        }
-        
-        /// <summary>
-        /// Localized resource similar to "Open"
-        /// </summary>
-        public static string MenuItemOpenCommandTitle
-        {
-            get
-            {
-                return resourceLoader.GetString("MenuItemOpenCommandTitle");
-            }
-        }
 
         /// <summary>
         /// Localized resource similar to "Could not open file"
@@ -159,17 +137,6 @@ namespace KeePass.Win
             get
             {
                 return resourceLoader.GetString("MenuItemOpenSameFileTitle");
-            }
-        }
-        
-        /// <summary>
-        /// Localized resource similar to "Logging is a useful tool to help diagnose issues that you may encounter. By default, logging is turned off but may be turned on here. If you encounter a problem with the application, please enable logging, reproduce the error, and then send the log."
-        /// </summary>
-        public static string SettingsLogDescription
-        {
-            get
-            {
-                return resourceLoader.GetString("SettingsLogDescription");
             }
         }
     }
