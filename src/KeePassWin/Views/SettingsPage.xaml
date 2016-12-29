@@ -1,21 +1,18 @@
 ﻿<prismMvvm:SessionStateAwarePage
     x:Class="KeePass.Win.Views.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:KeePass.Win.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:KeePass.Win.Controls"
     xmlns:mvvm="using:KeePass.Win.Mvvm"
-    xmlns:prismMvvm="using:Prism.Windows.Mvvm"
-    xmlns:models="using:KeePass.Models"
     xmlns:vm="using:KeePass.Win.ViewModels"
+    xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot>
+        <Pivot x:Name="Pivots">
             <PivotItem Header="About">
                 <StackPanel>
                     <TextBlock Margin="0,20,0,20" Text="{x:Bind Path=Model.Version}" IsTextSelectionEnabled="True" />
@@ -45,6 +42,20 @@
                               mvvm:ComboBox.ValueType="True"
                               SelectedValue="{x:Bind Path=Model.Settings.ClipboardTimeout, Mode=TwoWay}"
                               ItemsSource="{x:Bind Path=Model.TimeoutValues}" />
+                </StackPanel>
+            </PivotItem>
+
+            <PivotItem x:Name="KeyboardPivot" Header="Keyboard">
+                <StackPanel>
+                    <TextBlock MaxWidth="700" Margin="0,20,0,20"
+                               HorizontalAlignment="Center" 
+                               TextWrapping="WrapWholeWords">
+                        KeePassWin supports keyboard shortcuts for various operations. These settings allow you to customize which shortcuts are used. These settings are currently not saved between sessions.
+                        <LineBreak />
+                        <LineBreak />
+                        In order to set the shortcut, select the entry and press the key combination that you would like to use. If the combination is already taken, then it will not be set.
+                    </TextBlock>
+                    <controls:ShortcutEditor Shortcuts="{x:Bind Path=Model.Shortcuts}" />
                 </StackPanel>
             </PivotItem>
 

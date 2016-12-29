@@ -7,7 +7,6 @@ namespace KeePass
     public abstract class KeyboardShortcuts
     {
         private readonly Dictionary<KeyInfo, ShortcutName> _keys = new Dictionary<KeyInfo, ShortcutName>();
-        private readonly Dictionary<ShortcutName, KeyInfo> _names = new Dictionary<ShortcutName, KeyInfo>();
 
         public string GetShortcutString(int key)
         {
@@ -16,15 +15,15 @@ namespace KeePass
 
         public string GetShortcutString(ShortcutName name)
         {
-            KeyInfo info;
-            if (_names.TryGetValue(name, out info))
+            foreach (var item in _keys)
             {
-                return info.ToString();
+                if (item.Value == name)
+                {
+                    return item.Key.ToString(KeyToString);
+                }
             }
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
         public ShortcutName ProcessKeypress(int key)
@@ -42,19 +41,48 @@ namespace KeePass
             }
         }
 
-        protected void UpdateKey(ShortcutName name, KeyInfo info)
+        public IEnumerable<ShortcutName> ShortcutNames => _keys.Values;
+
+        public bool UpdateKey(ShortcutName name, int key)
         {
-            if (_names.ContainsKey(name))
+            var info = GetKeyInfo(key);
+
+            return UpdateKey(name, info);
+        }
+
+        protected bool UpdateKey(ShortcutName name, KeyInfo info)
+        {
+            if (info.Key == 0)
             {
-                _names.Remove(name);
-                _keys.Remove(info);
+                return false;
             }
 
-            _keys.Add(info, name);
-            _names.Add(name, info);
+            // Don't overwrite another shortcut 
+            if (_keys.ContainsKey(info))
+            {
+                return false;
+            }
+
+            foreach (var item in _keys)
+            {
+                if (item.Value == name)
+                {
+                    _keys.Remove(item.Key);
+                    break;
+                }
+            }
+
+            _keys[info] = name;
+
+            return true;
         }
 
         protected abstract KeyInfo GetKeyInfo(int key);
+
+        protected virtual string KeyToString(int key)
+        {
+            return key.ToString();
+        }
 
         [Flags]
         protected enum Modifier

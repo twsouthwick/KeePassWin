@@ -99,11 +99,15 @@
     <Compile Include="Controls\NameBoxDialog.xaml.cs">
       <DependentUpon>NameBoxDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShortcutEditor.xaml.cs">
+      <DependentUpon>ShortcutEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IContentDialogResult.cs" />
     <Compile Include="Mvvm\ComboBox.cs" />
     <Compile Include="Mvvm\Keyboard.Focus.cs" />
     <Compile Include="Mvvm\Keyboard.Shortcut.cs" />
     <None Include="project.json" />
+    <PRIResource Include="Resources\en\ShortcutNames.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -212,6 +216,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\NameBoxDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShortcutEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

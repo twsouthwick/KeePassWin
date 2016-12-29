@@ -33,16 +33,26 @@ namespace KeePass.Win.Services
 
         protected override KeyInfo GetKeyInfo(int key)
         {
-            var modifier = GetModifier(VirtualKey.Shift, Modifier.Shift)
-             | GetModifier(VirtualKey.Control, Modifier.Control)
-             | GetModifier(VirtualKey.Menu, Modifier.Menu)
-             | GetModifier(VirtualKey.Shift, Modifier.Shift);
+            var modifier = GetModifier(VirtualKey.Shift, Modifier.Shift, ref key)
+             | GetModifier(VirtualKey.Control, Modifier.Control, ref key)
+             | GetModifier(VirtualKey.Menu, Modifier.Menu, ref key)
+             | GetModifier(VirtualKey.Shift, Modifier.Shift, ref key);
 
             return new KeyInfo(modifier, key);
         }
 
-        private static Modifier GetModifier(VirtualKey key, Modifier modifier)
+        protected override string KeyToString(int key)
         {
+            return ((VirtualKey)key).ToString();
+        }
+
+        private static Modifier GetModifier(VirtualKey key, Modifier modifier, ref int pressed)
+        {
+            if ((int)key == pressed)
+            {
+                pressed = (int)VirtualKey.None;
+            }
+
             return Windows.UI.Xaml.Window.Current.CoreWindow.GetKeyState(key).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down)
                 ? modifier : Modifier.None;
         }
