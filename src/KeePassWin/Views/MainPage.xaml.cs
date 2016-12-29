@@ -1,5 +1,4 @@
-﻿using KeePass.Win.ViewModels;
-using Prism.Windows.Mvvm;
+﻿using Prism.Windows.Mvvm;
 
 namespace KeePass.Win.Views
 {
@@ -9,7 +8,5 @@ namespace KeePass.Win.Views
         {
             InitializeComponent();
         }
-
-        public MainPageViewModel ViewDataContext => DataContext as MainPageViewModel;
     }
 }

@@ -13,18 +13,21 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot x:Name="Pivots">
-            <PivotItem Header="About">
+            <PivotItem x:Uid="PivotAbout">
                 <StackPanel>
-                    <TextBlock Margin="0,20,0,20" Text="{x:Bind Path=Model.Version}" IsTextSelectionEnabled="True" />
+                    <TextBlock 
+                        Margin="0,20,0,20" 
+                        Text="{x:Bind Path=Model.Version}" 
+                        IsTextSelectionEnabled="True" />
 
-                    <HyperlinkButton Content="Project website" NavigateUri="http://github.com/twsouthwick/KeePassWin" />
-                    <HyperlinkButton Content="Issue tracker" NavigateUri="http://github.com/twsouthwick/KeePassWin/issues" />
+                    <HyperlinkButton x:Uid="HyperlinkWebsite" />
+                    <HyperlinkButton x:Uid="HyperlinkIssueTracker" />
 
-                    <TextBlock Margin="0,20,0,20" Text="Developed by Taylor Southwick" />
+                    <TextBlock x:Uid="AboutProject"
+                        TextWrapping="WrapWholeWords"
+                        Margin="0,20,0,20" />
 
-                    <TextBlock Margin="0,20,0,20" Text="This program is based in part off of KeePass available at http://keepass.info. This project is not supported or affiliated with the maintainers of the original KeePass project." TextWrapping="Wrap" />
-
-                    <TextBlock Text="The following 3rd party libraries are used:" />
+                    <TextBlock x:Uid="AboutThirdParties" />
                     <ItemsControl ItemsSource="{x:Bind Path=Model.Libraries}" Margin="20,0,0,20">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:Library">
@@ -35,35 +38,34 @@
                 </StackPanel>
             </PivotItem>
 
-            <PivotItem Header="Settings">
+            <PivotItem x:Uid="PivotSettings">
                 <StackPanel>
-                    <CheckBox VerticalAlignment="Top" IsChecked="{x:Bind Path=Model.Settings.ClearOnSuspend, Mode=TwoWay}" Content="Clear passwords on suspend" />
-                    <ComboBox Header="Clipboard timeout (seconds)" 
+                    <CheckBox x:Uid="SettingsClearOnSuspend"
+                              VerticalAlignment="Top" 
+                              IsChecked="{x:Bind Path=Model.Settings.ClearOnSuspend, Mode=TwoWay}" />
+                    <ComboBox x:Uid="SettingsClipboardTimeout"
                               mvvm:ComboBox.ValueType="True"
                               SelectedValue="{x:Bind Path=Model.Settings.ClipboardTimeout, Mode=TwoWay}"
                               ItemsSource="{x:Bind Path=Model.TimeoutValues}" />
                 </StackPanel>
             </PivotItem>
 
-            <PivotItem x:Name="KeyboardPivot" Header="Keyboard">
+            <PivotItem x:Name="KeyboardPivot" x:Uid="PivotKeyboard">
                 <StackPanel>
-                    <TextBlock MaxWidth="700" Margin="0,20,0,20"
+                    <TextBlock x:Uid="KeyboardDescription"
+                               MaxWidth="700" 
+                               Margin="0,20,0,20"
                                HorizontalAlignment="Center" 
-                               TextWrapping="WrapWholeWords">
-                        KeePassWin supports keyboard shortcuts for various operations. These settings allow you to customize which shortcuts are used. These settings are currently not saved between sessions.
-                        <LineBreak />
-                        <LineBreak />
-                        In order to set the shortcut, select the entry and press the key combination that you would like to use. If the combination is already taken, then it will not be set.
-                    </TextBlock>
+                               TextWrapping="WrapWholeWords" />
                     <controls:ShortcutEditor Shortcuts="{x:Bind Path=Model.Shortcuts}" />
                 </StackPanel>
             </PivotItem>
 
-            <PivotItem Header="Privacy">
+            <PivotItem x:Uid="PivotPrivacy">
                 <TextBlock Text="{x:Bind Path=Model.PrivacyStatement}" TextWrapping="Wrap"  />
             </PivotItem>
 
-            <PivotItem Header="Log">
+            <PivotItem x:Uid="PivotLogs">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -80,12 +82,23 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <CheckBox Grid.Column="0" Margin="0,0,10,0" IsChecked="{Binding Path=Logging.LogView.ShouldLogEvents, Mode=TwoWay}" Content="Enable logging" />
-                        <Button Grid.Column="1" Margin="10,0,10,0" Command="{x:Bind Path=Model.Logging.SendCommand}"  Content="Send Log" />
-                        <Button Grid.Column="2" Margin="10,0,10,0" Command="{x:Bind Path=Model.Logging.CopyCommand}" Content="Copy Log" />
+                        <CheckBox x:Uid="SettingsLogsEnable"
+                                  Grid.Column="0" 
+                                  Margin="0,0,10,0" 
+                                  IsChecked="{Binding Path=Logging.LogView.ShouldLogEvents, Mode=TwoWay}" />
+                        <Button x:Uid="SettingsLogsSend"
+                                Grid.Column="1" 
+                                Margin="10,0,10,0" 
+                                Command="{x:Bind Path=Model.Logging.SendCommand}" />
+                        <Button x:Uid="SettingsLogsCopy"
+                                Grid.Column="2" 
+                                Margin="10,0,10,0" 
+                                Command="{x:Bind Path=Model.Logging.CopyCommand}" />
                     </Grid>
 
-                    <TextBlock Grid.Row="2"  Text="{x:Bind Path=Model.Logging.Statement}" TextWrapping="Wrap"  />
+                    <TextBlock x:Uid="SettingsLogDescription" 
+                               Grid.Row="2"
+                               TextWrapping="Wrap"  />
 
                     <ScrollViewer Grid.Row="4" x:Name="LogScroll">
                         <TextBlock x:Name="LogText"

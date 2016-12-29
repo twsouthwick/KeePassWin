@@ -117,28 +117,110 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailMessageBody" xml:space="preserve">
-    <value>Attached is a usage log of KeePassWin</value>
+  <data name="AboutProject.Text" xml:space="preserve">
+    <value>Developed by Taylor Southwick
+
+This program is based in part off of KeePass available at http://keepass.info. This project is not supported or affiliated with the maintainers of the original KeePass project.</value>
   </data>
-  <data name="EmailMessageSubject" xml:space="preserve">
-    <value>KeePass [{0}] ({1})</value>
+  <data name="AboutThirdParties.Text" xml:space="preserve">
+    <value>The following 3rd party libraries are used:</value>
   </data>
-  <data name="EmailMessageTo" xml:space="preserve">
-    <value>keepasswin@outlook.com</value>
+  <data name="CommandNewEntry.Label" xml:space="preserve">
+    <value>Create entry</value>
   </data>
-  <data name="EmailMessageToName" xml:space="preserve">
-    <value>KeePassWin</value>
+  <data name="CommandNewGroup.Label" xml:space="preserve">
+    <value>Create group</value>
   </data>
-  <data name="InvalidCredentials" xml:space="preserve">
-    <value>Invalid credentials</value>
+  <data name="CommandSave.Label" xml:space="preserve">
+    <value>Save</value>
   </data>
-  <data name="MenuItemOpenError" xml:space="preserve">
-    <value>Could not open file</value>
+  <data name="EntryButtonPassword.Label" xml:space="preserve">
+    <value>Password</value>
   </data>
-  <data name="MenuItemOpenSameFileContent" xml:space="preserve">
-    <value>The database you selected is already available.</value>
+  <data name="EntryButtonUsername.Label" xml:space="preserve">
+    <value>Username</value>
   </data>
-  <data name="MenuItemOpenSameFileTitle" xml:space="preserve">
-    <value>Database already open!</value>
+  <data name="EntryButtonWebsite.Label" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="EntryFlyoutCopyPassword.Text" xml:space="preserve">
+    <value>Copy password</value>
+  </data>
+  <data name="EntryFlyoutCopyUrl.Text" xml:space="preserve">
+    <value>Copy website</value>
+  </data>
+  <data name="EntryFlyoutCopyUserName.Text" xml:space="preserve">
+    <value>Copy username</value>
+  </data>
+  <data name="EntryFlyoutDelete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EntryFlyoutOpenUrl.Text" xml:space="preserve">
+    <value>Open website</value>
+  </data>
+  <data name="GroupFlyoutRemove.Text" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="GroupFlyoutRename.Text" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="HamburgerOpen.Label" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="HamburgerSettings.Label" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="HyperlinkIssueTracker.Content" xml:space="preserve">
+    <value>Issue tracker</value>
+  </data>
+  <data name="HyperlinkIssueTracker.NavigateUri" xml:space="preserve">
+    <value>http://github.com/twsouthwick/KeePassWin/issues</value>
+  </data>
+  <data name="HyperlinkWebsite.Content" xml:space="preserve">
+    <value>Project website</value>
+  </data>
+  <data name="HyperlinkWebsite.NavigateUri" xml:space="preserve">
+    <value>http://github.com/twsouthwick/KeePassWin</value>
+  </data>
+  <data name="KeyboardDescription.Text" xml:space="preserve">
+    <value>KeePassWin supports keyboard shortcuts for various operations. These settings allow you to customize which shortcuts are used. These settings are currently not saved between sessions.
+
+In order to set the shortcut, select the entry and press the key combination that you would like to use. If the combination is already taken, then it will not be set.</value>
+  </data>
+  <data name="MainPageWelcome.Text" xml:space="preserve">
+    <value>Select a database to open.</value>
+  </data>
+  <data name="PivotAbout.Header" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="PivotKeyboard.Header" xml:space="preserve">
+    <value>Keyboard</value>
+  </data>
+  <data name="PivotLogs.Header" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="PivotPrivacy.Header" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="PivotSettings.Header" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsClearOnSuspend.Content" xml:space="preserve">
+    <value>Clear clipboard on suspend</value>
+  </data>
+  <data name="SettingsClipboardTimeout.Header" xml:space="preserve">
+    <value>Clipboard timeout (seconds)</value>
+  </data>
+  <data name="SettingsLogDescription.Text" xml:space="preserve">
+    <value>Logging is a useful tool to help diagnose issues that you may encounter. By default, logging is turned off but may be turned on here. If you encounter a problem with the application, please enable logging, reproduce the error, and then send the log.</value>
+  </data>
+  <data name="SettingsLogsCopy.Content" xml:space="preserve">
+    <value>Copy log</value>
+  </data>
+  <data name="SettingsLogsEnable.Content" xml:space="preserve">
+    <value>Enable logging</value>
+  </data>
+  <data name="SettingsLogsSend.Content" xml:space="preserve">
+    <value>Send log</value>
   </data>
 </root>

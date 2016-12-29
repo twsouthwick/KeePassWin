@@ -45,8 +45,12 @@
 
             <controls:HamburgerMenu.OptionsItemsSource>
                 <controls:HamburgerMenuItemCollection>
-                    <local:HamburgerMenuGlyphCommandItem Label="Open" Glyph="OpenFile" Command="{x:Bind Path=Model.OpenCommand, Mode=OneWay}" />
-                    <local:HamburgerMenuGlyphCommandItem Label="Settings" Glyph="Setting" Command="{x:Bind Path=Model.SettingsCommand, Mode=OneWay}" />
+                    <local:HamburgerMenuGlyphCommandItem x:Uid="HamburgerOpen"
+                        Glyph="OpenFile" 
+                        Command="{x:Bind Path=Model.OpenCommand, Mode=OneWay}" />
+                    <local:HamburgerMenuGlyphCommandItem x:Uid="HamburgerSettings"
+                        Glyph="Setting" 
+                        Command="{x:Bind Path=Model.SettingsCommand, Mode=OneWay}" />
                 </controls:HamburgerMenuItemCollection>
             </controls:HamburgerMenu.OptionsItemsSource>
 
