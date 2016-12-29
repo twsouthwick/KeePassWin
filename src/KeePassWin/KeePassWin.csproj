@@ -107,6 +107,7 @@
     <Compile Include="Mvvm\Keyboard.Focus.cs" />
     <Compile Include="Mvvm\Keyboard.Shortcut.cs" />
     <None Include="project.json" />
+    <PRIResource Include="Resources\en\ShortcutNames.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">

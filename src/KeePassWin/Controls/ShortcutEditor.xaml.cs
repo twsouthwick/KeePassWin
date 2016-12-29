@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using Windows.ApplicationModel.Resources;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -57,6 +59,8 @@ namespace KeePass.Win.Controls
 
     internal class ShortcutInfo : INotifyPropertyChanged
     {
+        private static readonly ResourceLoader s_loader = ResourceLoader.GetForCurrentView("ShortcutNames");
+
         private readonly ShortcutName _name;
         private readonly KeyboardShortcuts _shortcuts;
 
@@ -65,7 +69,9 @@ namespace KeePass.Win.Controls
             _shortcuts = shortcuts;
             _name = name;
 
-            Name = name.ToString();
+            Name = s_loader.GetString(name.ToString());
+
+            Debug.Assert(!string.IsNullOrWhiteSpace(Name), "A resource string must be available for the shortcut");
         }
 
         public string Name { get; }
