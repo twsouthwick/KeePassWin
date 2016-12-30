@@ -136,7 +136,6 @@
     <Compile Include="Services\FileDatabaseTracker.cs" />
     <Compile Include="INavigator.cs" />
     <Compile Include="Services\SimpleDatabaseCache.cs" />
-    <Compile Include="Models\DatabaseGroupParameter.cs" />
     <Compile Include="Services\DialogCredentialProvider.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />

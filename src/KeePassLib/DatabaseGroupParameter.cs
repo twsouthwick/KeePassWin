@@ -2,9 +2,10 @@
 
 namespace KeePass.Models
 {
-    internal struct DatabaseGroupParameter
+    public struct DatabaseGroupParameter
     {
         public KeePassId Database { get; }
+
         public KeePassId Group { get; }
 
         public DatabaseGroupParameter(KeePassId database, KeePassId group)
@@ -13,10 +14,15 @@ namespace KeePass.Models
             Group = group;
         }
 
-        public static DatabaseGroupParameter Parse(string entry)
+        public static DatabaseGroupParameter Decode(string encodedParameter)
         {
-            var db = Guid.Parse(entry.Substring(0, 32));
-            var group = Guid.Parse(entry.Substring(32));
+            if (encodedParameter.Length != 64)
+            {
+                throw new ArgumentOutOfRangeException(nameof(encodedParameter), encodedParameter, "Encoded parameter must have a length of 64.");
+            }
+
+            var db = Guid.Parse(encodedParameter.Substring(0, 32));
+            var group = Guid.Parse(encodedParameter.Substring(32));
 
             return new DatabaseGroupParameter(new KeePassId(db), new KeePassId(group));
         }

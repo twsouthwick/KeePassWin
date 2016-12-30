@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="DatabaseCache.cs" />
     <Compile Include="DatabaseAlreadyExistsException.cs" />
+    <Compile Include="DatabaseGroupParameter.cs" />
     <Compile Include="DatabaseUnlockException.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="IClipboard.cs" />

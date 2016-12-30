@@ -268,7 +268,7 @@ namespace KeePass.Win.ViewModels
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            var key = DatabaseGroupParameter.Parse(((string)e.Parameter));
+            var key = DatabaseGroupParameter.Decode(((string)e.Parameter));
             var db = await _unlocker.UnlockAsync(key.Database, _credentialProvider);
 
             if (db == null)
