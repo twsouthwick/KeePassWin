@@ -134,9 +134,6 @@
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
-    <Compile Include="ViewModels\LoggingPageViewModel.cs" />
-    <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
-    <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Controls\EntryViewControl.xaml.cs">
       <DependentUpon>EntryViewControl.xaml</DependentUpon>
     </Compile>
@@ -147,14 +144,6 @@
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinKeePassModule.cs" />
-    <Compile Include="Resources\en\LocalizedStrings.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LocalizedStrings.resw</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\DatabasePageViewModel.cs" />
-    <Compile Include="ViewModels\MenuItemViewModel.cs" />
-    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -172,8 +161,6 @@
     </AppxManifest>
     <PRIResource Include="Resources\en\LocalizedStrings.resw">
       <CustomToolNamespace>KeePass.Win</CustomToolNamespace>
-      <Generator>InternalReswFileCodeGenerator</Generator>
-      <LastGenOutput>LocalizedStrings.cs</LastGenOutput>
     </PRIResource>
   </ItemGroup>
   <ItemGroup>
@@ -252,6 +239,10 @@
     <ProjectReference Include="..\KeePass.Win.Services\KeePass.Win.Services.csproj">
       <Project>{c26f1b9e-4275-4f95-b579-feb764eadfc7}</Project>
       <Name>KeePass.Win.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KeePass.Win.ViewModels\KeePass.Win.ViewModels.csproj">
+      <Project>{84bc73a0-b888-42c4-87a7-f483356365c4}</Project>
+      <Name>KeePass.Win.ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
