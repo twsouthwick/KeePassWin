@@ -51,50 +51,6 @@ namespace KeePass.Win
                 resourceLoader = ResourceLoader.GetForCurrentView(currentAssemblyName + "/LocalizedStrings");
             }
         }
-        
-        /// <summary>
-        /// Localized resource similar to "Attached is a usage log of KeePassWin"
-        /// </summary>
-        public static string EmailMessageBody
-        {
-            get
-            {
-                return resourceLoader.GetString("EmailMessageBody");
-            }
-        }
-        
-        /// <summary>
-        /// Localized resource similar to "KeePass [{0}] ({1})"
-        /// </summary>
-        public static string EmailMessageSubject
-        {
-            get
-            {
-                return resourceLoader.GetString("EmailMessageSubject");
-            }
-        }
-        
-        /// <summary>
-        /// Localized resource similar to "keepasswin@outlook.com"
-        /// </summary>
-        public static string EmailMessageTo
-        {
-            get
-            {
-                return resourceLoader.GetString("EmailMessageTo");
-            }
-        }
-        
-        /// <summary>
-        /// Localized resource similar to "KeePassWin"
-        /// </summary>
-        public static string EmailMessageToName
-        {
-            get
-            {
-                return resourceLoader.GetString("EmailMessageToName");
-            }
-        }
  
         /// <summary>
         /// Localized resource similar to "Invalid credentials"

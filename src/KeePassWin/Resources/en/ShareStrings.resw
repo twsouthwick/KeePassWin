@@ -117,16 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InvalidCredentials" xml:space="preserve">
-    <value>Invalid credentials</value>
+  <data name="MessageBody" xml:space="preserve">
+    <value>Attached is a usage log of KeePassWin</value>
   </data>
-  <data name="MenuItemOpenError" xml:space="preserve">
-    <value>Could not open file</value>
+  <data name="MessageSubject" xml:space="preserve">
+    <value>KeePass [{0}] ({1})</value>
   </data>
-  <data name="MenuItemOpenSameFileContent" xml:space="preserve">
-    <value>The database you selected is already available.</value>
+  <data name="MessageTo" xml:space="preserve">
+    <value>keepasswin@outlook.com</value>
   </data>
-  <data name="MenuItemOpenSameFileTitle" xml:space="preserve">
-    <value>Database already open!</value>
+  <data name="MessageToName" xml:space="preserve">
+    <value>KeePassWin</value>
+  </data>
+  <data name="TimeoutAttribution" xml:space="preserve">
+    <value>KeePassWin</value>
+  </data>
+  <data name="TimeoutText" xml:space="preserve">
+    <value>Clipboard has been cleared</value>
   </data>
 </root>

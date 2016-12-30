@@ -1,11 +1,11 @@
-﻿using KeePass.Win.Log;
-using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Email;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
@@ -14,6 +14,8 @@ namespace KeePass.Win.Services
 {
     public class DataPackageClipboard : IClipboard<string>, IClipboard<ILogView>, IMailClient<ILogView>
     {
+        private static readonly ResourceLoader s_resources = ResourceLoader.GetForCurrentView("ShareStrings");
+
         private readonly KeePassSettings _settings;
 
         private CancellationTokenSource _cts;
@@ -72,10 +74,10 @@ namespace KeePass.Win.Services
                 {
                     BindingGeneric = new ToastBindingGeneric
                     {
-                        Attribution = new ToastGenericAttributionText { Text = "KeePassWin" },
+                        Attribution = new ToastGenericAttributionText { Text = s_resources.GetString("TimeoutAttribution") },
                         Children =
                         {
-                            new AdaptiveText { Text = "Clipboard has been cleared" }
+                            new AdaptiveText { Text = s_resources.GetString("TimeoutText") }
                         }
                     }
                 }
@@ -114,11 +116,11 @@ namespace KeePass.Win.Services
 
             var message = new EmailMessage
             {
-                Body = LocalizedStrings.EmailMessageBody,
-                Subject = string.Format(LocalizedStrings.EmailMessageSubject, log.Id, File.ReadAllText("version.txt").Trim())
+                Body = s_resources.GetString("MessageBody"),
+                Subject = string.Format(s_resources.GetString("MessageSubject"), log.Id, File.ReadAllText("version.txt").Trim())
             };
 
-            message.To.Add(new EmailRecipient(LocalizedStrings.EmailMessageTo, LocalizedStrings.EmailMessageToName));
+            message.To.Add(new EmailRecipient(s_resources.GetString("MessageTo"), s_resources.GetString("MessageToName")));
 
             using (var ms = new InMemoryRandomAccessStream())
             {

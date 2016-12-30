@@ -102,11 +102,11 @@
     <Compile Include="Controls\ShortcutEditor.xaml.cs">
       <DependentUpon>ShortcutEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IContentDialogResult.cs" />
     <Compile Include="Mvvm\ComboBox.cs" />
     <Compile Include="Mvvm\Keyboard.Focus.cs" />
     <Compile Include="Mvvm\Keyboard.Shortcut.cs" />
     <None Include="project.json" />
+    <PRIResource Include="Resources\en\ShareStrings.resw" />
     <PRIResource Include="Resources\en\Resources.resw" />
     <PRIResource Include="Resources\en\ShortcutNames.resw" />
   </ItemGroup>
@@ -130,19 +130,10 @@
     <Compile Include="Log\SerilogLogger.cs" />
     <Compile Include="Log\StringBuilderSink.cs" />
     <Compile Include="Mvvm\Keyboard.Dialog.cs" />
-    <Compile Include="Services\DataPackageClipboard.cs" />
-    <Compile Include="Services\FileDatabaseTracker.cs" />
-    <Compile Include="INavigator.cs" />
-    <Compile Include="Services\SimpleDatabaseCache.cs" />
     <Compile Include="Services\DialogCredentialProvider.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />
     <Compile Include="Mvvm\TemplateMatch.cs" />
-    <Compile Include="Services\StorageItemExtensions.cs" />
-    <Compile Include="Services\WindowsKeyboardShortcuts.cs" />
-    <Compile Include="Services\StorageItemFile.cs" />
-    <Compile Include="Services\WindowsFilePicker.cs" />
-    <Compile Include="Services\WinKeePassSettings.cs" />
     <Compile Include="ViewModels\LoggingPageViewModel.cs" />
     <Compile Include="ViewModels\PasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
@@ -258,6 +249,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KeePass.Win.Services\KeePass.Win.Services.csproj">
+      <Project>{c26f1b9e-4275-4f95-b579-feb764eadfc7}</Project>
+      <Name>KeePass.Win.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj">
       <Project>{b4d06dd3-1980-4f4e-9867-4e1625f8f14f}</Project>
       <Name>KeePass.Models</Name>

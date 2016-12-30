@@ -5,7 +5,7 @@ using System;
 
 namespace KeePass.Win.Services
 {
-    internal class SimpleDatabaseCache : IDatabaseCache, IBackgroundEnteredAware
+    public class SimpleDatabaseCache : IDatabaseCache, IBackgroundEnteredAware
     {
         private readonly Dictionary<KeePassId, IKeePassDatabase> _idCache = new Dictionary<KeePassId, IKeePassDatabase>();
         private readonly IDatabaseCache _cache;

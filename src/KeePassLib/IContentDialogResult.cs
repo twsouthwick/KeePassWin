@@ -1,6 +1,6 @@
 ﻿namespace KeePass.Win
 {
-    internal interface IContentDialogResult
+    public interface IContentDialogResult
     {
         void Enter();
 
