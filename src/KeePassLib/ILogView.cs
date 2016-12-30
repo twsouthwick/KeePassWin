@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace KeePass.Win.Log
+namespace KeePass
 {
     public interface ILogView : INotifyPropertyChanged
     {

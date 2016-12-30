@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppModel\IBackgroundEnteredAware.cs" />
     <Compile Include="DatabaseCache.cs" />
     <Compile Include="DatabaseAlreadyExistsException.cs" />
     <Compile Include="DatabaseGroupParameter.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="IFile.cs" />
     <Compile Include="IFilePicker.cs" />
     <Compile Include="ILogger.cs" />
+    <Compile Include="ILogView.cs" />
     <Compile Include="IMailClient.cs" />
     <Compile Include="INameProvider.cs" />
     <Compile Include="InvalidCredentialsException.cs" />
