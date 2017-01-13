@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace KeePass
@@ -12,7 +13,7 @@ namespace KeePass
         bool Modified { get; }
     }
 
-    public interface IKeePassId
+    public interface IKeePassId : INotifyPropertyChanged
     {
         KeePassId Id { get; set; }
     }
