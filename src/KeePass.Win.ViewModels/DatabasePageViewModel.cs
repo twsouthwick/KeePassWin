@@ -25,9 +25,6 @@ namespace KeePass.Win.ViewModels
         private readonly INameProvider _nameProvider;
         private readonly ILogger _log;
 
-        private readonly DelegateCommand _saveCommand;
-        private readonly DelegateCommand _addEntryCommand;
-
         private IKeePassDatabase _database;
         private IKeePassGroup _group;
         private IList<IKeePassGroup> _parents;
@@ -80,7 +77,7 @@ namespace KeePass.Win.ViewModels
                 }
             });
 
-            _addEntryCommand = new DelegateCommand(async () =>
+            AddEntryCommand = new DelegateCommand(async () =>
             {
                 var name = await _nameProvider.GetNameAsync();
 
@@ -95,7 +92,7 @@ namespace KeePass.Win.ViewModels
                 // This is disabled currently due to twsouthwick/KeePassWin 15
             }, () => !_saving);
 #else
-            });
+            }, () => !_activeSearch);
 #endif
 
             RemoveGroupCommand = new DelegateCommand<IKeePassGroup>(async group =>
@@ -135,7 +132,7 @@ namespace KeePass.Win.ViewModels
                 // This is disabled currently due to twsouthwick/KeePassWin 15
             }, () => !_saving);
 #else
-            });
+            }, () => !_activeSearch);
 #endif
 
             RenameGroupCommand = new DelegateCommand<IKeePassGroup>(async group =>
@@ -153,7 +150,7 @@ namespace KeePass.Win.ViewModels
                 }
             });
 
-            _saveCommand = new DelegateCommand(async () =>
+            SaveCommand = new DelegateCommand(async () =>
             {
 #if FEATURE_SAVE
                 _saving = true;
@@ -219,8 +216,9 @@ namespace KeePass.Win.ViewModels
 
         private void NotifyAllCommands()
         {
-            _addEntryCommand.RaiseCanExecuteChanged();
-            _saveCommand.RaiseCanExecuteChanged();
+            ((DelegateCommand)AddGroupCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)AddEntryCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -230,7 +228,8 @@ namespace KeePass.Win.ViewModels
 
         public void Search(string query)
         {
-            _activeSearch = true;
+            SetSearch(true);
+
             var items = _database.Root.EnumerateAllEntries()
                 .Where(item => FilterEntry(item, query))
                 .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase);
@@ -243,6 +242,12 @@ namespace KeePass.Win.ViewModels
             }
         }
 
+        private void SetSearch(bool activeSearch)
+        {
+            _activeSearch = activeSearch;
+            NotifyAllCommands();
+        }
+
         public bool TryClearSearch()
         {
             if (!_activeSearch)
@@ -250,8 +255,8 @@ namespace KeePass.Win.ViewModels
                 return false;
             }
 
-            _activeSearch = false;
             UpdateItems(Group, true);
+            SetSearch(false);
 
             return true;
         }
@@ -321,11 +326,11 @@ namespace KeePass.Win.ViewModels
 
         public ICommand RemoveEntryCommand { get; }
 
-        public ICommand AddEntryCommand => _addEntryCommand;
+        public ICommand AddEntryCommand { get; }
 
         public ICommand AddGroupCommand { get; }
 
-        public ICommand SaveCommand => _saveCommand;
+        public ICommand SaveCommand { get; }
 
         public IDeviceGestureService DeviceGestureService { get; }
 
