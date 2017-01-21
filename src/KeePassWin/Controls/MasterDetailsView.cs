@@ -64,7 +64,7 @@ namespace KeePass.Win.Controls
             _list.ItemClick -= ListItemClick;
             _list.ItemClick += ListItemClick;
         }
-        
+
         private static void ListSelectedItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var view = (MasterDetailsView)d;
@@ -79,7 +79,7 @@ namespace KeePass.Win.Controls
                 view.Focus();
             }
         }
-        
+
         private void ListItemClick(object sender, ItemClickEventArgs e)
         {
             var command = ItemClickCommand;
@@ -91,6 +91,8 @@ namespace KeePass.Win.Controls
             }
             else
             {
+                // Set master item first so it won't be called later; it will set SelectedItem to null, so we set it manually as well
+                SelectedMasterItem = e.ClickedItem;
                 SelectedItem = newItem;
                 FocusSelection();
             }
