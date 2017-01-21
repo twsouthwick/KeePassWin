@@ -179,7 +179,7 @@
                                 </VisualState>
                                 <VisualState x:Name="WideState">
                                     <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="720" />
+                                        <AdaptiveTrigger MinWindowWidth="950" />
                                     </VisualState.StateTriggers>
                                 </VisualState>
                             </VisualStateGroup>
