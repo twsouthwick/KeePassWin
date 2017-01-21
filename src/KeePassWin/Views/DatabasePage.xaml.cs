@@ -1,5 +1,5 @@
-﻿using KeePass.Win.Controls;
-using KeePass.Win.ViewModels;
+﻿using KeePass.Win.ViewModels;
+using Microsoft.Toolkit.Uwp.UI.Controls2;
 using Prism.Windows.Mvvm;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -17,18 +17,10 @@ namespace KeePass.Win.Views
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
-            if (!e.Cancel && e.NavigationMode == NavigationMode.Back)
+            if (!e.Cancel && e.NavigationMode == NavigationMode.Back && Model.TryClearSearch())
             {
-                if (ItemsList.ViewState == MasterDetailsViewState.Both)
-                {
-                    e.Cancel = true;
-                }
-                else if (Model.TryClearSearch())
-                {
-                    e.Cancel = true;
-                    ClearSearch();
-                }
-
+                e.Cancel = true;
+                ClearSearch();
                 ItemsList.Focus();
             }
 

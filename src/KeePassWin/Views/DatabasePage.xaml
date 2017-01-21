@@ -151,7 +151,6 @@
                   FooterContent="{x:Bind Model}"
                   MasterHeader="{x:Bind Model}"
                   ItemClickCommand="{x:Bind Path=Model.ItemClickCommand}"
-                  DeviceGestureService="{x:Bind Path=Model.DeviceGestureService}"
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <controls:MasterDetailsView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">

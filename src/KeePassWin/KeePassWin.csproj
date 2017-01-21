@@ -96,6 +96,10 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="KeePassWin_StoreKey.pfx" />
     <None Include="KeePassWin_TemporaryKey.pfx" />
+    <Compile Include="Controls\MasterDetailsView\MasterDetailsView.cs" />
+    <Compile Include="Controls\MasterDetailsView\MasterDetailsView.Events.cs" />
+    <Compile Include="Controls\MasterDetailsView\MasterDetailsView.Properties.cs" />
+    <Compile Include="Controls\MasterDetailsView\MasterDetailsViewState.cs" />
     <Compile Include="Controls\NameBoxDialog.xaml.cs">
       <DependentUpon>NameBoxDialog.xaml</DependentUpon>
     </Compile>

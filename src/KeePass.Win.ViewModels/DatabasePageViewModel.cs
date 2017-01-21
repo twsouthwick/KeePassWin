@@ -1,6 +1,5 @@
 ﻿using KeePass.Models;
 using Prism.Commands;
-using Prism.Windows.AppModel;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using System;
@@ -39,7 +38,6 @@ namespace KeePass.Win.ViewModels
             IDatabaseCache unlocker,
             IClipboard<string> clipboard,
             ICredentialProvider credentialProvider,
-            IDeviceGestureService deviceGestureService,
             INameProvider nameProvider,
             ILogger log)
         {
@@ -49,8 +47,6 @@ namespace KeePass.Win.ViewModels
             _credentialProvider = credentialProvider;
             _nameProvider = nameProvider;
             _log = log;
-
-            DeviceGestureService = deviceGestureService;
 
             ItemClickCommand = new DelegateCommand<IKeePassId>(item => GroupClicked(item as IKeePassGroup), item => (item as IKeePassGroup) != null);
 
@@ -331,8 +327,6 @@ namespace KeePass.Win.ViewModels
         public ICommand AddGroupCommand { get; }
 
         public ICommand SaveCommand { get; }
-
-        public IDeviceGestureService DeviceGestureService { get; }
 
         public IKeePassDatabase Database
         {

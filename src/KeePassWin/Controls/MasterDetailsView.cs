@@ -1,33 +1,11 @@
-﻿using Prism.Windows.AppModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace KeePass.Win.Controls
 {
-    public enum MasterDetailsViewState
-    {
-        /// <summary>
-        /// Only the Master view is shown
-        /// </summary>
-        Master,
-
-        /// <summary>
-        /// Only the Details view is shown
-        /// </summary>
-        Details,
-
-        /// <summary>
-        /// Both the Master and Details views are shown
-        /// </summary>
-        Both
-    }
-
-    public class MasterDetailsView : Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView
+    public class MasterDetailsView : Microsoft.Toolkit.Uwp.UI.Controls2.MasterDetailsView
     {
         private ContentPresenter _detailsPresenter;
         private ListView _list;
@@ -43,15 +21,6 @@ namespace KeePass.Win.Controls
 
         public static readonly DependencyProperty SelectedMasterItemProperty =
             DependencyProperty.Register(nameof(SelectedMasterItem), typeof(object), typeof(MasterDetailsView), new PropertyMetadata(null, ListSelectedItemPropertyChanged));
-
-        public static readonly DependencyProperty DeviceGestureServiceProperty =
-            DependencyProperty.Register(nameof(DeviceGestureService), typeof(IDeviceGestureService), typeof(MasterDetailsView), new PropertyMetadata(null, DeviceGestureServicePropertyChanged));
-
-        public IDeviceGestureService DeviceGestureService
-        {
-            get { return (IDeviceGestureService)GetValue(DeviceGestureServiceProperty); }
-            set { SetValue(DeviceGestureServiceProperty, value); }
-        }
 
         public object SelectedMasterItem
         {
@@ -77,27 +46,10 @@ namespace KeePass.Win.Controls
             set { SetValue(ItemClickCommandProperty, value); }
         }
 
-        public MasterDetailsViewState ViewState
-        {
-            get
-            {
-                var groups = VisualStateManager.GetVisualStateGroups(VisualTreeHelper.GetChild(this, 0) as FrameworkElement);
-                var currentState = groups.First(g => string.Equals(g.Name, "WidthStates", StringComparison.Ordinal)).CurrentState;
-
-                if (string.Equals(currentState?.Name, "NarrowState", StringComparison.Ordinal))
-                {
-                    return SelectedItem == null ? MasterDetailsViewState.Master : MasterDetailsViewState.Details;
-                }
-                else
-                {
-                    return MasterDetailsViewState.Both;
-                }
-            }
-        }
 
         public void Focus()
         {
-            if (ViewState != MasterDetailsViewState.Details)
+            if (ViewState != Microsoft.Toolkit.Uwp.UI.Controls2.MasterDetailsViewState.Details)
             {
                 _list.Focus(FocusState.Keyboard);
             }
@@ -112,57 +64,22 @@ namespace KeePass.Win.Controls
             _list.ItemClick -= ListItemClick;
             _list.ItemClick += ListItemClick;
         }
-
-        private static void DeviceGestureServicePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var view = (MasterDetailsView)d;
-
-            var previous = e.OldValue as IDeviceGestureService;
-            var newValue = e.NewValue as IDeviceGestureService;
-
-            if (previous != null)
-            {
-                previous.GoBackRequested -= view.DeviceGoBackRequested;
-            }
-
-            if (newValue != null)
-            {
-                newValue.GoBackRequested += view.DeviceGoBackRequested;
-            }
-        }
-
-        private void DeviceGoBackRequested(object sender, DeviceGestureEventArgs e)
-        {
-            if (SelectedItem != null)
-            {
-                e.Handled = true;
-                e.Cancel = true;
-
-                ClearSelection();
-            }
-        }
-
+        
         private static void ListSelectedItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var view = (MasterDetailsView)d;
 
-            if (view.ViewState == MasterDetailsViewState.Both && view.ItemClickCommand?.CanExecute(e.NewValue) == false)
+            if (view.ViewState == Microsoft.Toolkit.Uwp.UI.Controls2.MasterDetailsViewState.Both && view.ItemClickCommand?.CanExecute(e.NewValue) == false)
             {
                 view.SelectedItem = e.NewValue;
-                view.FocusSelection();
             }
             else
             {
-                view.ClearSelection();
+                view.SelectedItem = null;
+                view.Focus();
             }
         }
-
-        private void ClearSelection()
-        {
-            SelectedItem = null;
-            Focus();
-        }
-
+        
         private void ListItemClick(object sender, ItemClickEventArgs e)
         {
             var command = ItemClickCommand;
@@ -177,12 +94,18 @@ namespace KeePass.Win.Controls
                 SelectedItem = newItem;
                 FocusSelection();
             }
+
+            UpdateView(true);
         }
 
         private void FocusSelection()
         {
             var control = VisualTreeHelper.GetChild(_detailsPresenter, 0) as ContentControl;
 
+            // Focus if already loaded
+            (control.ContentTemplateRoot as Control)?.Focus(FocusState.Keyboard);
+
+            // Focus when loaded if not
             control.Loaded += (s, _) =>
             {
                 var root = (s as ContentControl).ContentTemplateRoot;
