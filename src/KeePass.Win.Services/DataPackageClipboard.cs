@@ -84,7 +84,13 @@ namespace KeePass.Win.Services
             };
 
             Clipboard.Clear();
-            ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(toast.GetXml()));
+
+            var notification = new ToastNotification(toast.GetXml())
+            {
+                ExpirationTime = DateTimeOffset.Now.AddSeconds(10)
+            };
+
+            ToastNotificationManager.CreateToastNotifier().Show(notification);
         }
 
         public virtual bool Copy(ILogView log)
