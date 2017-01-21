@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.5.0 - 1/20/2016
+# Added
+- Clipboard is cleared after a customizable timeout
+- Strings are now localizable. Please see [tracking issue](https://github.com/twsouthwick/KeePassWin/issues/44) for details
+- Key handling is customizable per instance
+
+# Fixed
+- Fields were not updating as expected
+- Adding items in search mode put the item in an ambiguous location
+- Navigation on mobile required multiple taps
+- View in mobile was truncated 
+
 ## 2.4.0 - 12/21/2016
 # Added
 - Enable creation and renaming of groups
