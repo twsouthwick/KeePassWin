@@ -55,85 +55,111 @@
         </DataTemplate>
 
         <DataTemplate x:Name="KeePassEntryTemplate" x:DataType="keepass:IKeePassEntry">
-            <Grid HorizontalAlignment="Stretch">
-                <Grid.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem x:Uid="EntryFlyoutCopyUserName"
-                            mvvm:Keyboard.Shortcut="CopyUserName"
-                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
-                            CommandParameter="{x:Bind UserName, Mode=OneWay}" />
-                        <MenuFlyoutItem x:Uid="EntryFlyoutCopyPassword"
-                            mvvm:Keyboard.Shortcut="CopyPassword"
-                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
-                            CommandParameter="{x:Bind Password, Mode=OneWay}" />
-                        <MenuFlyoutItem x:Uid="EntryFlyoutCopyUrl"
-                            mvvm:Keyboard.Shortcut="CopyUrl"
-                            Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}"
-                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
-                            CommandParameter="{x:Bind}" />
-                        <MenuFlyoutItem x:Uid="EntryFlyoutOpenUrl"
-                            mvvm:Keyboard.Shortcut="OpenUrl"
-                            Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}"
-                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
-                            CommandParameter="{x:Bind}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem x:Uid="EntryFlyoutDelete"
-                            mvvm:Keyboard.Shortcut="DeleteItem"
-                            Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root, Mode=OneTime}"
-                            CommandParameter="{x:Bind}"  />
-                    </MenuFlyout>
-                </Grid.ContextFlyout>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <UserControl>
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem x:Uid="EntryFlyoutCopyUserName"
+                                            mvvm:Keyboard.Shortcut="CopyUserName"
+                                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                            CommandParameter="{x:Bind UserName, Mode=OneWay}" />
+                            <MenuFlyoutItem x:Uid="EntryFlyoutCopyPassword"
+                                            mvvm:Keyboard.Shortcut="CopyPassword"
+                                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                            CommandParameter="{x:Bind Password, Mode=OneWay}" />
+                            <MenuFlyoutItem x:Uid="EntryFlyoutCopyUrl"
+                                            mvvm:Keyboard.Shortcut="CopyUrl"
+                                            Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}" 
+                                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                                            CommandParameter="{x:Bind}" />
+                            <MenuFlyoutItem x:Uid="EntryFlyoutOpenUrl" 
+                                            mvvm:Keyboard.Shortcut="OpenUrl"
+                                            Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}"
+                                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                                            CommandParameter="{x:Bind}" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="EntryFlyoutDelete"
+                                            mvvm:Keyboard.Shortcut="DeleteItem"
+                                            Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root, Mode=OneTime}"
+                                            CommandParameter="{x:Bind}"  />
+                        </MenuFlyout>
+                    </Grid.ContextFlyout>
 
-                <controls:ByteImage Grid.RowSpan="2"
-                    Image="{x:Bind Icon, Mode=OneWay}" VerticalAlignment="Center" />
+                    <RelativePanel HorizontalAlignment="Stretch">
+                        <controls:ByteImage x:Name="EntryImage"
+                                            Grid.RowSpan="2"
+                                            VerticalAlignment="Center"
+                                            Image="{x:Bind Icon, Mode=OneWay}" />
 
-                <TextBlock Grid.Column="1" Grid.Row="0"
-                           Margin="10,0,0,0"
-                           Text="{x:Bind Title, Mode=OneWay}"
-                           Style="{ThemeResource EntryItemTitleStyle}"
-                           TextTrimming="WordEllipsis" />
-                <TextBlock Grid.Column="1" Grid.Row="1"
-                           Margin="10,0,0,0"
-                           Text="{x:Bind UserName, Mode=OneWay}"
-                           Style="{ThemeResource EntryItemUserNameStyle}"
-                           TextTrimming="WordEllipsis" />
-                <AppBarButton x:Uid="EntryButtonWebsite"
-                              Grid.Column="2" Grid.RowSpan="2"
-                              Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
-                              CommandParameter="{x:Bind}"
-                              Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Globe" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-                <AppBarButton x:Uid="EntryButtonUsername"
-                              Grid.Column="3" Grid.RowSpan="2"
-                              Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
-                              CommandParameter="{x:Bind UserName, Mode=OneWay}">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Contact" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-                <AppBarButton x:Uid="EntryButtonPassword"
-                              Grid.Column="4" Grid.RowSpan="2"
-                              Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
-                              CommandParameter="{x:Bind Password, Mode=OneWay}">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Permissions" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-            </Grid>
+                        <Grid x:Name="EntryInfo" RelativePanel.RightOf="EntryImage">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="1" Grid.Row="0"
+                                       Margin="10,0,0,0"
+                                       Text="{x:Bind Title, Mode=OneWay}"
+                                       Style="{ThemeResource EntryItemTitleStyle}"
+                                       TextTrimming="WordEllipsis" />
+                            <TextBlock Grid.Column="1" Grid.Row="1"
+                                       Margin="10,0,0,0"
+                                       Text="{x:Bind UserName, Mode=OneWay}"
+                                       Style="{ThemeResource EntryItemUserNameStyle}"
+                                       TextTrimming="WordEllipsis" />
+                        </Grid>
+
+                        <StackPanel x:Name="EntryButtons" RelativePanel.AlignRightWithPanel="True"
+                                    Orientation="Horizontal">
+                            <AppBarButton x:Uid="EntryButtonWebsite"
+                                          Grid.Column="2" Grid.RowSpan="2"
+                                          Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                                          CommandParameter="{x:Bind}"
+                                          Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}">
+                                <AppBarButton.Icon>
+                                    <SymbolIcon Symbol="Globe" />
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                            <AppBarButton x:Uid="EntryButtonUsername"
+                                          Grid.Column="3" Grid.RowSpan="2"
+                                          Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                          CommandParameter="{x:Bind UserName, Mode=OneWay}">
+                                <AppBarButton.Icon>
+                                    <SymbolIcon Symbol="Contact" />
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                            <AppBarButton x:Uid="EntryButtonPassword"
+                                          Grid.Column="4" Grid.RowSpan="2"
+                                          Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                          CommandParameter="{x:Bind Password, Mode=OneWay}">
+                                <AppBarButton.Icon>
+                                    <SymbolIcon Symbol="Permissions" />
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                        </StackPanel>
+                    </RelativePanel>
+
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal">
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="400" />
+                                </VisualState.StateTriggers>
+                            </VisualState>
+                            <VisualState x:Name="Mobile">
+                                <VisualState.Setters>
+                                    <Setter Target="EntryButtons.(RelativePanel.Below)" Value="EntryInfo" />
+                                    <Setter Target="EntryButtons.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="True" />
+                                    <Setter Target="EntryButtons.(RelativePanel.AlignRightWithPanel)" Value="False" />
+                                </VisualState.Setters>
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="0" />
+                                </VisualState.StateTriggers>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+
+                </Grid>
+            </UserControl>
         </DataTemplate>
     </prismMvvm:SessionStateAwarePage.Resources>
 
