@@ -1,6 +1,6 @@
-# Changelog
+# CHANGELOG
 
-## 2.5.0 - 1/20/2016
+## 2.5.0 - 1/20/2017
 # Added
 - Clipboard is cleared after a customizable timeout
 - Strings are now localizable. Please see [tracking issue](https://github.com/twsouthwick/KeePassWin/issues/44) for details
