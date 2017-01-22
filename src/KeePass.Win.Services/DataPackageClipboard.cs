@@ -55,7 +55,7 @@ namespace KeePass.Win.Services
 
             try
             {
-                await Task.Delay(TimeSpan.FromSeconds(15), _cts.Token);
+                await Task.Delay(TimeSpan.FromSeconds(_settings.ClipboardTimeout), _cts.Token);
 
                 ClearClipboard();
             }
