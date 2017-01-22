@@ -17,11 +17,14 @@
 
 <Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
   <Application>
-    <!--
-      An Assembly element with Name="*Application*" applies to all assemblies in
-      the application package. The asterisks are not wildcards.
-    -->
-    <Assembly Name="*Application*" Dynamic="Required All" />
+    <!-- This is needed so we don't need to manually register all types with Autofac -->
+    <Namespace Name="KeePass.Win.ViewModels" Dynamic="Required Public" />
 
+    <!-- These are needed as Prism uses reflection requiring them -->
+    <Namespace Name="KeePass.Win.Views" Dynamic="Required All" />
+    <Type Name="KeePass.Win.App" Browse="Required Public" />
+
+    <!-- We may be able to narrow this, but without this sometimes dependency resolution fails -->
+    <Assembly Name="Autofac" Dynamic="Required All" />
   </Application>
 </Directives>
