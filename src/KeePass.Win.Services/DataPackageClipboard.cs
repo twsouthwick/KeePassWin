@@ -3,11 +3,13 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Email;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
 using Windows.UI.Notifications;
 
 namespace KeePass.Win.Services
@@ -17,12 +19,14 @@ namespace KeePass.Win.Services
         private static readonly ResourceLoader s_resources = ResourceLoader.GetForCurrentView("ShareStrings");
 
         private readonly KeePassSettings _settings;
+        private readonly ILogger _log;
 
         private CancellationTokenSource _cts;
 
-        public DataPackageClipboard(KeePassSettings settings)
+        public DataPackageClipboard(KeePassSettings settings, ILogger log)
         {
             _settings = settings;
+            _log = log;
         }
 
         public virtual bool Copy(string text)
@@ -43,25 +47,38 @@ namespace KeePass.Win.Services
 
         private async void AddToClipboardAsync(DataPackage package, bool autoClear = false)
         {
-            _cts?.Cancel();
-            Clipboard.SetContent(package);
+#if DEBUG
+            // Under debug, make sure the clipboard code goes onto another thread to make sure dispatcher is appropriately used
+            await Task.Delay(1).ConfigureAwait(false);
+#endif
 
-            if (!autoClear)
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
             {
-                return;
-            }
+                try
+                {
+                    _cts?.Cancel();
 
-            _cts = new CancellationTokenSource();
+                    Clipboard.SetContent(package);
 
-            try
-            {
-                await Task.Delay(TimeSpan.FromSeconds(_settings.ClipboardTimeout), _cts.Token);
+                    if (!autoClear)
+                    {
+                        return;
+                    }
 
-                ClearClipboard();
-            }
-            catch (OperationCanceledException)
-            {
-            }
+                    _cts = new CancellationTokenSource();
+
+                    await Task.Delay(TimeSpan.FromSeconds(_settings.ClipboardTimeout), _cts.Token);
+
+                    ClearClipboard();
+                }
+                catch (OperationCanceledException)
+                {
+                }
+                catch (Exception e)
+                {
+                    _log.Error(e, "Error manipulating keyboard");
+                }
+            });
         }
 
         private void ClearClipboard()

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.5.1 - 1/23/2017
+# Fixed
+- Adding an item to the clipboard would sometimes result in a crash
+
 ## 2.5.0 - 1/20/2017
 # Added
 - Clipboard is cleared after a customizable timeout
