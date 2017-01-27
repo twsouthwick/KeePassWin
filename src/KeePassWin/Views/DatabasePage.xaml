@@ -86,16 +86,21 @@
                     </Grid.ContextFlyout>
 
                     <RelativePanel HorizontalAlignment="Stretch">
-                        <controls:ByteImage x:Name="EntryImage"
-                                            Grid.RowSpan="2"
-                                            VerticalAlignment="Center"
-                                            Image="{x:Bind Icon, Mode=OneWay}" />
-
-                        <Grid x:Name="EntryInfo" RelativePanel.RightOf="EntryImage">
+                        <Grid x:Name="EntryInfo">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
+
+                            <controls:ByteImage Grid.Column="0" Grid.RowSpan="2"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Image="{x:Bind Icon, Mode=OneWay}" />
+
                             <TextBlock Grid.Column="1" Grid.Row="0"
                                        Margin="10,0,0,0"
                                        Text="{x:Bind Title, Mode=OneWay}"

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.5.2 - 1/27/2017
+# Fixed
+- Entry icons were taking entire column and making it hard to see anything else
+
 ## 2.5.1 - 1/23/2017
 # Fixed
 - Adding an item to the clipboard would sometimes result in a crash
