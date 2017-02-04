@@ -5,11 +5,10 @@
                                  xmlns:converters="using:KeePass.Win.Converters"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:mvvm="using:KeePass.Win.Mvvm"
-                                 xmlns:prismMvvm="using:Prism.Windows.Mvvm"
                                  xmlns:keepass="using:KeePass"
                                  xmlns:controls="using:KeePass.Win.Controls"
                                  xmlns:vm="using:KeePass.Win.ViewModels"
-                                 prismMvvm:ViewModelLocator.AutoWireViewModel="True"
+                                 mvvm:Autofac.Autowire="True"
                                  mc:Ignorable="d">
 
     <Page.Resources>

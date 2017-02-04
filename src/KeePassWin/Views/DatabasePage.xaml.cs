@@ -1,6 +1,6 @@
 ﻿using KeePass.Models;
+using KeePass.Win.Mvvm;
 using KeePass.Win.ViewModels;
-using Prism.Windows.Mvvm;
 using Windows.UI.Xaml.Navigation;
 
 namespace KeePass.Win.Views
@@ -21,6 +21,7 @@ namespace KeePass.Win.Views
             await Model.SetDatabase(key.Database, key.Group);
         }
 
-        public DatabasePageViewModel Model => DataContext as DatabasePageViewModel;
+        [Inject]
+        public DatabasePageViewModel Model { get; set; }
     }
 }

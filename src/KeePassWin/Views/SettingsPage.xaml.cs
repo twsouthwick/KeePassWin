@@ -1,4 +1,5 @@
-﻿using KeePass.Win.ViewModels;
+﻿using KeePass.Win.Mvvm;
+using KeePass.Win.ViewModels;
 using Windows.Devices.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,7 +10,8 @@ namespace KeePass.Win.Views
     {
         private static readonly KeyboardCapabilities s_capabilities = new KeyboardCapabilities();
 
-        public SettingsPageViewModel Model => DataContext as SettingsPageViewModel;
+        [Inject]
+        public SettingsPageViewModel Model { get; set; }
 
         public SettingsPage()
         {
