@@ -1,8 +1,4 @@
-﻿using KeePass.Models;
-using Prism.Commands;
-using Prism.Windows.Mvvm;
-using Prism.Windows.Navigation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -214,9 +210,9 @@ namespace KeePass.Win.ViewModels
 
         private void NotifyAllCommands()
         {
-            ((DelegateCommand)AddGroupCommand).RaiseCanExecuteChanged();
-            ((DelegateCommand)AddEntryCommand).RaiseCanExecuteChanged();
-            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+            AddGroupCommand.RaiseCanExecuteChanged();
+            AddEntryCommand.RaiseCanExecuteChanged();
+            SaveCommand.RaiseCanExecuteChanged();
         }
 
         private void GroupClicked(IKeePassGroup group)
@@ -260,19 +256,19 @@ namespace KeePass.Win.ViewModels
             NotifyAllCommands();
         }
 
-        public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
+        public async Task SetDatabase(KeePassId dbId, KeePassId groupId)
         {
-            var key = DatabaseGroupParameter.Decode(((string)e.Parameter));
-            var db = await _unlocker.UnlockAsync(key.Database, _credentialProvider);
+            var db = await _unlocker.UnlockAsync(dbId, _credentialProvider);
 
             if (db == null)
             {
                 _navigator.GoBack();
-                return;
             }
-
-            Database = db;
-            UpdateItems(db.GetGroup(key.Group));
+            else
+            {
+                Database = db;
+                UpdateItems(db.GetGroup(groupId));
+            }
         }
 
         public void UpdateItems(IKeePassGroup group, bool force = false)
@@ -281,11 +277,12 @@ namespace KeePass.Win.ViewModels
             {
                 return;
             }
+            
+            // Set group and entries into the Items container
+            Group = group;
 
             Items.Clear();
 
-            // Set group and entries into the Items container
-            Group = group;
 
             foreach (var item in Group.Groups)
             {

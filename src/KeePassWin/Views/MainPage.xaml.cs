@@ -1,8 +1,6 @@
-﻿using Prism.Windows.Mvvm;
-
-namespace KeePass.Win.Views
+﻿namespace KeePass.Win.Views
 {
-    public sealed partial class MainPage : SessionStateAwarePage
+    public sealed partial class MainPage
     {
         public MainPage()
         {

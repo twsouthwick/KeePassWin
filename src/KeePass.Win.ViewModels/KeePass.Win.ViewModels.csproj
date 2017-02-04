@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabasePageViewModel.cs" />
+    <Compile Include="DelegateCommand.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="LoggingPageViewModel.cs" />
     <Compile Include="MenuItemViewModel.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="PasswordDialogViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsPageViewModel.cs" />
+    <Compile Include="ViewModelBase.cs" />
     <EmbeddedResource Include="Properties\KeePass.Win.ViewModels.rd.xml" />
   </ItemGroup>
   <ItemGroup>

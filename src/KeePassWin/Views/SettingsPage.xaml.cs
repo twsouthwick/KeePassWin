@@ -1,12 +1,11 @@
 ﻿using KeePass.Win.ViewModels;
-using Prism.Windows.Mvvm;
 using Windows.Devices.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace KeePass.Win.Views
 {
-    public sealed partial class SettingsPage : SessionStateAwarePage
+    public sealed partial class SettingsPage
     {
         private static readonly KeyboardCapabilities s_capabilities = new KeyboardCapabilities();
 

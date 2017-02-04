@@ -1,6 +1,4 @@
-﻿using Prism.Commands;
-using Prism.Windows.Mvvm;
-using System;
+﻿using System;
 using System.Windows.Input;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
@@ -17,7 +15,7 @@ namespace KeePass.Win.ViewModels
 
             AddKeyFileCommand = new DelegateCommand(async () =>
             {
-                KeyFile = await cache.AddKeyFileAsync(db); 
+                KeyFile = await cache.AddKeyFileAsync(db);
             });
 
             tracker.GetKeyFileAsync(db).ContinueWith(async r =>

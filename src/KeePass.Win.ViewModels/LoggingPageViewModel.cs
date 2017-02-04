@@ -1,10 +1,8 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace KeePass.Win.ViewModels
 {
-    public class LoggingPageViewModel : BindableBase
+    public class LoggingPageViewModel
     {
         public LoggingPageViewModel(ILogView logView, IClipboard<ILogView> clipboard, IMailClient<ILogView> mailClient)
         {

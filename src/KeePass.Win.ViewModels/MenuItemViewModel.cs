@@ -1,10 +1,9 @@
-﻿using Prism.Windows.Mvvm;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
 namespace KeePass.Win.ViewModels
 {
-    public class MenuItemViewModel : ViewModelBase
+    public class MenuItemViewModel
     {
         public string DisplayName { get; set; }
 

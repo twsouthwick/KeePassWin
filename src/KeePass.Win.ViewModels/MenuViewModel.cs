@@ -1,6 +1,4 @@
-﻿using Prism.Commands;
-using Prism.Windows.Mvvm;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace KeePass.Win.ViewModels
 {
-    public class MenuViewModel : ViewModelBase
+    public class MenuViewModel
     {
         private readonly INavigator _navigator;
         private readonly IDatabaseCache _cache;
@@ -113,7 +111,7 @@ namespace KeePass.Win.ViewModels
         {
             foreach (var item in Commands)
             {
-                (item.Command as DelegateCommand).RaiseCanExecuteChanged();
+                item.Command.RaiseCanExecuteChanged();
             }
         }
     }
