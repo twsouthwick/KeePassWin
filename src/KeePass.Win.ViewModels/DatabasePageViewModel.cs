@@ -91,6 +91,8 @@ namespace KeePass.Win.ViewModels
             }, () => !_activeSearch);
 #endif
 
+            FilterCommand = new DelegateCommand<string>(Search);
+
             RemoveGroupCommand = new DelegateCommand<IKeePassGroup>(async group =>
             {
                 if (await CheckToDeleteAsync("group", group.Name))
@@ -222,49 +224,40 @@ namespace KeePass.Win.ViewModels
             _navigator.GoToDatabaseView(Database, group);
         }
 
-        public void Search(string query)
+        private void Search(string query)
         {
-            SetSearch(true);
-
-            var items = _database.Root.EnumerateAllEntries()
-                .Where(item => FilterEntry(item, query))
-                .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase);
-
-            Items.Clear();
-
-            foreach (var item in items)
+            bool FilterEntry(IKeePassEntry entry, string text)
             {
-                Items.Add(item);
+                return Contains(entry.Title, text) || Contains(entry.Notes, text) || Contains(entry.Group.Name, text);
             }
-        }
 
-        private void SetSearch(bool activeSearch)
-        {
-            _activeSearch = activeSearch;
+            bool Contains(string source, string searchText)
+            {
+                return CultureInfo.CurrentCulture.CompareInfo.IndexOf(source, searchText, CompareOptions.IgnoreCase) >= 0;
+            }
+
+            if (string.IsNullOrEmpty(query))
+            {
+                UpdateItems(Group, true);
+                _activeSearch = false;
+            }
+            else
+            {
+                _activeSearch = true;
+
+                var items = _database.Root.EnumerateAllEntries()
+                    .Where(item => FilterEntry(item, query))
+                    .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase);
+
+                Items.Clear();
+
+                foreach (var item in items)
+                {
+                    Items.Add(item);
+                }
+            }
+
             NotifyAllCommands();
-        }
-
-        public bool TryClearSearch()
-        {
-            if (!_activeSearch)
-            {
-                return false;
-            }
-
-            UpdateItems(Group, true);
-            SetSearch(false);
-
-            return true;
-        }
-
-        private bool FilterEntry(IKeePassEntry entry, string text)
-        {
-            return Contains(entry.Title, text) || Contains(entry.Notes, text) || Contains(entry.Group.Name, text);
-        }
-
-        private bool Contains(string source, string searchText)
-        {
-            return CultureInfo.CurrentCulture.CompareInfo.IndexOf(source, searchText, CompareOptions.IgnoreCase) >= 0;
         }
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -327,6 +320,8 @@ namespace KeePass.Win.ViewModels
         public ICommand AddGroupCommand { get; }
 
         public ICommand SaveCommand { get; }
+
+        public ICommand FilterCommand { get; }
 
         public IKeePassDatabase Database
         {

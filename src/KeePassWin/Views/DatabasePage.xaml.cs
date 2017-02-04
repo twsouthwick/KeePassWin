@@ -1,8 +1,5 @@
 ﻿using KeePass.Win.ViewModels;
-using Microsoft.Toolkit.Uwp.UI.Controls2;
 using Prism.Windows.Mvvm;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace KeePass.Win.Views
 {
@@ -15,43 +12,6 @@ namespace KeePass.Win.Views
             Loaded += (_, __) => ItemsList.Focus();
         }
 
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-            if (!e.Cancel && e.NavigationMode == NavigationMode.Back && Model.TryClearSearch())
-            {
-                e.Cancel = true;
-                ClearSearch();
-                ItemsList.Focus();
-            }
-
-            base.OnNavigatingFrom(e);
-        }
-
         public DatabasePageViewModel Model => DataContext as DatabasePageViewModel;
-
-        #region Search functionality
-        private AutoSuggestBox _autoSuggestBox;
-
-        public void ClearSearch()
-        {
-            _autoSuggestBox?.ClearValue(AutoSuggestBox.TextProperty);
-        }
-
-        private void SearchTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            // Store so we can clear the search if needed
-            _autoSuggestBox = sender;
-
-            var text = sender.Text;
-
-            if (text.Length < 3)
-            {
-                Model.TryClearSearch();
-                return;
-            }
-
-            Model.Search(text);
-        }
-        #endregion
     }
 }

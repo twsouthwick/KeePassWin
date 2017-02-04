@@ -223,7 +223,7 @@
                                     </DataTemplate>
                                 </controls:BreadCrumbView.ItemTemplate>
                             </controls:BreadCrumbView>
-                            <AutoSuggestBox mvvm:Keyboard.Focus="Search" QueryIcon="Find" TextChanged="SearchTextChanged" />
+                            <controls:SearchBox mvvm:Keyboard.Focus="Search" Filter="{x:Bind FilterCommand}" />
                         </StackPanel>
                     </DataTemplate>
                 </controls:MasterDetailsView.MasterHeaderTemplate>
