@@ -5,16 +5,21 @@ namespace KeePass
 {
     public struct KeePassId
     {
-        public static KeePassId Empty { get; } = new KeePassId(Guid.Empty);
-
         public KeePassId(Guid id)
         {
             Id = id;
         }
 
+        public static KeePassId Empty { get; } = new KeePassId(Guid.Empty);
+
         public Guid Id { get; set; }
 
         public bool IsEmpty => Id == Guid.Empty;
+
+        public static explicit operator string(KeePassId id)
+        {
+            return id.ToString();
+        }
 
         public override bool Equals(object obj)
         {
@@ -48,11 +53,6 @@ namespace KeePass
             }
 
             return sb.ToString();
-        }
-
-        public static explicit operator string(KeePassId id)
-        {
-            return id.ToString();
         }
     }
 }

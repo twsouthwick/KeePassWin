@@ -35,6 +35,7 @@ namespace KeePass.Win.Log
         {
             _log.Warning(format, obj);
         }
+
         public void Warning(Exception e, string format, params object[] obj)
         {
             _log.Warning(e, format, obj);

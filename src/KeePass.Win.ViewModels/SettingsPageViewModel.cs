@@ -34,9 +34,12 @@ namespace KeePass.Win.ViewModels
         public int[] TimeoutValues { get; } = new[] { 15, 30, 45, 90, 120 };
     }
 
+#pragma warning disable SA1402 // File may only contain a single class
     public class Library
+#pragma warning restore SA1402 // File may only contain a single class
     {
         public string Name { get; set; }
+
         public string Url { get; set; }
     }
 }

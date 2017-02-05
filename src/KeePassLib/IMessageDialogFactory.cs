@@ -10,8 +10,11 @@ namespace KeePass
         Task InvalidCredentialsAsync();
 
         Task UnlockErrorAsync(string message);
+
         Task DatabaseSavedAsync();
+
         Task ErrorSavingDatabaseAsync(Exception e);
-        Task<bool> CheckToDeleteAsync(string v, string name);
+
+        Task<bool> CheckToDeleteAsync(string type, string name);
     }
 }

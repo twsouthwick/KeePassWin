@@ -69,7 +69,7 @@ namespace KeePass.Win.Mvvm
             });
 
             Window.Current.CoreWindow.KeyDown += handler;
-            button.Unloaded += (_, __) => Window.Current.CoreWindow.KeyDown -= handler;
+            button.Unloaded += (s, args) => Window.Current.CoreWindow.KeyDown -= handler;
         }
 
         private static void FocusPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -94,7 +94,7 @@ namespace KeePass.Win.Mvvm
             });
 
             Window.Current.CoreWindow.KeyDown += handler;
-            control.Unloaded += (_, __) => Window.Current.CoreWindow.KeyDown -= handler;
+            control.Unloaded += (s, args) => Window.Current.CoreWindow.KeyDown -= handler;
         }
     }
 }

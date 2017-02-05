@@ -6,8 +6,7 @@ namespace KeePass.Win.Controls
 {
     public class BreadCrumbView : ItemsControl
     {
-        public static readonly DependencyProperty CommandProperty = 
-            DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(BreadCrumbView), new PropertyMetadata(null));
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(BreadCrumbView), new PropertyMetadata(null));
 
         public BreadCrumbView()
         {

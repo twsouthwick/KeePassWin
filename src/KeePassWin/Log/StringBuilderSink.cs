@@ -30,6 +30,16 @@ namespace KeePass.Win.Log
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public string Id { get; } = Guid.NewGuid().ToString();
+
+        public string Log => _sb.ToString();
+
+        public bool ShouldLogEvents
+        {
+            get { return _settings.TrackTelemetry; }
+            set { _settings.TrackTelemetry = value; }
+        }
+
         public void Emit(LogEvent logEvent)
         {
             if (!_settings.TrackTelemetry)
@@ -48,16 +58,6 @@ namespace KeePass.Win.Log
             _writer.WriteLine();
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Log)));
-        }
-
-        public string Id { get; } = Guid.NewGuid().ToString();
-
-        public string Log => _sb.ToString();
-
-        public bool ShouldLogEvents
-        {
-            get { return _settings.TrackTelemetry; }
-            set { _settings.TrackTelemetry = value; }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace KeePass
 
         public override async Task<IKeePassDatabase> UnlockAsync(IFile dbFile, KeePassCredentials credentials)
         {
-            _log.Info("Unlocking {Database}", dbFile);
+            Log.Info("Unlocking {Database}", dbFile);
 
             try
             {

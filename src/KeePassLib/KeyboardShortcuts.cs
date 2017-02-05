@@ -8,6 +8,17 @@ namespace KeePass
     {
         private readonly Dictionary<KeyInfo, ShortcutName> _keys = new Dictionary<KeyInfo, ShortcutName>();
 
+        [Flags]
+        protected enum Modifier
+        {
+            None = 0,
+            Control = 1,
+            Menu = 2,
+            Shift = 4
+        }
+
+        public IEnumerable<ShortcutName> ShortcutNames => _keys.Values;
+
         public string GetShortcutString(int key)
         {
             return GetKeyInfo(key).ToString();
@@ -41,8 +52,6 @@ namespace KeePass
             }
         }
 
-        public IEnumerable<ShortcutName> ShortcutNames => _keys.Values;
-
         public bool UpdateKey(ShortcutName name, int key)
         {
             var info = GetKeyInfo(key);
@@ -57,7 +66,7 @@ namespace KeePass
                 return false;
             }
 
-            // Don't overwrite another shortcut 
+            // Don't overwrite another shortcut
             if (_keys.ContainsKey(info))
             {
                 return false;
@@ -82,15 +91,6 @@ namespace KeePass
         protected virtual string KeyToString(int key)
         {
             return key.ToString();
-        }
-
-        [Flags]
-        protected enum Modifier
-        {
-            None = 0,
-            Control = 1,
-            Menu = 2,
-            Shift = 4
         }
 
         protected struct KeyInfo

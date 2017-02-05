@@ -4,15 +4,15 @@ namespace KeePass.Models
 {
     public struct DatabaseGroupParameter
     {
-        public KeePassId Database { get; }
-
-        public KeePassId Group { get; }
-
         public DatabaseGroupParameter(KeePassId database, KeePassId group)
         {
             Database = database;
             Group = group;
         }
+
+        public KeePassId Database { get; }
+
+        public KeePassId Group { get; }
 
         public static DatabaseGroupParameter Decode(string encodedParameter)
         {

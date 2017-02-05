@@ -6,14 +6,14 @@ namespace KeePass.Win.ViewModels
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
-        protected SynchronizationContext SynchContext { get; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public ViewModelBase()
         {
             SynchContext = SynchronizationContext.Current;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected SynchronizationContext SynchContext { get; }
 
         protected void SetProperty<T>(ref T field, T obj, [CallerMemberName]string name = null)
         {

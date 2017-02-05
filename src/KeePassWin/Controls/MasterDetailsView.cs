@@ -46,7 +46,6 @@ namespace KeePass.Win.Controls
             set { SetValue(ItemClickCommandProperty, value); }
         }
 
-
         public void Focus()
         {
             if (ViewState != Microsoft.Toolkit.Uwp.UI.Controls2.MasterDetailsViewState.Details)

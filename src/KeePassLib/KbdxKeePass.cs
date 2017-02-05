@@ -30,6 +30,8 @@ namespace KeePass
 
         public IKeePassGroup Root => new KbdxGroup(_db.RootGroup, null, _db);
 
+        public bool Modified => _db.Modified;
+
         public async Task SaveAsync()
         {
             using (var fs = await _file.OpenWriteAsync())
@@ -44,8 +46,6 @@ namespace KeePass
             var kdbx = new KdbxFile(_db);
             kdbx.Save(stream, null, KdbxFormat.Default, null);
         }
-
-        public bool Modified => _db.Modified;
 
         private sealed class KbdxGroup : KbdxId, IKeePassGroup
         {
@@ -76,7 +76,11 @@ namespace KeePass
 
             public string Name
             {
-                get { return _group.Name; }
+                get
+                {
+                    return _group.Name;
+                }
+
                 set
                 {
                     if (!string.Equals(Name, value, StringComparison.CurrentCulture))
@@ -186,11 +190,11 @@ namespace KeePass
                 Id = new KeePassId(new Guid(id.UuidBytes));
             }
 
+            public event PropertyChangedEventHandler PropertyChanged;
+
             public KeePassId Id { get; set; }
 
             public PwDatabase Database { get; }
-
-            public event PropertyChangedEventHandler PropertyChanged;
 
             protected void SetProperty<T>(ref T item, T value, IEqualityComparer<T> equalityComparer = null, [CallerMemberName]string name = null)
             {
@@ -301,14 +305,6 @@ namespace KeePass
 
                 NotifyPropertyChanged(name);
             }
-        }
-    }
-
-    internal static class ListExtensions
-    {
-        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> enumerable)
-        {
-            return new ObservableCollection<T>(enumerable);
         }
     }
 }

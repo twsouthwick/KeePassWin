@@ -175,6 +175,48 @@ namespace KeePass.Win.ViewModels
 #endif
         }
 
+        public ICommand RenameGroupCommand { get; }
+
+        public ICommand GoToParentCommand { get; }
+
+        public ICommand OpenUrlCommand { get; }
+
+        public ICommand CopyCommand { get; }
+
+        public ICommand ItemClickCommand { get; }
+
+        public ICommand RemoveGroupCommand { get; }
+
+        public ICommand RemoveEntryCommand { get; }
+
+        public ICommand AddEntryCommand { get; }
+
+        public ICommand AddGroupCommand { get; }
+
+        public ICommand SaveCommand { get; }
+
+        public ICommand FilterCommand { get; }
+
+        public IKeePassDatabase Database
+        {
+            get { return _database; }
+            set { SetProperty(ref _database, value); }
+        }
+
+        public IKeePassGroup Group
+        {
+            get { return _group; }
+            set { SetProperty(ref _group, value); }
+        }
+
+        public IList<IKeePassGroup> Parents
+        {
+            get { return _parents; }
+            set { SetProperty(ref _parents, value); }
+        }
+
+        public ObservableCollection<IKeePassId> Items { get; } = new ObservableCollection<IKeePassId>();
+
         /// <summary>
         /// Get the index of the last group item in Items. This is used to add groups into the right location of the collection
         /// </summary>
@@ -267,7 +309,6 @@ namespace KeePass.Win.ViewModels
 
             Items.Clear();
 
-
             foreach (var item in Group.Groups)
             {
                 Items.Add(item);
@@ -281,47 +322,5 @@ namespace KeePass.Win.ViewModels
             // Add parents to generate breadcrump navigation
             Parents = Group.EnumerateParents(includeSelf: true).Reverse().ToList();
         }
-
-        public ICommand RenameGroupCommand { get; }
-
-        public ICommand GoToParentCommand { get; }
-
-        public ICommand OpenUrlCommand { get; }
-
-        public ICommand CopyCommand { get; }
-
-        public ICommand ItemClickCommand { get; }
-
-        public ICommand RemoveGroupCommand { get; }
-
-        public ICommand RemoveEntryCommand { get; }
-
-        public ICommand AddEntryCommand { get; }
-
-        public ICommand AddGroupCommand { get; }
-
-        public ICommand SaveCommand { get; }
-
-        public ICommand FilterCommand { get; }
-
-        public IKeePassDatabase Database
-        {
-            get { return _database; }
-            set { SetProperty(ref _database, value); }
-        }
-
-        public IKeePassGroup Group
-        {
-            get { return _group; }
-            set { SetProperty(ref _group, value); }
-        }
-
-        public IList<IKeePassGroup> Parents
-        {
-            get { return _parents; }
-            set { SetProperty(ref _parents, value); }
-        }
-
-        public ObservableCollection<IKeePassId> Items { get; } = new ObservableCollection<IKeePassId>();
     }
 }

@@ -40,7 +40,8 @@ namespace KeePass.Win.Services
                 await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
             catch (Exception)
-            { }
+            {
+            }
         }
 
         public async Task<bool> AddDatabaseAsync(IFile dbFile)
@@ -114,7 +115,9 @@ namespace KeePass.Win.Services
                     return file.AsFile();
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
 
             return null;
         }
@@ -129,7 +132,7 @@ namespace KeePass.Win.Services
             {
                 Guid g;
 
-                if (Guid.TryParse(file.Name.Replace("-", ""), out g))
+                if (Guid.TryParse(file.Name.Replace("-", string.Empty), out g))
                 {
                     var id = new KeePassId(g);
                     var dbStorageItem = await GetDatabaseAsync(id);

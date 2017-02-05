@@ -7,34 +7,29 @@ namespace KeePass.Win.Mvvm
 {
     public class MvvmExtensions
     {
-
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(MvvmExtensions), new PropertyMetadata(null, CommandPropertyChanged));
-
 
         public static void SetCommand(DependencyObject attached, ICommand value)
         {
             attached.SetValue(CommandProperty, value);
         }
 
-
         public static ICommand GetCommand(DependencyObject attached)
         {
             return (ICommand)attached.GetValue(CommandProperty);
         }
 
-
         private static void CommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Debug.Assert(d is ListViewBase);
+            Debug.Assert(d is ListViewBase, "Should be a list");
 
             // Attach click handler
             (d as ListViewBase).ItemClick += ItemClick;
         }
 
-
         private static void ItemClick(object sender, ItemClickEventArgs e)
         {
-            Debug.Assert(sender is DependencyObject);
+            Debug.Assert(sender is DependencyObject, "Should be a list");
 
             var command = GetCommand(sender as DependencyObject);
 

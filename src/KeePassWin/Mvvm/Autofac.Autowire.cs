@@ -8,7 +8,9 @@ using Windows.UI.Xaml.Controls;
 namespace KeePass.Win.Mvvm
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+#pragma warning disable SA1402 // File may only contain a single class
     public sealed class InjectAttribute : Attribute
+#pragma warning restore SA1402 // File may only contain a single class
     {
     }
 

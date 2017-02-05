@@ -7,6 +7,8 @@ namespace KeePass.Win.Controls
 {
     public sealed partial class ByteImage : UserControl
     {
+        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register(nameof(Image), typeof(byte[]), typeof(ByteImage), new PropertyMetadata(null, ImageUpdate));
+
         public ByteImage()
         {
             this.InitializeComponent();
@@ -17,9 +19,6 @@ namespace KeePass.Win.Controls
             get { return (byte[])GetValue(ImageProperty); }
             set { SetValue(ImageProperty, value); }
         }
-
-        public static readonly DependencyProperty ImageProperty =
-            DependencyProperty.Register(nameof(Image), typeof(byte[]), typeof(ByteImage), new PropertyMetadata(null, ImageUpdate));
 
         private static void ImageUpdate(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

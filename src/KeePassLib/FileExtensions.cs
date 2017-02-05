@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace KeePass
 {
-
     public static class FileExtensions
     {
         public static async Task<byte[]> ReadFileBytesAsync(this IFile file)

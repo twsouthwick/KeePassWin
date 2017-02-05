@@ -46,7 +46,7 @@ namespace KeePass.Win.Mvvm
             });
 
             Window.Current.CoreWindow.KeyDown += handler;
-            dialog.Unloaded += (_, __) => Window.Current.CoreWindow.KeyDown -= handler;
+            dialog.Unloaded += (s, e) => Window.Current.CoreWindow.KeyDown -= handler;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace KeePass.Win.Services
 
         public Task DatabaseAlreadyExistsAsync() => ShowDialogAsync(LocalizedStrings.MenuItemOpenSameFileContent, LocalizedStrings.MenuItemOpenSameFileTitle);
 
-        public Task DatabaseSavedAsync() => ShowDialogAsync("Database saved", "");
+        public Task DatabaseSavedAsync() => ShowDialogAsync("Database saved", string.Empty);
 
         public Task ErrorSavingDatabaseAsync(Exception e) => ShowDialogAsync(e.Message, "Error saving database");
 

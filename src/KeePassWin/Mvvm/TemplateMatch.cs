@@ -1,11 +1,12 @@
-﻿using KeePass;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
-using System.Reflection;
+
+#pragma warning disable SA1402 // File may only contain a single class
 
 namespace KeePass.Win.Mvvm
 {

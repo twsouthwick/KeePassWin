@@ -120,7 +120,6 @@ namespace KeePass.Tests
             await access.Received(1).AddDatabaseAsync(db);
         }
 
-
         [Fact]
         public async Task AddDatabaseTestFalseAsync()
         {
@@ -173,7 +172,7 @@ namespace KeePass.Tests
             await access.Received(1).GetDatabaseAsync(id);
             await credentialProvider.Received(1).GetCredentialsAsync(db);
         }
-        
+
         [Fact]
         public async Task UnlockTestNoCredentialsAsync()
         {

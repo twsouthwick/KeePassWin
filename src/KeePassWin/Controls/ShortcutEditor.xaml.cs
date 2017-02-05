@@ -57,7 +57,9 @@ namespace KeePass.Win.Controls
         }
     }
 
+#pragma warning disable SA1402 // File may only contain a single class
     internal class ShortcutInfo : INotifyPropertyChanged
+#pragma warning restore SA1402 // File may only contain a single class
     {
         private static readonly ResourceLoader s_loader = ResourceLoader.GetForCurrentView("ShortcutNames");
 
@@ -74,11 +76,11 @@ namespace KeePass.Win.Controls
             Debug.Assert(!string.IsNullOrWhiteSpace(Name), "A resource string must be available for the shortcut");
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public string Name { get; }
 
         public string Text => _shortcuts.GetShortcutString(_name);
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public bool Update(int key)
         {
@@ -92,5 +94,4 @@ namespace KeePass.Win.Controls
             return false;
         }
     }
-
 }

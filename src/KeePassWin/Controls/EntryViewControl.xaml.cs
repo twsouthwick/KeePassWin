@@ -46,7 +46,3 @@ namespace KeePass.Win.Controls
         }
     }
 }
-
-
-
-

@@ -1,7 +1,6 @@
 ﻿using KeePass.Win.AppModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 
 namespace KeePass.Win.Services
 {

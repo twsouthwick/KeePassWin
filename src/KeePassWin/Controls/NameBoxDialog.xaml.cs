@@ -9,15 +9,15 @@ namespace KeePass.Win.Controls
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(NameBoxDialog), new PropertyMetadata(null));
 
+        public NameBoxDialog()
+        {
+            this.InitializeComponent();
+        }
+
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
-        }
-
-        public NameBoxDialog()
-        {
-            this.InitializeComponent();
         }
 
         public async Task<string> GetNameAsync(string initial = null)

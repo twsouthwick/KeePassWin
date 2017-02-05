@@ -50,6 +50,14 @@ namespace KeePass.Win.ViewModels
             });
         }
 
+        public ICommand SettingsCommand { get; }
+
+        public ICommand OpenCommand { get; }
+
+        public ObservableCollection<MenuItemViewModel> Commands { get; set; }
+
+        public ObservableCollection<MenuItemViewModel> Databases { get; set; }
+
         private void AddDatabaseEntry(IFile dbFile)
         {
             var id = dbFile.IdFromPath();
@@ -87,14 +95,6 @@ namespace KeePass.Win.ViewModels
 
             SynchContext.Post(_ => Databases.Add(entry), null);
         }
-
-        public ICommand SettingsCommand { get; }
-
-        public ICommand OpenCommand { get; }
-
-        public ObservableCollection<MenuItemViewModel> Commands { get; set; }
-
-        public ObservableCollection<MenuItemViewModel> Databases { get; set; }
 
         private void RaiseCanExecuteChanged()
         {

@@ -20,7 +20,6 @@ namespace KeePass.Win.Mvvm
             _navigationService.GoBack();
         }
 
-
         public bool GoToDatabaseView(IKeePassDatabase database, IKeePassGroup group)
         {
             _shell.Value.Dismiss();
@@ -34,7 +33,7 @@ namespace KeePass.Win.Mvvm
         }
 
         public bool GoToSettings()
-        { 
+        {
             _shell.Value.Dismiss();
             return _navigationService.Navigate("Settings", null);
         }

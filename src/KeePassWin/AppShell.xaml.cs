@@ -8,14 +8,14 @@ namespace KeePass.Win
 {
     public sealed partial class AppShell : Page
     {
-        public MenuViewModel Model { get; }
-
         public AppShell(MenuViewModel model)
         {
             InitializeComponent();
 
             Model = model;
         }
+
+        public MenuViewModel Model { get; }
 
         public void SetContentFrame(Frame frame)
         {
@@ -32,12 +32,7 @@ namespace KeePass.Win
             Menu.IsPaneOpen = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <remarks>MVVM is not used here as the style became inconsistent within the hamburger menu with a Button control</remarks>
+        // MVVM is not used here as the style became inconsistent within the hamburger menu with a Button control
         private void HamburgerMenuItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (MenuItemViewModel)e.ClickedItem;
@@ -45,12 +40,7 @@ namespace KeePass.Win
             item.Command?.Execute(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <remarks>MVVM is not used here as using a Button control was causing a COMException in the hamburger control</remarks>
+        // MVVM is not used here as using a Button control was causing a COMException in the hamburger control
         private void HamburgerMenuOptionsItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (HamburgerMenuGlyphCommandItem)e.ClickedItem;
@@ -59,7 +49,9 @@ namespace KeePass.Win
         }
     }
 
+#pragma warning disable SA1402 // File may only contain a single class
     public class HamburgerMenuGlyphCommandItem : HamburgerMenuGlyphItem
+#pragma warning restore SA1402 // File may only contain a single class
     {
         public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(HamburgerMenuItem), new PropertyMetadata(null));
 

@@ -10,9 +10,6 @@ namespace KeePass.Win.Views
     {
         private static readonly KeyboardCapabilities s_capabilities = new KeyboardCapabilities();
 
-        [Inject]
-        public SettingsPageViewModel Model { get; set; }
-
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -21,6 +18,9 @@ namespace KeePass.Win.Views
 
             Loaded += SettingsPageLoaded;
         }
+
+        [Inject]
+        public SettingsPageViewModel Model { get; set; }
 
         private void SettingsPageLoaded(object sender, RoutedEventArgs e)
         {
