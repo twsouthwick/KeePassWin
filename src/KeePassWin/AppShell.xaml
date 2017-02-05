@@ -23,7 +23,7 @@
                     </MenuFlyout>
                 </Grid.ContextFlyout>
                 <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="{x:Bind Path=FontIcon}" Style="{StaticResource SplitViewMenuSymbolIconStyle}" />
+                    <SymbolIcon Symbol="ProtectedDocument" Style="{StaticResource SplitViewMenuSymbolIconStyle}" />
                     <TextBlock AutomationProperties.AccessibilityView="Raw"
                                    Style="{StaticResource SplitViewMenuItemTextStyle}"
                                    Text="{x:Bind Path=DisplayName}" />

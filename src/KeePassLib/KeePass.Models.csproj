@@ -120,9 +120,11 @@
     <Compile Include="IDatabaseCache.cs" />
     <Compile Include="IFile.cs" />
     <Compile Include="IFilePicker.cs" />
+    <Compile Include="ILauncher.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ILogView.cs" />
     <Compile Include="IMailClient.cs" />
+    <Compile Include="IMessageDialogFactory.cs" />
     <Compile Include="INameProvider.cs" />
     <Compile Include="INavigator.cs" />
     <Compile Include="InvalidCredentialsException.cs" />

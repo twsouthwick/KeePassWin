@@ -7,6 +7,8 @@ namespace KeePass.Win.Views
 {
     public sealed partial class DatabasePage
     {
+        private DatabasePageViewModel _model;
+
         public DatabasePage()
         {
             InitializeComponent();
@@ -22,6 +24,16 @@ namespace KeePass.Win.Views
         }
 
         [Inject]
-        public DatabasePageViewModel Model { get; set; }
+        public DatabasePageViewModel Model
+        {
+            get { return _model; }
+            set
+            {
+                _model = value;
+
+                // Set the DataContext to this as some binding in the view needs access to it
+                DataContext = value;
+            }
+        }
     }
 }

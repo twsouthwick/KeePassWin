@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
+﻿using System.Windows.Input;
 
 namespace KeePass.Win.ViewModels
 {
@@ -18,10 +15,10 @@ namespace KeePass.Win.ViewModels
                 KeyFile = await cache.AddKeyFileAsync(db);
             });
 
-            tracker.GetKeyFileAsync(db).ContinueWith(async r =>
+            tracker.GetKeyFileAsync(db).ContinueWith((r, o) =>
             {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => KeyFile = r.Result);
-            });
+                KeyFile = r.Result;
+            }, SynchContext);
         }
 
         /// <summary>

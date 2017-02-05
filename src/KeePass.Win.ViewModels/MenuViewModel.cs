@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
 
 namespace KeePass.Win.ViewModels
 {
-    public class MenuViewModel
+    public class MenuViewModel : ViewModelBase
     {
         private readonly INavigator _navigator;
         private readonly IDatabaseCache _cache;
         private readonly ICredentialProvider _credentialProvider;
+        private readonly IMessageDialogFactory _messageDialogs;
 
-        public MenuViewModel(INavigator navigator, IDatabaseCache cache, ICredentialProvider credentialProvider)
+        public MenuViewModel(INavigator navigator, IDatabaseCache cache, ICredentialProvider credentialProvider, IMessageDialogFactory messageDialogs)
         {
             _navigator = navigator;
             _cache = cache;
             _credentialProvider = credentialProvider;
+            _messageDialogs = messageDialogs;
 
             Databases = new ObservableCollection<MenuItemViewModel>();
             SettingsCommand = new DelegateCommand(() => _navigator.GoToSettings());
@@ -31,18 +27,16 @@ namespace KeePass.Win.ViewModels
 
                     if (db != null)
                     {
-                        await AddDatabaseEntryAsync(db);
+                        AddDatabaseEntry(db);
                     }
                 }
                 catch (DatabaseAlreadyExistsException)
                 {
-                    var dialog = new MessageDialog(LocalizedStrings.MenuItemOpenSameFileContent, LocalizedStrings.MenuItemOpenSameFileTitle);
-
-                    await dialog.ShowAsync();
+                    await _messageDialogs.DatabaseAlreadyExistsAsync();
                 }
             });
 
-            _cache.GetDatabaseFilesAsync().ContinueWith(async r =>
+            _cache.GetDatabaseFilesAsync().ContinueWith(r =>
             {
                 if (r.IsFaulted)
                 {
@@ -51,19 +45,18 @@ namespace KeePass.Win.ViewModels
 
                 foreach (var item in r.Result)
                 {
-                    await AddDatabaseEntryAsync(item);
+                    AddDatabaseEntry(item);
                 }
             });
         }
 
-        private async Task AddDatabaseEntryAsync(IFile dbFile)
+        private void AddDatabaseEntry(IFile dbFile)
         {
             var id = dbFile.IdFromPath();
 
             var entry = new MenuItemViewModel
             {
                 DisplayName = dbFile.Name,
-                FontIcon = Symbol.ProtectedDocument,
                 Command = new DelegateCommand(async () =>
                 {
                     try
@@ -77,26 +70,22 @@ namespace KeePass.Win.ViewModels
                     }
                     catch (InvalidCredentialsException)
                     {
-                        var dialog = new MessageDialog(LocalizedStrings.InvalidCredentials, LocalizedStrings.MenuItemOpenError);
-
-                        await dialog.ShowAsync();
+                        await _messageDialogs.InvalidCredentialsAsync();
                     }
                     catch (DatabaseUnlockException e)
                     {
-                        var dialog = new MessageDialog(e.Message, LocalizedStrings.MenuItemOpenError);
-
-                        await dialog.ShowAsync();
+                        await _messageDialogs.UnlockErrorAsync(e.Message);
                     }
                 })
             };
 
             entry.RemoveCommand = new DelegateCommand(async () =>
             {
-                await _cache.RemoveDatabaseAsync(dbFile);
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => Databases.Remove(entry));
+                await _cache.RemoveDatabaseAsync(dbFile)
+                    .ContinueWith((t, o) => Databases.Remove(entry), SynchContext);
             });
 
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => Databases.Add(entry));
+            SynchContext.Post(_ => Databases.Add(entry), null);
         }
 
         public ICommand SettingsCommand { get; }

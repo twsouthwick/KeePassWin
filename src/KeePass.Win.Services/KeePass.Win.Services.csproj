@@ -109,11 +109,14 @@
   <ItemGroup>
     <Compile Include="DataPackageClipboard.cs" />
     <Compile Include="FileDatabaseTracker.cs" />
+    <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="MessageBoxDialogs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageItemExtensions.cs" />
     <Compile Include="StorageItemFile.cs" />
     <Compile Include="WindowsFilePicker.cs" />
     <Compile Include="WindowsKeyboardShortcuts.cs" />
+    <Compile Include="WindowsLauncher.cs" />
     <Compile Include="WinKeePassSettings.cs" />
     <EmbeddedResource Include="Properties\KeePass.Win.Services.rd.xml" />
   </ItemGroup>

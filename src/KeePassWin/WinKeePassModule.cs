@@ -28,6 +28,14 @@ namespace KeePass.Win
                 .RegisterAppModel()
                 .SingleInstance();
 
+            builder.RegisterType<MessageBoxDialogs>()
+                .As<IMessageDialogFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<WindowsLauncher>()
+                .As<ILauncher>()
+                .SingleInstance();
+
             builder.RegisterType<DataPackageClipboard>()
                 .As<IClipboard<string>>()
                 .As<IClipboard<ILogView>>()

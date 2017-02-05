@@ -1,6 +1,6 @@
 ﻿using Windows.ApplicationModel.Resources;
 
-namespace KeePass.Win.ViewModels
+namespace KeePass.Win
 {
     internal class LocalizedStrings
     {

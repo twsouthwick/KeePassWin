@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.System;
-using Windows.UI.Popups;
 
 namespace KeePass.Win.ViewModels
 {
@@ -19,6 +16,8 @@ namespace KeePass.Win.ViewModels
         private readonly ICredentialProvider _credentialProvider;
         private readonly INameProvider _nameProvider;
         private readonly ILogger _log;
+        private readonly ILauncher _launcher;
+        private readonly IMessageDialogFactory _dialogs;
 
         private IKeePassDatabase _database;
         private IKeePassGroup _group;
@@ -35,6 +34,8 @@ namespace KeePass.Win.ViewModels
             IClipboard<string> clipboard,
             ICredentialProvider credentialProvider,
             INameProvider nameProvider,
+            ILauncher launcher,
+            IMessageDialogFactory dialogs,
             ILogger log)
         {
             _clipboard = clipboard;
@@ -42,6 +43,8 @@ namespace KeePass.Win.ViewModels
             _navigator = navigator;
             _credentialProvider = credentialProvider;
             _nameProvider = nameProvider;
+            _launcher = launcher;
+            _dialogs = dialogs;
             _log = log;
 
             ItemClickCommand = new DelegateCommand<IKeePassId>(item => GroupClicked(item as IKeePassGroup), item => (item as IKeePassGroup) != null);
@@ -58,14 +61,9 @@ namespace KeePass.Win.ViewModels
 
             OpenUrlCommand = new DelegateCommand<IKeePassEntry>(async entry =>
             {
-                Uri uri;
-
-                if (Uri.TryCreate(entry.Url, UriKind.Absolute, out uri))
+                if (Uri.TryCreate(entry.Url, UriKind.Absolute, out Uri uri))
                 {
-                    if (!(await Launcher.LaunchUriAsync(uri)))
-                    {
-                        var dialog = new MessageDialog($"Could not launch {entry.Url}");
-                    }
+                    await _launcher.LaunchUriAsync(uri);
                 }
             });
 
@@ -91,7 +89,7 @@ namespace KeePass.Win.ViewModels
 
             RemoveGroupCommand = new DelegateCommand<IKeePassGroup>(async group =>
             {
-                if (await CheckToDeleteAsync("group", group.Name))
+                if (await _dialogs.CheckToDeleteAsync("group", group.Name))
                 {
                     group.Remove();
                     Items.Remove(group);
@@ -102,7 +100,7 @@ namespace KeePass.Win.ViewModels
 
             RemoveEntryCommand = new DelegateCommand<IKeePassEntry>(async entry =>
             {
-                if (await CheckToDeleteAsync("entry", entry.Title))
+                if (await _dialogs.CheckToDeleteAsync("entry", entry.Title))
                 {
                     entry.Remove();
                     Items.Remove(entry);
@@ -153,16 +151,13 @@ namespace KeePass.Win.ViewModels
 
                 try
                 {
-                    await Database.SaveAsync();
+                    await Database.SaveAsync().ConfigureAwait(false);
 
-                    var dialog = new MessageDialog("Database saved");
-                    await dialog.ShowAsync();
+                    await _dialogs.DatabaseSavedAsync().ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
-                    var dialog = new MessageDialog("Error saving file");
-                    Debug.WriteLine(e);
-                    await dialog.ShowAsync();
+                    await _dialogs.ErrorSavingDatabaseAsync(e).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -178,17 +173,6 @@ namespace KeePass.Win.ViewModels
 #else
             });
 #endif
-        }
-
-        private async Task<bool> CheckToDeleteAsync(string type, string name)
-        {
-            var dialog = new MessageDialog($"Are you sure you want to remove the {type} '{name}'", $"Remove {type}?");
-            dialog.Commands.Add(new UICommand { Label = "No", Id = 0 });
-            dialog.Commands.Add(new UICommand { Label = "Yes", Id = 1 });
-
-            var result = await dialog.ShowAsync();
-
-            return (int)result.Id == 1;
         }
 
         /// <summary>
@@ -277,7 +261,7 @@ namespace KeePass.Win.ViewModels
             {
                 return;
             }
-            
+
             // Set group and entries into the Items container
             Group = group;
 

@@ -109,7 +109,6 @@
   <ItemGroup>
     <Compile Include="DatabasePageViewModel.cs" />
     <Compile Include="DelegateCommand.cs" />
-    <Compile Include="LocalizedStrings.cs" />
     <Compile Include="LoggingPageViewModel.cs" />
     <Compile Include="MenuItemViewModel.cs" />
     <Compile Include="MenuViewModel.cs" />
