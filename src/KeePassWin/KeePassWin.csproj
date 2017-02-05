@@ -113,7 +113,6 @@
     <Compile Include="Mvvm\Keyboard.Focus.cs" />
     <Compile Include="Mvvm\Keyboard.Shortcut.cs" />
     <Compile Include="Mvvm\Autofac.Autowire.cs" />
-    <None Include="project.json" />
     <PRIResource Include="Resources\en\ShareStrings.resw" />
     <PRIResource Include="Resources\en\Resources.resw" />
     <PRIResource Include="Resources\en\ShortcutNames.resw" />
@@ -246,6 +245,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.3.0" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.0" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls" Version="1.2.0" />
+    <PackageReference Include="Prism.Autofac" Version="6.2.0" />
+    <PackageReference Include="Serilog" Version="2.4.0" />
+    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KeePass.Win.Services\KeePass.Win.Services.csproj">

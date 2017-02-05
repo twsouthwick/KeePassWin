@@ -53,7 +53,11 @@
     <EmbeddedResource Include="Assets\password-key-aes_rijndael_256.kdbx" />
     <EmbeddedResource Include="Assets\password-key-aes_rijndael_256.key" />
     <None Include="App.config" />
-    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.1.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.1.0" />
+    <PackageReference Include="NSubstitute" Version="1.10.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\KeePassLib\KeePass.Models.csproj">
