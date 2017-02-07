@@ -118,8 +118,7 @@
     <EmbeddedResource Include="Properties\KeePass.Win.Services.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.0" />
-    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="1.2.0" />
+    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj">
