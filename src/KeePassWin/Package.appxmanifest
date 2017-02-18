@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="24433TaylorWS.KeePassWinBeta" Publisher="CN=620E076F-5CF7-4691-83A2-DD64D4E264DD" Version="1.1.0.0" />
+  <Identity Name="24433TaylorWS.KeePassWinBeta" Publisher="CN=Taylor Southwick" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="4ff162b9-bb0d-45f6-97e6-bcd6c1b7e8ad" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>KeePassWin (Beta)</DisplayName>
