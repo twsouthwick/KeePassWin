@@ -1,17 +1,32 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
 
 namespace KeePass.Win.ViewModels
 {
     public class SettingsPageViewModel
     {
+        private static readonly Lazy<string> s_about = new Lazy<string>(() => GetString("About.md"));
+        private static readonly Lazy<string> s_version = new Lazy<string>(() => GetString("version.txt"));
+        private static readonly Lazy<string> s_privacy = new Lazy<string>(() => GetString("PrivacyPolicy.md"));
+        private static readonly Lazy<string> s_changelog = new Lazy<string>(() => GetString("CHANGELOG.md"));
+
         public SettingsPageViewModel(LoggingPageViewModel logViewModel, KeePassSettings settings, KeyboardShortcuts shortcuts)
         {
             Logging = logViewModel;
             Settings = settings;
             Shortcuts = shortcuts;
+        }
 
-            Version = File.ReadAllText("version.txt").Trim();
-            PrivacyStatement = File.ReadAllText("PrivacyPolicy.txt");
+        private static string GetString(string name)
+        {
+            var names = typeof(SettingsPageViewModel).GetTypeInfo().Assembly.GetManifestResourceNames();
+
+            using (var stream = typeof(SettingsPageViewModel).GetTypeInfo().Assembly.GetManifestResourceStream($"KeePass.Win.ViewModels.{name}"))
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd().Trim();
+            }
         }
 
         public KeePassSettings Settings { get; }
@@ -20,26 +35,14 @@ namespace KeePass.Win.ViewModels
 
         public KeyboardShortcuts Shortcuts { get; }
 
-        public string Version { get; set; }
+        public string About => s_about.Value;
 
-        public string PrivacyStatement { get; set; }
+        public string Version => s_version.Value;
 
-        public Library[] Libraries { get; } = new Library[]
-        {
-            new Library { Name = "Autofac", Url = "https://autofac.org/" },
-            new Library { Name = "Prism", Url = "https://github.com/PrismLibrary/Prism" },
-            new Library { Name = "UWP Community Toolkit", Url = "http://www.uwpcommunitytoolkit.com" }
-        };
+        public string PrivacyStatement => s_privacy.Value;
+
+        public string Changelog => s_changelog.Value;
 
         public int[] TimeoutValues { get; } = new[] { 15, 30, 45, 90, 120 };
-    }
-
-#pragma warning disable SA1402 // File may only contain a single class
-    public class Library
-#pragma warning restore SA1402 // File may only contain a single class
-    {
-        public string Name { get; set; }
-
-        public string Url { get; set; }
     }
 }

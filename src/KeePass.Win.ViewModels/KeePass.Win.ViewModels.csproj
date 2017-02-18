@@ -4,6 +4,16 @@
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\..\version.txt" Link="version.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\CHANGELOG.md" Link="CHANGELOG.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\About.md" Link="About.md" />
+    <EmbeddedResource Include="..\..\PrivacyPolicy.md" Link="PrivacyPolicy.md" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj" />
   </ItemGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />

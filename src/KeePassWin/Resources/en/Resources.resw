@@ -117,14 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutProject.Text" xml:space="preserve">
-    <value>Developed by Taylor Southwick
-
-This program is based in part off of KeePass available at http://keepass.info. This project is not supported or affiliated with the maintainers of the original KeePass project.</value>
-  </data>
-  <data name="AboutThirdParties.Text" xml:space="preserve">
-    <value>The following 3rd party libraries are used:</value>
-  </data>
   <data name="CommandNewEntry.Label" xml:space="preserve">
     <value>Create entry</value>
   </data>
@@ -192,6 +184,9 @@ In order to set the shortcut, select the entry and press the key combination tha
   </data>
   <data name="PivotAbout.Header" xml:space="preserve">
     <value>About</value>
+  </data>
+  <data name="PivotChangelog.Header" xml:space="preserve">
+    <value>Changelog</value>
   </data>
   <data name="PivotKeyboard.Header" xml:space="preserve">
     <value>Keyboard</value>

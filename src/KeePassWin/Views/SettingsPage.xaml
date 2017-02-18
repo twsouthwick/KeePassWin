@@ -7,6 +7,7 @@
     xmlns:controls="using:KeePass.Win.Controls"
     xmlns:mvvm="using:KeePass.Win.Mvvm"
     xmlns:vm="using:KeePass.Win.ViewModels"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mvvm:Autofac.Autowire="True"
     mc:Ignorable="d">
 
@@ -19,21 +20,7 @@
                         Text="{x:Bind Path=Model.Version}" 
                         IsTextSelectionEnabled="True" />
 
-                    <HyperlinkButton x:Uid="HyperlinkWebsite" />
-                    <HyperlinkButton x:Uid="HyperlinkIssueTracker" />
-
-                    <TextBlock x:Uid="AboutProject"
-                        TextWrapping="WrapWholeWords"
-                        Margin="0,20,0,20" />
-
-                    <TextBlock x:Uid="AboutThirdParties" />
-                    <ItemsControl ItemsSource="{x:Bind Path=Model.Libraries}" Margin="20,0,0,20">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="vm:Library">
-                                <HyperlinkButton Content="{x:Bind Name}" NavigateUri="{x:Bind Url}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <toolkit:MarkdownTextBlock Text="{x:Bind Path=Model.About}" LinkClicked="LinkClicked" />
                 </StackPanel>
             </PivotItem>
 
@@ -49,6 +36,12 @@
                 </StackPanel>
             </PivotItem>
 
+            <PivotItem x:Uid="PivotChangelog">
+                <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+                    <toolkit:MarkdownTextBlock Text="{x:Bind Path=Model.Changelog}" LinkClicked="LinkClicked" />
+                </ScrollViewer>
+            </PivotItem>
+
             <PivotItem x:Name="KeyboardPivot" x:Uid="PivotKeyboard">
                 <StackPanel>
                     <TextBlock x:Uid="KeyboardDescription"
@@ -61,7 +54,7 @@
             </PivotItem>
 
             <PivotItem x:Uid="PivotPrivacy">
-                <TextBlock Text="{x:Bind Path=Model.PrivacyStatement}" TextWrapping="Wrap"  />
+                <toolkit:MarkdownTextBlock Text="{x:Bind Path=Model.PrivacyStatement}" />
             </PivotItem>
 
             <PivotItem x:Uid="PivotLogs">

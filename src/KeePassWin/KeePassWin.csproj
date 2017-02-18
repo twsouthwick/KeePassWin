@@ -170,10 +170,6 @@
     </PRIResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PrivacyPolicy.txt" />
-    <Content Include="version.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="KeePassWin_TemporaryKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
