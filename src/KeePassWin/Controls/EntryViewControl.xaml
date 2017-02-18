@@ -25,6 +25,7 @@
                 Header="Username" Text="{x:Bind Path=Entry.UserName, Mode=TwoWay}" />
 
             <PasswordBox
+                FontFamily="Consolas"
                 x:Name="passwordBox"
                 PasswordRevealMode="Hidden" 
                 Header="Password" Password="{x:Bind Path=Entry.Password, Mode=TwoWay}" />
