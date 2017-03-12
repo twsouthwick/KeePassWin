@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -53,10 +54,14 @@ namespace KeePass.Win.Mvvm
         private static void ShortcutKeyDown(object sender, KeyRoutedEventArgs e)
         {
             var content = e.OriginalSource as ContentControl;
-            var menu = content?.ContentTemplateRoot?.ContextFlyout as MenuFlyout;
+            var root = content?.ContentTemplateRoot;
+
+            // If the root is a UserControl (such as the Entry view), grab its content. Otherwise, use the root object itself
+            var menu = ((root as UserControl)?.Content ?? root)?.ContextFlyout as MenuFlyout;
 
             if (menu == null)
             {
+                Debug.Assert(true, "No flyout was found with shortcut information");
                 return;
             }
 
