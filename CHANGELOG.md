@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.5.3 - 3/12/2017
+### Fixed
+- Keyboard shortcuts were not being honored on entry items
+- Search box did not clear on escape
+- Switched the font when showing password to Consolas to help distinguish characters such as 'I','l' and '1'
+
+### Added
+- Show keyboard shortcut on context menus
+
 ## 2.5.2 - 1/27/2017
 ### Fixed
 - Entry icons were taking entire column and making it hard to see anything else
