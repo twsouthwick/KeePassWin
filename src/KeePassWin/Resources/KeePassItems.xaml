@@ -1,7 +1,36 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mvvm="using:KeePass.Win.Mvvm"
                     xmlns:converters="using:KeePass.Win.Converters">
 
     <converters:AutoSuggestQueryParameterConverter x:Key="SearchArgsConverter" />
     <converters:NullObjectVisibilityConverter x:Key="NullObjectVisibilityConverter" />
+    <converters:ShortcutDisplayConverter x:Key="ShortcutDisplayConverter" />
+
+    <Style TargetType="mvvm:MenuFlyoutItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="mvvm:MenuFlyoutItem">
+                    <Grid Padding="12,5,12,7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   VerticalAlignment="Center"
+                                   FontSize="15"
+                                   Text="{TemplateBinding Text}" />
+                        <TextBlock Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   FontSize="10"
+                                   FontStyle="Italic"
+                                   Text="{Binding Shortcut, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource ShortcutDisplayConverter}}" />
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

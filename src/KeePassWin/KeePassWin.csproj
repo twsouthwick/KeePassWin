@@ -108,6 +108,7 @@
     <Compile Include="Controls\ShortcutEditor.xaml.cs">
       <DependentUpon>ShortcutEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ShortcutDisplayConverter.cs" />
     <Compile Include="Mvvm\ComboBox.cs" />
     <Compile Include="Mvvm\Keyboard.Focus.cs" />
     <Compile Include="Mvvm\Keyboard.Shortcut.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Log\SerilogLogger.cs" />
     <Compile Include="Log\StringBuilderSink.cs" />
     <Compile Include="Mvvm\Keyboard.Dialog.cs" />
+    <Compile Include="Mvvm\MenuFlyoutItem.cs" />
     <Compile Include="Services\DialogCredentialProvider.cs" />
     <Compile Include="Mvvm\MvvmExtensions.cs" />
     <Compile Include="Mvvm\PrismNavigationService.cs" />

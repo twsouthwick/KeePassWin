@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,22 +8,11 @@ namespace KeePass.Win.Mvvm
 {
     public partial class Keyboard
     {
-        public static readonly DependencyProperty ShortcutProperty = DependencyProperty.RegisterAttached("Shortcut", typeof(ShortcutName), typeof(Keyboard), new PropertyMetadata(default(ShortcutName)));
         public static readonly DependencyProperty AutoWireProperty = DependencyProperty.RegisterAttached("AutoWire", typeof(bool), typeof(Keyboard), new PropertyMetadata(false, AutoWirePropertyChanged));
-
-        public static void SetShortcut(MenuFlyoutItem attached, ShortcutName value)
-        {
-            attached.SetValue(ShortcutProperty, value);
-        }
 
         public static void SetAutoWire(FrameworkElement attached, bool value)
         {
             attached.SetValue(AutoWireProperty, value);
-        }
-
-        public static ShortcutName GetShortcut(MenuFlyoutItem attached)
-        {
-            return (ShortcutName)attached.GetValue(ShortcutProperty);
         }
 
         public static bool GetAutoWire(FrameworkElement attached)
@@ -34,21 +22,17 @@ namespace KeePass.Win.Mvvm
 
         private static void AutoWirePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
-            var shortcut = d as FrameworkElement;
+            var shortcut = (FrameworkElement)d;
 
-            if (shortcut == null)
+            if ((bool)args.NewValue)
             {
-                return;
+                shortcut.KeyDown += ShortcutKeyDown;
+                shortcut.Unloaded += (s, _) => (s as FrameworkElement).KeyDown -= ShortcutKeyDown;
             }
-
-            if (!(bool)args.NewValue)
+            else
             {
                 shortcut.KeyDown -= ShortcutKeyDown;
-                return;
             }
-
-            shortcut.KeyDown += ShortcutKeyDown;
-            shortcut.Unloaded += (s, _) => (s as FrameworkElement).KeyDown -= ShortcutKeyDown;
         }
 
         private static void ShortcutKeyDown(object sender, KeyRoutedEventArgs e)
@@ -81,7 +65,7 @@ namespace KeePass.Win.Mvvm
 
             var item = menu.Items
                 .OfType<MenuFlyoutItem>()
-                .FirstOrDefault(i => GetShortcut(i) == key) as MenuFlyoutItem;
+                .FirstOrDefault(i => i.Shortcut == key) as MenuFlyoutItem;
 
             if (item == null)
             {

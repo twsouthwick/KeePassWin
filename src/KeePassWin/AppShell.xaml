@@ -5,6 +5,7 @@
       xmlns:local="using:KeePass.Win"
       xmlns:viewModels="using:KeePass.Win.ViewModels"
       xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+      xmlns:mvvm="using:KeePass.Win.Mvvm" 
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
 
@@ -19,7 +20,11 @@
             <Grid>
                 <Grid.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Command="{x:Bind Path=RemoveCommand}" Text="Remove" Visibility="{x:Bind Path=RemoveCommand, Converter={StaticResource NullObjectVisibilityConverter}}"/>
+                        <mvvm:MenuFlyoutItem 
+                            Command="{x:Bind Path=RemoveCommand}" 
+                            Text="Remove" 
+                            Shortcut="DeleteItem"
+                            Visibility="{x:Bind Path=RemoveCommand, Converter={StaticResource NullObjectVisibilityConverter}}"/>
                     </MenuFlyout>
                 </Grid.ContextFlyout>
                 <StackPanel Orientation="Horizontal">

@@ -1,15 +1,15 @@
 ﻿<Page x:Class="KeePass.Win.Views.DatabasePage"
-                                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                                 xmlns:converters="using:KeePass.Win.Converters"
-                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                                 xmlns:mvvm="using:KeePass.Win.Mvvm"
-                                 xmlns:keepass="using:KeePass"
-                                 xmlns:controls="using:KeePass.Win.Controls"
-                                 xmlns:vm="using:KeePass.Win.ViewModels"
-                                 mvvm:Autofac.Autowire="True"
-                                 mc:Ignorable="d">
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:converters="using:KeePass.Win.Converters"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:mvvm="using:KeePass.Win.Mvvm"
+      xmlns:keepass="using:KeePass"
+      xmlns:controls="using:KeePass.Win.Controls"
+      xmlns:vm="using:KeePass.Win.ViewModels"
+      mvvm:Autofac.Autowire="True"
+      mc:Ignorable="d">
 
     <Page.Resources>
         <converters:UriVisibilityConverter x:Key="UriVisibilityConverter"/>
@@ -31,18 +31,20 @@
 
                 <Grid.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem x:Uid="GroupFlyoutRename"
+                        <mvvm:MenuFlyoutItem x:Uid="GroupFlyoutRename"
                             AllowFocusOnInteraction="True"
                             AllowFocusWhenDisabled="True"
                             CommandParameter="{x:Bind}"
                             Command="{Binding Path=DataContext.RenameGroupCommand, ElementName=Root, Mode=OneTime}"
-                            mvvm:Keyboard.Shortcut="Rename" />
-                        <MenuFlyoutItem x:Uid="GroupFlyoutRemove"
+                            Shortcut="Rename">
+
+                        </mvvm:MenuFlyoutItem>
+                        <mvvm:MenuFlyoutItem x:Uid="GroupFlyoutRemove"
                             AllowFocusOnInteraction="True"
                             AllowFocusWhenDisabled="True"
                             CommandParameter="{x:Bind}"
                             Command="{Binding Path=DataContext.RemoveGroupCommand, ElementName=Root, Mode=OneTime}"
-                            mvvm:Keyboard.Shortcut="DeleteItem" />
+                            Shortcut="DeleteItem" />
                     </MenuFlyout>
                 </Grid.ContextFlyout>
 
@@ -52,33 +54,33 @@
                            TextTrimming="WordEllipsis" />
             </Grid>
         </DataTemplate>
-
+        
         <DataTemplate x:Name="KeePassEntryTemplate" x:DataType="keepass:IKeePassEntry">
             <UserControl>
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ContextFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem x:Uid="EntryFlyoutCopyUserName"
-                                            mvvm:Keyboard.Shortcut="CopyUserName"
+                            <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutCopyUserName"
+                                            Shortcut="CopyUserName"
                                             Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
                                             CommandParameter="{x:Bind UserName, Mode=OneWay}" />
-                            <MenuFlyoutItem x:Uid="EntryFlyoutCopyPassword"
-                                            mvvm:Keyboard.Shortcut="CopyPassword"
+                            <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutCopyPassword"
+                                            Shortcut="CopyPassword"
                                             Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
                                             CommandParameter="{x:Bind Password, Mode=OneWay}" />
-                            <MenuFlyoutItem x:Uid="EntryFlyoutCopyUrl"
-                                            mvvm:Keyboard.Shortcut="CopyUrl"
+                            <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutCopyUrl"
+                                            Shortcut="CopyUrl"
                                             Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}" 
                                             Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
                                             CommandParameter="{x:Bind}" />
-                            <MenuFlyoutItem x:Uid="EntryFlyoutOpenUrl" 
-                                            mvvm:Keyboard.Shortcut="OpenUrl"
+                            <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutOpenUrl" 
+                                            Shortcut="OpenUrl"
                                             Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}"
                                             Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
                                             CommandParameter="{x:Bind}" />
                             <MenuFlyoutSeparator />
-                            <MenuFlyoutItem x:Uid="EntryFlyoutDelete"
-                                            mvvm:Keyboard.Shortcut="DeleteItem"
+                            <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutDelete"
+                                            Shortcut="DeleteItem"
                                             Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root, Mode=OneTime}"
                                             CommandParameter="{x:Bind}"  />
                         </MenuFlyout>
