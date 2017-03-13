@@ -19,7 +19,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KeePassWin_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>B445FF998549A7014B4F99D5D595A3CD9CFBF311</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>25E7C6A25A9404FA1A014D982879870548BE4781</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>

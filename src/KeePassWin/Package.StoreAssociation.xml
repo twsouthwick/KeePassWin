@@ -363,10 +363,5 @@
       <ReservedName>KeePassWin</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
-  <AccountPackageIdentityNames>
-    <MainPackageIdentityName>24433TaylorWS.HamTools</MainPackageIdentityName>
-    <MainPackageIdentityName>24433TaylorWS.LDSMusic</MainPackageIdentityName>
-    <MainPackageIdentityName>24433TaylorWS.PodcastPlayer</MainPackageIdentityName>
-  </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9WZDNCRD91JM" />
 </StoreAssociation>
