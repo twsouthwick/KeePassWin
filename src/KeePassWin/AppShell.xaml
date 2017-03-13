@@ -20,9 +20,10 @@
             <Grid>
                 <Grid.ContextFlyout>
                     <MenuFlyout>
-                        <mvvm:MenuFlyoutItem 
-                            Command="{x:Bind Path=RemoveCommand}" 
-                            Text="Remove" 
+                        <mvvm:MenuFlyoutItem x:Uid="AppMenuOpen"
+                            Command="{x:Bind Path=Command}" />
+                        <mvvm:MenuFlyoutItem  x:Uid="AppMenuRemove"
+                            Command="{x:Bind Path=RemoveCommand}"
                             Shortcut="DeleteItem"
                             Visibility="{x:Bind Path=RemoveCommand, Converter={StaticResource NullObjectVisibilityConverter}}"/>
                     </MenuFlyout>
