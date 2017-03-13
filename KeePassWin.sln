@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26205.0
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeePassWin", "src\KeePassWin\KeePassWin.csproj", "{6A6ABD82-C76B-4392-95B2-95EB64F628FD}"
 EndProject
@@ -113,18 +113,18 @@ Global
 		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|ARM.Build.0 = Debug|Any CPU
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x64.ActiveCfg = Debug|x64
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x64.Build.0 = Debug|x64
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x86.ActiveCfg = Debug|x86
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x86.Build.0 = Debug|x86
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x64.Build.0 = Debug|Any CPU
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Debug|x86.Build.0 = Debug|Any CPU
 		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|ARM.ActiveCfg = Release|Any CPU
 		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|ARM.Build.0 = Release|Any CPU
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x64.ActiveCfg = Release|x64
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x64.Build.0 = Release|x64
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x86.ActiveCfg = Release|x86
-		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x86.Build.0 = Release|x86
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x64.ActiveCfg = Release|Any CPU
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x64.Build.0 = Release|Any CPU
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{84BC73A0-B888-42C4-87A7-F483356365C4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
