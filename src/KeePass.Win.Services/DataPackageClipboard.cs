@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -83,27 +82,25 @@ namespace KeePass.Win.Services
 
         private void ClearClipboard()
         {
-            var toast = new ToastContent
-            {
-                Launch = "action=view&eventId=1983",
-                Scenario = ToastScenario.Default,
-                Visual = new ToastVisual
-                {
-                    BindingGeneric = new ToastBindingGeneric
-                    {
-                        Attribution = new ToastGenericAttributionText { Text = s_resources.GetString("TimeoutAttribution") },
-                        Children =
-                        {
-                            new AdaptiveText { Text = s_resources.GetString("TimeoutText") }
-                        }
-                    }
-                }
-            };
+            var timeout = s_resources.GetString("TimeoutText");
+            var attribution = s_resources.GetString("TimeoutAttribution");
+
+            var toastText = $@"<toast>
+  <visual>
+    <binding template=""ToastGeneric"">
+      <text>{timeout}</text>
+      <text>{attribution}</text>
+    </binding>
+  </visual>
+</toast>";
+            var xmlDoc = new Windows.Data.Xml.Dom.XmlDocument();
+            xmlDoc.LoadXml(toastText);
 
             Clipboard.Clear();
 
-            var notification = new ToastNotification(toast.GetXml())
+            var notification = new ToastNotification(xmlDoc)
             {
+                NotificationMirroring = NotificationMirroring.Disabled,
                 ExpirationTime = DateTimeOffset.Now.AddSeconds(10)
             };
 

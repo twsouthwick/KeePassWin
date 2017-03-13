@@ -5,6 +5,7 @@
 - Keyboard shortcuts were not being honored on entry items
 - Search box did not clear on escape
 - Switched the font when showing password to Consolas to help distinguish characters such as 'I','l' and '1'
+- Fixed clipboard cleared notification to show what happened
 
 ### Added
 - Show keyboard shortcut on context menus
