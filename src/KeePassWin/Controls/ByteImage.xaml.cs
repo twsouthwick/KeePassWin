@@ -2,6 +2,7 @@
 using System.IO;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace KeePass.Win.Controls
 {
@@ -22,22 +23,25 @@ namespace KeePass.Win.Controls
 
         private static void ImageUpdate(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ByteImage)d).Update();
+            ((ByteImage)d).Update((byte[])e.NewValue);
         }
 
-        private async void Update()
+        private async void Update(byte[] image)
         {
-            var image = Image;
-
             if (image == null)
             {
+                imageControl.Source = null;
                 return;
             }
 
+            var bitmap = new BitmapImage();
+
             using (var ms = new MemoryStream(image))
             {
-                await BitmapImageSource.SetSourceAsync(ms.AsRandomAccessStream());
+                await bitmap.SetSourceAsync(ms.AsRandomAccessStream());
             }
+
+            imageControl.Source = bitmap;
         }
     }
 }
