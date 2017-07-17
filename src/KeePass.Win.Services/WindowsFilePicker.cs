@@ -6,15 +6,18 @@ namespace KeePass.Win.Services
 {
     public class WindowsFilePicker : IFilePicker
     {
-        public Task<IFile> GetDatabaseAsync() => OpenFileAsync(".kdbx");
+        public Task<IFile> GetDatabaseAsync() => OpenFileAsync(".kdbx", ".kdb");
 
         public Task<IFile> GetKeyFileAsync() => OpenFileAsync("*");
 
-        private async Task<IFile> OpenFileAsync(string extension)
+        private async Task<IFile> OpenFileAsync(params string[] extensions)
         {
             var picker = new FileOpenPicker();
 
-            picker.FileTypeFilter.Add(extension);
+            foreach (var extension in extensions)
+            {
+                picker.FileTypeFilter.Add(extension);
+            }
 
             return (await picker.PickSingleFileAsync()).AsFile();
         }
