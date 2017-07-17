@@ -1,4 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.UI;
+using System;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.System;
@@ -23,6 +25,35 @@ namespace KeePass.Win.Controls
                 Unloaded += SearchBoxUnloaded;
             }
 
+            var changes = Observable.FromEventPattern<AutoSuggestBox, AutoSuggestBoxTextChangedEventArgs>(Box, nameof(Box.TextChanged))
+                .Select(t => t.Sender.Text)
+                .Where(text => text.Length >= 3)
+                .DistinctUntilChanged()
+                .Throttle(TimeSpan.FromMilliseconds(300))
+                .ObserveOnDispatcher(CoreDispatcherPriority.Low)
+                .Subscribe(text =>
+                {
+                    var filter = Filter;
+
+                    if (filter?.CanExecute(text) == true)
+                    {
+                        filter.Execute(text);
+                    }
+                });
+
+            Box.Unloaded += (s, e) =>
+            {
+                changes.Dispose();
+            };
+
+            void CoreWindowCharacterReceived(CoreWindow sender, CharacterReceivedEventArgs args)
+            {
+                if (args.KeyCode == (uint)VirtualKey.Escape)
+                {
+                    args.Handled = TryClearSearch();
+                }
+            }
+
             Box.GotFocus += (s, e) => Window.Current.CoreWindow.CharacterReceived += CoreWindowCharacterReceived;
             Box.LostFocus += (s, e) => Window.Current.CoreWindow.CharacterReceived -= CoreWindowCharacterReceived;
         }
@@ -43,17 +74,6 @@ namespace KeePass.Win.Controls
             Box.ClearValue(AutoSuggestBox.TextProperty);
 
             return true;
-        }
-
-        private void SearchTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            var filter = Filter;
-            var text = sender.Text;
-
-            if (filter?.CanExecute(text) == true)
-            {
-                filter.Execute(text);
-            }
         }
 
         private void SearchBoxUnloaded(object sender, RoutedEventArgs e)
@@ -81,14 +101,6 @@ namespace KeePass.Win.Controls
             if (TryClearSearch())
             {
                 e.Cancel = true;
-            }
-        }
-
-        private void CoreWindowCharacterReceived(CoreWindow sender, CharacterReceivedEventArgs args)
-        {
-            if (args.KeyCode == (uint)VirtualKey.Escape)
-            {
-                args.Handled = TryClearSearch();
             }
         }
     }

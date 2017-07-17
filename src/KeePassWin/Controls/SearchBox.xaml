@@ -9,6 +9,6 @@
     d:DesignWidth="400">
 
     <Grid>
-        <AutoSuggestBox x:Name="Box" QueryIcon="Find" TextChanged="SearchTextChanged" />
+        <AutoSuggestBox x:Name="Box" QueryIcon="Find" />
     </Grid>
 </UserControl>
