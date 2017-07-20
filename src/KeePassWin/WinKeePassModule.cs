@@ -71,6 +71,14 @@ namespace KeePass.Win
             builder.RegisterType<DialogNameProvider>()
                 .As<INameProvider>()
                 .SingleInstance();
+
+            builder.RegisterType<PasswordGenerator>()
+                .AsSelf()
+                .SingleInstance();
+
+            builder.RegisterType<PasswordGeneratorSettings>()
+                .AsSelf()
+                .SingleInstance();
         }
 
         private ILogger CreateLogger(IComponentContext arg)

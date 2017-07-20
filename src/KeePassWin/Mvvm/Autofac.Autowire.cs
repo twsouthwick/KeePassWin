@@ -20,25 +20,18 @@ namespace KeePass.Win.Mvvm
 
         private static readonly IPropertySelector s_propertySelector = new MvvmPropertySelector();
 
-        public static void SetAutowire(Page attached, bool value)
+        public static void SetAutowire(UserControl attached, bool value)
         {
             attached.SetValue(AutowireProperty, value);
         }
 
-        public static bool GetAutowire(Page attached)
+        public static bool GetAutowire(UserControl attached)
         {
             return (bool)attached.GetValue(AutowireProperty);
         }
 
         private static void AutowirePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var page = d as Page;
-
-            if (page == null)
-            {
-                return;
-            }
-
             var container = ((App)Application.Current).Container;
 
             container.InjectProperties(d, s_propertySelector);
