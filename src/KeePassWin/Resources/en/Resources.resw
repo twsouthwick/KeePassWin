@@ -188,6 +188,27 @@ In order to set the shortcut, select the entry and press the key combination tha
   <data name="MainPageWelcome.Text" xml:space="preserve">
     <value>Select a database to open.</value>
   </data>
+  <data name="PasswordGeneratorGeneratePassword.Content" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="PasswordGeneratorIncludeArabicNumerals.Content" xml:space="preserve">
+    <value>Include Arabic numerals (0,1,2)</value>
+  </data>
+  <data name="PasswordGeneratorIncludeLowercase.Content" xml:space="preserve">
+    <value>Include lowercase Latin (a,b,c)</value>
+  </data>
+  <data name="PasswordGeneratorIncludeSpecialCharacters.Content" xml:space="preserve">
+    <value>Special characters (!,@,#)</value>
+  </data>
+  <data name="PasswordGeneratorIncludeUppercase.Content" xml:space="preserve">
+    <value>Include uppercase Latin (A,B,C)</value>
+  </data>
+  <data name="PasswordGeneratorOtherCharacters.Content" xml:space="preserve">
+    <value>Include others:</value>
+  </data>
+  <data name="PasswordGeneratorPasswordLength.Header" xml:space="preserve">
+    <value>Password length</value>
+  </data>
   <data name="PivotAbout.Header" xml:space="preserve">
     <value>About</value>
   </data>

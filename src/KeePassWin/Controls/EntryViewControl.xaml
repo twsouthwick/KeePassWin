@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:KeePass.Win.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
@@ -27,8 +28,16 @@
             <PasswordBox
                 FontFamily="Consolas"
                 x:Name="passwordBox"
-                PasswordRevealMode="Hidden" 
+                PasswordRevealMode="Hidden"
                 Header="Password" Password="{x:Bind Path=Entry.Password, Mode=TwoWay}" />
+
+            <local:PasswordGenerator
+                Margin="20,0,0,0"
+                Visibility="{x:Bind ShowGenerator, Mode=OneWay}"
+                Password="{x:Bind Path=Entry.Password, Mode=TwoWay}" />
+
+            <CheckBox
+                Content="Show generator" IsChecked="{x:Bind ShowGenerator, Mode=TwoWay}" />
 
             <CheckBox
                 Content="Show password" IsChecked="False" Checked="PasswordChecked" Unchecked="PasswordChecked" />
@@ -37,10 +46,10 @@
                 Header="Website" Text="{x:Bind Path=Entry.Url, Mode=TwoWay}" />
 
             <TextBox
-                Header="Notes" Text="{x:Bind Path=Entry.Notes, Mode=TwoWay}" 
+                Header="Notes" Text="{x:Bind Path=Entry.Notes, Mode=TwoWay}"
                 AcceptsReturn="True" TextWrapping="Wrap"
-                VerticalContentAlignment="Stretch" 
-                ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                VerticalContentAlignment="Stretch"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
                 MinHeight="300" />
         </StackPanel>
     </ScrollViewer>

@@ -15,6 +15,9 @@ namespace KeePass.Win.Controls
         public static readonly DependencyProperty SaveCommandProperty =
             DependencyProperty.Register(nameof(SaveCommand), typeof(ICommand), typeof(EntryViewControl), new PropertyMetadata(null));
 
+        public static readonly DependencyProperty ShowGeneratorProperty =
+            DependencyProperty.Register(nameof(ShowGenerator), typeof(bool), typeof(EntryViewControl), new PropertyMetadata(false));
+
         public EntryViewControl()
         {
             this.InitializeComponent();
@@ -36,6 +39,12 @@ namespace KeePass.Win.Controls
         {
             get { return (ICommand)GetValue(SaveCommandProperty); }
             set { SetValue(SaveCommandProperty, value); }
+        }
+
+        public bool ShowGenerator
+        {
+            get { return (bool)GetValue(ShowGeneratorProperty); }
+            set { SetValue(ShowGeneratorProperty, value); }
         }
 
         private void PasswordChecked(object sender, RoutedEventArgs e)
