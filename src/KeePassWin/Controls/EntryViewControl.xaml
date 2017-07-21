@@ -31,13 +31,13 @@
                 PasswordRevealMode="Hidden"
                 Header="Password" Password="{x:Bind Path=Entry.Password, Mode=TwoWay}" />
 
+            <CheckBox
+                Content="Show generator" IsChecked="{x:Bind ShowGenerator, Mode=TwoWay}" />
+
             <local:PasswordGenerator
                 Margin="20,0,0,0"
                 Visibility="{x:Bind ShowGenerator, Mode=OneWay}"
                 Password="{x:Bind Path=Entry.Password, Mode=TwoWay}" />
-
-            <CheckBox
-                Content="Show generator" IsChecked="{x:Bind ShowGenerator, Mode=TwoWay}" />
 
             <CheckBox
                 Content="Show password" IsChecked="False" Checked="PasswordChecked" Unchecked="PasswordChecked" />
