@@ -21,8 +21,7 @@ namespace KeePass.Win
             {
                 var settings = c.Context.Resolve<KeePassSettings>();
 
-                var backgroundAware = c.Instance as IBackgroundEnteredAware;
-                if (backgroundAware != null)
+                if (c.Instance is IBackgroundEnteredAware backgroundAware)
                 {
                     Application.Current.EnteredBackground += async (s, e) =>
                     {

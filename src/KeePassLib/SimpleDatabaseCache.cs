@@ -31,8 +31,7 @@ namespace KeePass.Win.Services
 
         public async Task<IKeePassDatabase> UnlockAsync(KeePassId id, ICredentialProvider provider)
         {
-            IKeePassDatabase db;
-            if (_idCache.TryGetValue(id, out db))
+            if (_idCache.TryGetValue(id, out var db))
             {
                 return db;
             }

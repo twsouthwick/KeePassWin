@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Email;
@@ -101,7 +102,8 @@ namespace KeePass.Win.Services
             var notification = new ToastNotification(xmlDoc)
             {
                 NotificationMirroring = NotificationMirroring.Disabled,
-                ExpirationTime = DateTimeOffset.Now.AddSeconds(10)
+                ExpirationTime = DateTimeOffset.Now.AddSeconds(10),
+                SuppressPopup = false
             };
 
             ToastNotificationManager.CreateToastNotifier().Show(notification);
