@@ -223,7 +223,7 @@ namespace KeePass.Win.ViewModels
         /// <returns></returns>
         private int GetGroupIndex()
         {
-            for (int i = 0; i < Items.Count; i++)
+            for (var i = 0; i < Items.Count; i++)
             {
                 if (!(Items[i] is IKeePassGroup))
                 {
@@ -269,11 +269,18 @@ namespace KeePass.Win.ViewModels
 
                 var items = _database.Root.EnumerateAllEntries()
                     .Where(item => FilterEntry(item, query))
-                    .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase);
+                    .OrderBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase)
+                    .ToList();
 
-                Items.Clear();
+                var extra = Items.Except(items, KeePassIdComparer.Instance).ToList();
+                var newItems = items.Except(Items, KeePassIdComparer.Instance).ToList();
 
-                foreach (var item in items)
+                foreach (var item in extra)
+                {
+                    Items.Remove(item);
+                }
+
+                foreach (var item in newItems)
                 {
                     Items.Add(item);
                 }
