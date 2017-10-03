@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
     "Autofac": "4.6.1",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.4",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
     "Microsoft.Toolkit.Uwp.UI.Controls": "1.5.1",
     "Prism.Autofac": "6.3.0",
     "Serilog": "2.5.1-dev-00873",
