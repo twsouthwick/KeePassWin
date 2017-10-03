@@ -1,14 +1,24 @@
 # CHANGELOG
 
+## 2.6.0 - 10/3/2017
+### Added
+- Password generator is available
+- KeePass files (kdbx and kdb) can now be launched to start the application
+
+### Fixed
+- Search does not flash now
+- Add support for kdb files
+- Images were sometimes being mixed up in rendering
+
 ## 2.5.3 - 3/12/2017
+### Added
+- Show keyboard shortcut on context menus
+
 ### Fixed
 - Keyboard shortcuts were not being honored on entry items
 - Search box did not clear on escape
 - Switched the font when showing password to Consolas to help distinguish characters such as 'I','l' and '1'
 - Fixed clipboard cleared notification to show what happened
-
-### Added
-- Show keyboard shortcut on context menus
 
 ## 2.5.2 - 1/27/2017
 ### Fixed
