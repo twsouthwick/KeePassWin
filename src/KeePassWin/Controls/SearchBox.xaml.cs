@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI;
+using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -78,7 +79,7 @@ namespace KeePass.Win.Controls
 
         private void SearchBoxUnloaded(object sender, RoutedEventArgs e)
         {
-            var frame = this.FindVisualAscendant<Frame>();
+            var frame = this.FindAscendant<Frame>();
 
             if (frame != null)
             {
@@ -88,7 +89,7 @@ namespace KeePass.Win.Controls
 
         private void SearchBoxLoaded(object sender, RoutedEventArgs e)
         {
-            var frame = this.FindVisualAscendant<Frame>();
+            var frame = this.FindAscendant<Frame>();
 
             if (frame != null)
             {
