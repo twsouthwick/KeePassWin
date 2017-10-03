@@ -15,7 +15,7 @@ namespace KeePassLib
         public async Task UnlockTestAsync(string db, string password, bool hasKey)
         {
             var kdbx = TestAssets.GetFile(db);
-            var unlocker = new KdbxDatabaseCache(Substitute.For<ILogger>(), Substitute.For<IDatabaseFileAccess>(), Substitute.For<IFilePicker>());
+            var unlocker = new KdbxDatabaseCache(Substitute.For<ILogger>(), Substitute.For<IDatabaseFileAccess>());
 
             var key = hasKey ? TestAssets.GetFile(Path.ChangeExtension(db, "key")) : null;
             var credentials = new KeePassCredentials(key, password);
@@ -31,7 +31,7 @@ namespace KeePassLib
         public async Task InvalidUnlockTestAsync(string db, string password, bool hasKey)
         {
             var kdbx = TestAssets.GetFile(db);
-            var unlocker = new KdbxDatabaseCache(Substitute.For<ILogger>(), Substitute.For<IDatabaseFileAccess>(), Substitute.For<IFilePicker>());
+            var unlocker = new KdbxDatabaseCache(Substitute.For<ILogger>(), Substitute.For<IDatabaseFileAccess>());
 
             var key = hasKey ? TestAssets.GetFile(Path.ChangeExtension(db, "key")) : null;
             var credentials = new KeePassCredentials(key, password);

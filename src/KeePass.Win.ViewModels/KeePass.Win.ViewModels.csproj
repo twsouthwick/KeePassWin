@@ -21,6 +21,9 @@
     <EmbeddedResource Include="..\..\PrivacyPolicy.md" Link="PrivacyPolicy.md" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\KeePassLib\KeePass.Models.csproj" />
   </ItemGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />

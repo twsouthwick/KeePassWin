@@ -7,8 +7,8 @@ namespace KeePass
 {
     public class KdbxDatabaseCache : DatabaseCache
     {
-        public KdbxDatabaseCache(ILogger log, IDatabaseFileAccess databaseTracker, IFilePicker filePicker)
-            : base(log, databaseTracker, filePicker)
+        public KdbxDatabaseCache(ILogger log, IDatabaseFileAccess databaseTracker)
+            : base(log, databaseTracker)
         {
         }
 

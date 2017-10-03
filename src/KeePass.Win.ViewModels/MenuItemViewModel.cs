@@ -10,6 +10,8 @@ namespace KeePass.Win.ViewModels
 
         public ICommand RemoveCommand { get; set; }
 
+        public KeePassId Id { get; set; }
+
         public override string ToString()
         {
             return DisplayName;

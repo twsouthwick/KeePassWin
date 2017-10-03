@@ -21,14 +21,24 @@ namespace KeePass
             return id.ToString();
         }
 
+        public static bool operator ==(KeePassId id1, KeePassId id2)
+        {
+            return id1.Id == id2.Id;
+        }
+
+        public static bool operator !=(KeePassId id1, KeePassId id2)
+        {
+            return !(id1 == id2);
+        }
+
         public override bool Equals(object obj)
         {
-            if (!(obj is KeePassId))
+            if (obj is KeePassId other)
             {
-                return false;
+                return other == this;
             }
 
-            return Equals(((KeePassId)obj).Id, Id);
+            return false;
         }
 
         public override int GetHashCode()

@@ -6,13 +6,13 @@ namespace KeePass.Win.ViewModels
     {
         private IFile _keyFile;
 
-        public PasswordDialogViewModel(IFile db, IDatabaseCache cache, IDatabaseFileAccess tracker)
+        public PasswordDialogViewModel(IFile db, IDatabaseCache cache, IDatabaseFileAccess tracker, IFilePicker filePicker)
         {
             Name = db.Name;
 
             AddKeyFileCommand = new DelegateCommand(async () =>
             {
-                KeyFile = await cache.AddKeyFileAsync(db);
+                KeyFile = await cache.AddKeyFileAsync(db, filePicker);
             });
 
             tracker.GetKeyFileAsync(db).ContinueWith((r, o) =>

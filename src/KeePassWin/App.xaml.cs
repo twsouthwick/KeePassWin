@@ -35,6 +35,38 @@ namespace KeePass.Win
             return Task.CompletedTask;
         }
 
+        protected override async Task OnActivateApplicationAsync(IActivatedEventArgs args)
+        {
+            Container.Resolve<ILogger>().Info("Application was activated {ActivationArg}", args);
+
+            if (args.Kind == ActivationKind.File && args is FileActivatedEventArgs fileArgs)
+            {
+                var cache = Container.Resolve<IDatabaseCache>();
+
+                foreach (var file in fileArgs.Files)
+                {
+                    await cache.AddDatabaseAsync(new FilePickerSingleFile(file.AsFile()), true);
+                }
+            }
+        }
+
+        private class FilePickerSingleFile : IFilePicker
+        {
+            private readonly IFile _file;
+
+            public FilePickerSingleFile(IFile file)
+            {
+                _file = file;
+            }
+
+            public Task<IFile> GetDatabaseAsync() => Task.FromResult(_file);
+
+            public Task<IFile> GetKeyFileAsync()
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
             base.ConfigureContainer(builder);

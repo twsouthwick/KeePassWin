@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Linq;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Windows.Input;
 
 namespace KeePass.Win.ViewModels
@@ -9,8 +12,9 @@ namespace KeePass.Win.ViewModels
         private readonly IDatabaseCache _cache;
         private readonly ICredentialProvider _credentialProvider;
         private readonly IMessageDialogFactory _messageDialogs;
+        private readonly IDisposable _subscription;
 
-        public MenuViewModel(INavigator navigator, IDatabaseCache cache, ICredentialProvider credentialProvider, IMessageDialogFactory messageDialogs)
+        public MenuViewModel(INavigator navigator, IDatabaseCache cache, ICredentialProvider credentialProvider, IMessageDialogFactory messageDialogs, IFilePicker filePicker)
         {
             _navigator = navigator;
             _cache = cache;
@@ -19,22 +23,26 @@ namespace KeePass.Win.ViewModels
 
             Databases = new ObservableCollection<MenuItemViewModel>();
             SettingsCommand = new DelegateCommand(() => _navigator.GoToSettings());
-            OpenCommand = new DelegateCommand(async () =>
-            {
-                try
-                {
-                    var db = await _cache.AddDatabaseAsync();
+            OpenCommand = new DelegateCommand(async () => await _cache.AddDatabaseAsync(filePicker, false));
 
-                    if (db != null)
-                    {
-                        AddDatabaseEntry(db);
-                    }
-                }
-                catch (DatabaseAlreadyExistsException)
+            _subscription = cache.Databases
+                .ObserveOn(SynchContext)
+                .Subscribe(action =>
                 {
-                    await _messageDialogs.DatabaseAlreadyExistsAsync();
-                }
-            });
+                    switch (action.action)
+                    {
+                        case DatabaseAction.Add:
+                            AddDatabaseEntry(action.file);
+                            break;
+                        case DatabaseAction.Open:
+                            var entry = AddDatabaseEntry(action.file);
+                            entry.Command.Execute(null);
+                            break;
+                        case DatabaseAction.Remove:
+                            RemoveDatabaseEntry(action.file);
+                            break;
+                    }
+                });
 
             _cache.GetDatabaseFilesAsync().ContinueWith(r =>
             {
@@ -50,6 +58,13 @@ namespace KeePass.Win.ViewModels
             });
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            _subscription.Dispose();
+        }
+
         public ICommand SettingsCommand { get; }
 
         public ICommand OpenCommand { get; }
@@ -58,13 +73,28 @@ namespace KeePass.Win.ViewModels
 
         public ObservableCollection<MenuItemViewModel> Databases { get; set; }
 
-        private void AddDatabaseEntry(IFile dbFile)
+        private void RemoveDatabaseEntry(IFile file)
+        {
+            var entry = Databases.FirstOrDefault(m => file.IdFromPath() == m.Id);
+
+            Databases.Remove(entry);
+        }
+
+        private MenuItemViewModel AddDatabaseEntry(IFile dbFile)
         {
             var id = dbFile.IdFromPath();
+
+            var exists = Databases.FirstOrDefault(m => m.Id == dbFile.IdFromPath());
+
+            if (exists != null)
+            {
+                return exists;
+            }
 
             var entry = new MenuItemViewModel
             {
                 DisplayName = dbFile.Name,
+                Id = dbFile.IdFromPath(),
                 Command = new DelegateCommand(async () =>
                 {
                     try
@@ -89,11 +119,12 @@ namespace KeePass.Win.ViewModels
 
             entry.RemoveCommand = new DelegateCommand(async () =>
             {
-                await _cache.RemoveDatabaseAsync(dbFile)
-                    .ContinueWith((t, o) => Databases.Remove(entry), SynchContext);
+                await _cache.RemoveDatabaseAsync(dbFile);
             });
 
             SynchContext.Post(_ => Databases.Add(entry), null);
+
+            return entry;
         }
 
         private void RaiseCanExecuteChanged()

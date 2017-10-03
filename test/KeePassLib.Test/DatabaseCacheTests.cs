@@ -45,13 +45,13 @@ namespace KeePass.Tests
             var access = Substitute.For<IDatabaseFileAccess>();
             var log = Substitute.For<ILogger>();
             var filePicker = Substitute.For<IFilePicker>();
-            var cache = Substitute.For<DatabaseCache>(log, access, filePicker);
+            var cache = Substitute.For<DatabaseCache>(log, access);
 
             filePicker.GetKeyFileAsync().Returns(Task.FromResult<IFile>(null));
             var file = Substitute.For<IFile>();
 
             // Act
-            var result = await cache.AddKeyFileAsync(file);
+            var result = await cache.AddKeyFileAsync(file, filePicker);
 
             // Assert
             Assert.Null(result);
@@ -64,7 +64,7 @@ namespace KeePass.Tests
             var access = Substitute.For<IDatabaseFileAccess>();
             var log = Substitute.For<ILogger>();
             var filePicker = Substitute.For<IFilePicker>();
-            var cache = Substitute.For<DatabaseCache>(log, access, filePicker);
+            var cache = Substitute.For<DatabaseCache>(log, access);
 
             var db = Substitute.For<IFile>();
 
@@ -72,7 +72,7 @@ namespace KeePass.Tests
             filePicker.GetKeyFileAsync().Returns(Task.FromResult(keyfile));
 
             // Act
-            var result = await cache.AddKeyFileAsync(db);
+            var result = await cache.AddKeyFileAsync(db, filePicker);
 
             // Assert
             Assert.Same(keyfile, result);
@@ -86,12 +86,12 @@ namespace KeePass.Tests
             var access = Substitute.For<IDatabaseFileAccess>();
             var log = Substitute.For<ILogger>();
             var filePicker = Substitute.For<IFilePicker>();
-            var cache = Substitute.For<DatabaseCache>(log, access, filePicker);
+            var cache = Substitute.For<DatabaseCache>(log, access);
 
             filePicker.GetDatabaseAsync().Returns(Task.FromResult<IFile>(null));
 
             // Act
-            var result = await cache.AddDatabaseAsync();
+            var result = await cache.AddDatabaseAsync(filePicker, false);
 
             // Assert
             Assert.Null(result);
@@ -110,35 +110,13 @@ namespace KeePass.Tests
             var access = Substitute.For<IDatabaseFileAccess>();
             access.AddDatabaseAsync(db).Returns(Task.FromResult(true));
 
-            var cache = Substitute.For<DatabaseCache>(log, access, filePicker);
+            var cache = Substitute.For<DatabaseCache>(log, access);
 
             // Act
-            var result = await cache.AddDatabaseAsync();
+            var result = await cache.AddDatabaseAsync(filePicker, false);
 
             // Assert
             Assert.Equal(db, result);
-            await access.Received(1).AddDatabaseAsync(db);
-        }
-
-        [Fact]
-        public async Task AddDatabaseTestFalseAsync()
-        {
-            // Arrange
-            var log = Substitute.For<ILogger>();
-
-            var filePicker = Substitute.For<IFilePicker>();
-            var db = Substitute.For<IFile>();
-            filePicker.GetDatabaseAsync().Returns(Task.FromResult(db));
-
-            var access = Substitute.For<IDatabaseFileAccess>();
-            access.AddDatabaseAsync(db).Returns(Task.FromResult(false));
-
-            var cache = Substitute.For<DatabaseCache>(log, access, filePicker);
-
-            // Act
-            await Assert.ThrowsAsync<DatabaseAlreadyExistsException>(async () => await cache.AddDatabaseAsync());
-
-            // Assert
             await access.Received(1).AddDatabaseAsync(db);
         }
 

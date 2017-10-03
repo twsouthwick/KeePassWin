@@ -178,6 +178,7 @@
   <ItemGroup>
     <None Include="KeePassWin_TemporaryKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Assets\icon.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -287,6 +288,9 @@
     </PackageReference>
     <PackageReference Include="System.Reactive">
       <Version>3.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.4.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

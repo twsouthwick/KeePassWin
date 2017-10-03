@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace KeePass
@@ -7,16 +9,18 @@ namespace KeePass
     public abstract class DatabaseCache : IDatabaseCache
     {
         private readonly IDatabaseFileAccess _fileAccess;
-        private readonly IFilePicker _filePicker;
+        private readonly Subject<(DatabaseAction, IFile)> _databases;
 
-        public DatabaseCache(ILogger log, IDatabaseFileAccess databaseTracker, IFilePicker filePicker)
+        public DatabaseCache(ILogger log, IDatabaseFileAccess databaseTracker)
         {
             Log = log;
             _fileAccess = databaseTracker;
-            _filePicker = filePicker;
+            _databases = new Subject<(DatabaseAction, IFile)>();
         }
 
         protected ILogger Log { get; }
+
+        public IObservable<(DatabaseAction action, IFile file)> Databases => _databases;
 
         public async Task<IKeePassDatabase> UnlockAsync(KeePassId id, ICredentialProvider credentialProvider)
         {
@@ -41,29 +45,27 @@ namespace KeePass
 
         public abstract Task<IKeePassDatabase> UnlockAsync(IFile dbFile, KeePassCredentials credentials);
 
-        public async Task<IFile> AddDatabaseAsync()
+        public async Task<IFile> AddDatabaseAsync(IFilePicker filePicker, bool autoOpen)
         {
             Log.Info("Adding a database");
-            var result = await _filePicker.GetDatabaseAsync();
+            var result = await filePicker.GetDatabaseAsync();
 
             if (result == null)
             {
                 return null;
             }
 
-            if (await _fileAccess.AddDatabaseAsync(result))
-            {
-                return result;
-            }
-            else
-            {
-                throw new DatabaseAlreadyExistsException();
-            }
+            await _fileAccess.AddDatabaseAsync(result);
+
+            var action = autoOpen ? DatabaseAction.Open : DatabaseAction.Add;
+            _databases.OnNext((action, result));
+
+            return result;
         }
 
-        public async Task<IFile> AddKeyFileAsync(IFile db)
+        public async Task<IFile> AddKeyFileAsync(IFile db, IFilePicker filePicker)
         {
-            var result = await _filePicker.GetKeyFileAsync();
+            var result = await filePicker.GetKeyFileAsync();
 
             if (result == null)
             {
@@ -84,6 +86,7 @@ namespace KeePass
         public Task RemoveDatabaseAsync(IFile dbFile)
         {
             Log.Info("Removing {Database}", dbFile);
+            _databases.OnNext((DatabaseAction.Remove, dbFile));
             return _fileAccess.RemoveDatabaseAsync(dbFile);
         }
     }

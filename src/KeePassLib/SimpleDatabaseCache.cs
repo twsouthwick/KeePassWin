@@ -1,6 +1,7 @@
 ﻿using KeePass.Win.AppModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace KeePass.Win.Services
 {
@@ -16,11 +17,13 @@ namespace KeePass.Win.Services
             _navigator = navigator;
         }
 
-        public Task<IFile> AddDatabaseAsync() => _cache.AddDatabaseAsync();
+        public Task<IFile> AddDatabaseAsync(IFilePicker filePicker, bool autoOpen) => _cache.AddDatabaseAsync(filePicker, autoOpen);
 
         public Task<IEnumerable<IFile>> GetDatabaseFilesAsync() => _cache.GetDatabaseFilesAsync();
 
-        public Task<IFile> AddKeyFileAsync(IFile db) => _cache.AddKeyFileAsync(db);
+        public IObservable<(DatabaseAction action, IFile file)> Databases => _cache.Databases;
+
+        public Task<IFile> AddKeyFileAsync(IFile db, IFilePicker filePicker) => _cache.AddKeyFileAsync(db, filePicker);
 
         public async Task RemoveDatabaseAsync(IFile dbFile)
         {
