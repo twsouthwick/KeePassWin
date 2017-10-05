@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.6.1 - 10/5/2017
+### Fixed
+- Password generator crashed in Store build
+
 ## 2.6.0 - 10/3/2017
 ### Added
 - Password generator is available

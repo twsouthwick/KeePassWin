@@ -22,6 +22,8 @@
 
     <!-- These are needed as Prism uses reflection requiring them -->
     <Namespace Name="KeePass.Win.Views" Dynamic="Required All" />
+    <Namespace Name="KeePass.Win.Controls" Dynamic="Required All" />
+
     <Type Name="KeePass.Win.App" Browse="Required Public" />
 
     <!-- We may be able to narrow this, but without this sometimes dependency resolution fails -->
