@@ -19,11 +19,11 @@
     <EmbeddedResource Include="Assets\db1.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="xunit" Version="2.2.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
-    <PackageReference Include="NSubstitute" Version="2.0.3" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="NSubstitute" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\KeePassLib\KeePass.Models.csproj" />
