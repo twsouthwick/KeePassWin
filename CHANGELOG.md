@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.7.0 - 6/26/2018
+### Fixed
+- Search resets when no text is in the search box
+
+### Updated
+- Updated supporting libraries and bumped minimum Windows version
+
 ## 2.6.1 - 10/5/2017
 ### Fixed
 - Password generator crashed in Store build

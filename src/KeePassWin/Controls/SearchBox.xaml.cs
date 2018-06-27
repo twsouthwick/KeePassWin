@@ -28,7 +28,7 @@ namespace KeePass.Win.Controls
 
             var changes = Observable.FromEventPattern<AutoSuggestBox, AutoSuggestBoxTextChangedEventArgs>(Box, nameof(Box.TextChanged))
                 .Select(t => t.Sender.Text)
-                .Where(text => text.Length >= 3)
+                .Where(text => text.Length >= 3 || text.Length == 0)
                 .DistinctUntilChanged()
                 .Throttle(TimeSpan.FromMilliseconds(300))
                 .ObserveOnDispatcher(CoreDispatcherPriority.Low)
