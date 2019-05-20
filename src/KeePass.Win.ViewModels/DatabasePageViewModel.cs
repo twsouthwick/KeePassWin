@@ -289,7 +289,13 @@ namespace KeePass.Win.ViewModels
             NotifyAllCommands();
         }
 
-        public async Task SetDatabase(KeePassId dbId, KeePassId groupId)
+        public void ClearDatabase()
+        {
+            Database = null;
+            UpdateItems(null);
+        }
+
+        public async Task SetDatabaseAsync(KeePassId dbId, KeePassId groupId)
         {
             var db = await _unlocker.UnlockAsync(dbId, _credentialProvider);
 
@@ -315,6 +321,11 @@ namespace KeePass.Win.ViewModels
             Group = group;
 
             Items.Clear();
+
+            if (Group == null)
+            {
+                return;
+            }
 
             foreach (var item in Group.Groups)
             {

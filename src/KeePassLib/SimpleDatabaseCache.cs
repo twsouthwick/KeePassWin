@@ -54,9 +54,6 @@ namespace KeePass.Win.Services
         {
             _idCache.Clear();
 
-            // Without this, on resume, the last page will still be cached
-            _navigator.GoToMain();
-
             return Task.CompletedTask;
         }
     }

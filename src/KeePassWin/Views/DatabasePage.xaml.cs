@@ -1,4 +1,6 @@
-﻿using KeePass.Models;
+﻿using System;
+using System.Threading.Tasks;
+using KeePass.Models;
 using KeePass.Win.Mvvm;
 using KeePass.Win.ViewModels;
 using Windows.ApplicationModel;
@@ -10,18 +12,26 @@ namespace KeePass.Win.Views
     public sealed partial class DatabasePage
     {
         private DatabasePageViewModel _model;
+        private string _parameter;
 
         public DatabasePage()
         {
             InitializeComponent();
 
             Loaded += (s, e) => ItemsList.Focus();
+
             Application.Current.Suspending += OnAppSuspending;
+            Application.Current.Resuming += OnAppResuming;
+        }
+
+        private async void OnAppResuming(object sender, object e)
+        {
+            await LoadAsync(_parameter);
         }
 
         private void OnAppSuspending(object sender, SuspendingEventArgs e)
         {
-            Model = null;
+            Model.ClearDatabase();
         }
 
         [Inject]
@@ -41,9 +51,15 @@ namespace KeePass.Win.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var key = DatabaseGroupParameter.Decode((string)e.Parameter);
+            _parameter = (string)e.Parameter;
+            await LoadAsync(_parameter);
+        }
 
-            await Model.SetDatabase(key.Database, key.Group);
+        private Task LoadAsync(string parameter)
+        {
+            var key = DatabaseGroupParameter.Decode(parameter);
+
+            return Model.SetDatabaseAsync(key.Database, key.Group);
         }
     }
 }
