@@ -43,7 +43,7 @@ namespace KeePass
                     {
                         kdbx.Load(fs, KdbxFormat.Default, null);
                     });
-
+                    
                     return new KdbxDatabase(dbFile, db, dbFile.IdFromPath());
                 }
             }

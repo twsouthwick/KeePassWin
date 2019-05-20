@@ -65,6 +65,7 @@ namespace KeePass
                     .Cast<IKeePassEntry>()
                     .ToObservableCollection());
                 _groups = new Lazy<IList<IKeePassGroup>>(() => _group.Groups
+                    .Where(g => !g.Uuid.Equals(db.RecycleBinUuid))
                     .Select(g => new KbdxGroup(g, this, db))
                     .Cast<IKeePassGroup>()
                     .ToObservableCollection());
@@ -280,13 +281,30 @@ namespace KeePass
                 Group.Entries.Remove(this);
                 Group = null;
 
+                Modified();
+            }
+
+            private void Modified(bool changed = true)
+            {
                 Database.Modified = true;
+
+                if (changed)
+                {
+                    _entry.LastModificationTime = Now;
+                }
+                else
+                {
+                    _entry.LastAccessTime = Now;
+                }
             }
 
             private string Get(string def)
             {
+                Modified(changed: false);
                 return _entry.Strings.Get(def)?.ReadString() ?? string.Empty;
             }
+
+            private DateTime Now => DateTime.Now;
 
             private void Add(string def, string value, [CallerMemberName]string name = null)
             {
@@ -301,7 +319,8 @@ namespace KeePass
                 }
 
                 _entry.Strings.Set(def, new ProtectedString(true, value));
-                Database.Modified = true;
+
+                Modified();
 
                 NotifyPropertyChanged(name);
             }
