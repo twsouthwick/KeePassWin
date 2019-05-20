@@ -1,6 +1,8 @@
 ﻿using KeePass.Models;
 using KeePass.Win.Mvvm;
 using KeePass.Win.ViewModels;
+using Windows.ApplicationModel;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 
 namespace KeePass.Win.Views
@@ -14,6 +16,12 @@ namespace KeePass.Win.Views
             InitializeComponent();
 
             Loaded += (s, e) => ItemsList.Focus();
+            Application.Current.Suspending += OnAppSuspending;
+        }
+
+        private void OnAppSuspending(object sender, SuspendingEventArgs e)
+        {
+            Model = null;
         }
 
         [Inject]
