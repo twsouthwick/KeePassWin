@@ -35,7 +35,7 @@
                             AllowFocusOnInteraction="True"
                             AllowFocusWhenDisabled="True"
                             CommandParameter="{x:Bind}"
-                            Command="{Binding Path=DataContext.RenameGroupCommand, ElementName=Root, Mode=OneTime}"
+                            Command="{Binding Path=DataContext.RenameGroupCommand, ElementName=PageRoot, Mode=OneTime}"
                             Shortcut="Rename">
 
                         </mvvm:MenuFlyoutItem>
@@ -43,7 +43,7 @@
                             AllowFocusOnInteraction="True"
                             AllowFocusWhenDisabled="True"
                             CommandParameter="{x:Bind}"
-                            Command="{Binding Path=DataContext.RemoveGroupCommand, ElementName=Root, Mode=OneTime}"
+                            Command="{Binding Path=DataContext.RemoveGroupCommand, ElementName=PageRoot, Mode=OneTime}"
                             Shortcut="DeleteItem" />
                     </MenuFlyout>
                 </Grid.ContextFlyout>
@@ -62,26 +62,26 @@
                         <MenuFlyout>
                             <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutCopyUserName"
                                             Shortcut="CopyUserName"
-                                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                            Command="{Binding Path=DataContext.CopyCommand, ElementName=PageRoot, Mode=OneTime}"
                                             CommandParameter="{x:Bind UserName, Mode=OneWay}" />
                             <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutCopyPassword"
                                             Shortcut="CopyPassword"
-                                            Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                            Command="{Binding Path=DataContext.CopyCommand, ElementName=PageRoot, Mode=OneTime}"
                                             CommandParameter="{x:Bind Password, Mode=OneWay}" />
                             <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutCopyUrl"
                                             Shortcut="CopyUrl"
                                             Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}" 
-                                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=PageRoot, Mode=OneTime}"
                                             CommandParameter="{x:Bind}" />
                             <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutOpenUrl" 
                                             Shortcut="OpenUrl"
                                             Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}"
-                                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                                            Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=PageRoot, Mode=OneTime}"
                                             CommandParameter="{x:Bind}" />
                             <MenuFlyoutSeparator />
                             <mvvm:MenuFlyoutItem x:Uid="EntryFlyoutDelete"
                                             Shortcut="DeleteItem"
-                                            Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=Root, Mode=OneTime}"
+                                            Command="{Binding Path=DataContext.RemoveEntryCommand, ElementName=PageRoot, Mode=OneTime}"
                                             CommandParameter="{x:Bind}"  />
                         </MenuFlyout>
                     </Grid.ContextFlyout>
@@ -118,7 +118,7 @@
                                     Orientation="Horizontal">
                             <AppBarButton x:Uid="EntryButtonWebsite"
                                           Grid.Column="2" Grid.RowSpan="2"
-                                          Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=Root, Mode=OneTime}"
+                                          Command="{Binding Path=DataContext.OpenUrlCommand, ElementName=PageRoot, Mode=OneTime}"
                                           CommandParameter="{x:Bind}"
                                           Visibility="{x:Bind Url, Mode=OneWay, Converter={StaticResource UriVisibilityConverter}}">
                                 <AppBarButton.Icon>
@@ -127,7 +127,7 @@
                             </AppBarButton>
                             <AppBarButton x:Uid="EntryButtonUsername"
                                           Grid.Column="3" Grid.RowSpan="2"
-                                          Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                          Command="{Binding Path=DataContext.CopyCommand, ElementName=PageRoot, Mode=OneTime}"
                                           CommandParameter="{x:Bind UserName, Mode=OneWay}">
                                 <AppBarButton.Icon>
                                     <SymbolIcon Symbol="Contact" />
@@ -135,7 +135,7 @@
                             </AppBarButton>
                             <AppBarButton x:Uid="EntryButtonPassword"
                                           Grid.Column="4" Grid.RowSpan="2"
-                                          Command="{Binding Path=DataContext.CopyCommand, ElementName=Root, Mode=OneTime}"
+                                          Command="{Binding Path=DataContext.CopyCommand, ElementName=PageRoot, Mode=OneTime}"
                                           CommandParameter="{x:Bind Password, Mode=OneWay}">
                                 <AppBarButton.Icon>
                                     <SymbolIcon Symbol="Permissions" />
@@ -169,7 +169,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="Root">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="PageRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
